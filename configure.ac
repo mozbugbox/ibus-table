@@ -3,7 +3,8 @@
 #
 # ibus-table - The Tables engine for IBus
 #
-# Copyright (c) 2008-2009 Yu Yuwei <acevery@gmail.com>
+# Copyright (c) 2008 Yu Yuwei <acevery at gmail.com>
+# Copyright (c) 2008 Caius 'kaio' Chance <kaio at fedoraproject.org>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -24,7 +25,7 @@
 m4_define([package_name], [ibus-table])
 m4_define([ibus_released], [0])
 m4_define([ibus_major_version], [1])
-m4_define([ibus_minor_version], [2])
+m4_define([ibus_minor_version], [3])
 m4_define([ibus_micro_version], [0])
 m4_define(ibus_maybe_datestamp,
     m4_esyscmd([if test x]ibus_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
@@ -44,7 +45,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_PATH_PYTHON([2.5])
 
 # check for ibus
-PKG_CHECK_MODULES([IBUS],[ibus-1.0 >= 1.1.0])
+PKG_CHECK_MODULES([IBUS],[ibus-1.0 >= 1.2])
 
 # define GETTEXT_* variables
 GETTEXT_PACKAGE=ibus-table
@@ -64,20 +65,13 @@ AC_ARG_ENABLE([additional],
 AM_CONDITIONAL([IBUS_TABLE_BUILD_ADDITIONAL],[test x"$enable_additional" = x"yes"])
 
 # OUTPUT files
-AC_CONFIG_FILES([po/Makefile.in
+AC_CONFIG_FILES(po/Makefile.in
     Makefile
-    engine/Makefile
-    engine/ibus-engine-table
-    engine/ibus-table-createdb
-    engine/table.xml.in
-    data/Makefile
+    src/Makefile
+    src/table.xml.in
     icons/Makefile
-    icons/additional/Makefile
     tables/Makefile
-    tables/additional/Makefile
-    m4/Makefile
     ibus-table.spec
-    ibus-table.pc]
 )
 
 AC_OUTPUT

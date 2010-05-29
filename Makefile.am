@@ -23,11 +23,9 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	$(NULL)
 
 SUBDIRS = \
-	engine \
+	src \
 	icons \
-	m4 \
 	tables \
-	data \
 	po \
 	$(NULL)
 
