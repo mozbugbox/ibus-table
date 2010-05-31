@@ -132,7 +132,7 @@ void button_clicked(GtkButton *button, gpointer user_data)
 	  GdkRectangle regtangle;
 
 	  engine = ((struct button_data *)user_data)->engine;
-	  ibus = IBUS_T9_ENGINE_GET_CLASS(engine);
+	  ibus = IBUS_TABLE_ENGINE_GET_CLASS(engine);
 
 	  i = ((struct button_data *)user_data)->index;
 
@@ -155,7 +155,7 @@ void table_button_clicked(GtkButton *button, gpointer user_data)
 	  GdkRectangle regtangle;
 
 	  engine = ((struct button_data *)user_data)->engine;
-	  ibus = IBUS_T9_ENGINE_GET_CLASS(engine);
+	  ibus = IBUS_TABLE_ENGINE_GET_CLASS(engine);
 
 	  i = ((struct button_data *)user_data)->index;
 
@@ -173,7 +173,7 @@ on_button(GtkWidget* widget, GdkEventButton *event, gpointer user_data)
   GdkRectangle regtangle;
 
   engine = (IBusT9Engine *) (user_data);
-  klass = IBUS_T9_ENGINE_GET_CLASS(engine);
+  klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
 
   engine->drag = event->button != 1;
 

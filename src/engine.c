@@ -122,7 +122,7 @@ ibus_t9_engine_init(IBusT9Engine *engine)
   engine->laststate.height = 100;
   engine->drag = 0;
 
-  klass = IBUS_T9_ENGINE_GET_CLASS(engine);
+  klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
 
   engine->LookupTable = gtk_window_new(GTK_WINDOW_POPUP);
 
@@ -233,7 +233,7 @@ ibus_t9_engine_update(IBusT9Engine *engine)
     {
       g_print("input is now %s\n", engine->inputed->str);
       phraser_get_phrases(engine->matched, engine->inputed,
-          IBUS_T9_ENGINE_GET_CLASS(engine)->phraser);
+          IBUS_TABLE_ENGINE_GET_CLASS(engine)->phraser);
     }
   else
 	  engine->matched = g_array_set_size(engine->matched,0);
@@ -336,14 +336,14 @@ ibus_t9_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
 static void
 ibus_t9_engine_focus_in(IBusEngine *engine)
 {
-  IBusT9Engine * ibus_t9 = IBUS_T9_ENGINE(engine);
+  IBusT9Engine * ibus_t9 = IBUS_TABLE_ENGINE(engine);
   gtk_widget_show_all(ibus_t9->LookupTable);
 }
 
 static void
 ibus_t9_engine_focus_out(IBusEngine *engine)
 {
-  IBusT9Engine * ibus_t9 = IBUS_T9_ENGINE(engine);
+  IBusT9Engine * ibus_t9 = IBUS_TABLE_ENGINE(engine);
   gtk_window_get_position(GTK_WINDOW(ibus_t9->LookupTable),
       &ibus_t9->laststate.x, &ibus_t9->laststate.y);
   gtk_widget_hide(ibus_t9->LookupTable);
