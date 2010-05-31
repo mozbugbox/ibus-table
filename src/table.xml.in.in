@@ -15,13 +15,12 @@
 			<name>Table</name>
 			<language>zh_CN</language>
 			<license>GPL</license>
-			<author>Microcai &lt;microcai AT fedoraproject DOT org &gt;</author>
-			<icon>${pkgdatadir}/icons/ibus-t9.svg</icon>
+			<author>Caius 'kaio' Chance &lt;kaio AT fedoraproject DOT org &gt;</author>
+			<icon>${pkgdatadir}/icons/ibus-table.svg</icon>
 			<layout>us</layout>
-			<longname>T9</longname>
-			<description>T9输入法</description>
+			<longname>Table</longname>
+			<description>Table 输入法</description>
 			<rank>0</rank>
 		</engine>
 	</engines>
-
 </component>

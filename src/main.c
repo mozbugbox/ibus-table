@@ -70,7 +70,7 @@ static void init_outside(const char * icon_dir, const char *exefile)
 {
 	char iconfile [1024];
 	strcpy(iconfile,icon_dir);
-	strcat(iconfile,"/ibus-t9.svg");
+	strcat(iconfile,"/ibus-table.svg");
 
 	IBusComponent *component;
 	IBusEngineDesc * desc;
