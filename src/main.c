@@ -23,12 +23,15 @@
 
 #include "engine.h"
 
+// extern vars
+IBusBus bus = NULL;
+const gchar *datafile = PKGDATADIR"/tables/table.txt";
+const char *iconfile = PKGDATADIR"/icons/ibus-table.svg";
+
 int
 main(int argc, char* argv[])
 {
   // default if nth spec
-  const gchar *datafile = PKGDATADIR"/tables/table.txt";
-  const char *iconfile = PKGDATADIR"/icons/ibus-table.svg";
 
   gboolean have_ibus = FALSE;
   gchar *locale_dir = NULL;
@@ -59,7 +62,7 @@ main(int argc, char* argv[])
     bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 
   // create bus, factory, component
-  IBusBus *bus = ibus_bus_new();
+  bus = ibus_bus_new();
   g_signal_connect(bus, "disconnected", G_CALLBACK(ibus_quit), NULL);
   IBusFactory *factory = ibus_factory_new(ibus_bus_get_connection(bus));
   ibus_bus_request_name(bus, "org.freedesktop.IBus.Table", 0);
