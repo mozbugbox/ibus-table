@@ -66,14 +66,6 @@ PKG_CHECK_MODULES(IBUS, [
     ibus-1.0 >= 1.2
 ])
 
-PKG_CHECK_MODULES(GTK2, [
-    gtk+-2.0 >= 2.10
-])
-
-PKG_CHECK_MODULES(ALL, [
-	gtk+-2.0 >= 2.10 ibus-1.0 >= 1.2
-])
-
 AC_DEFINE(MICROCAI_WITHEMAIL,"kaio@fedoraproject.org",[author Caius 'kaio' Chance and his email])
 
 # OUTPUT files
