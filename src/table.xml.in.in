@@ -5,7 +5,7 @@
 	<description>Table Input Method</description>
 	<exec>${libexecdir}/ibus-engine-table --ibus </exec>
 	<version>@VERSION@</version>
-	<author>Caius 'kaio' Chance &lt;kaio AT fedoraproject DOT org &gt;</author>
+	<author>Caius 'kaio' Chance &lt;kaio AT fedoraproject.org &gt;</author>
 	<license>GPL</license>
 	<homepage>http://code.google.com/p/ibus</homepage>
 	<textdomain>ibus-table</textdomain>
@@ -15,7 +15,7 @@
 			<name>Table</name>
 			<language>zh_CN</language>
 			<license>GPL</license>
-			<author>Caius 'kaio' Chance &lt;kaio AT fedoraproject DOT org &gt;</author>
+			<author>Caius 'kaio' Chance &lt;kaio AT fedoraproject.org &gt;</author>
 			<icon>${pkgdatadir}/icons/ibus-table.svg</icon>
 			<layout>us</layout>
 			<longname>Table</longname>

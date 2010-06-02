@@ -4,27 +4,32 @@
 
 #include <ibus.h>
 
-typedef struct
+typedef struct _PHRASER PHRASER;
+typedef struct _IBusTableEngine IBusTableEngine;
+typedef struct _IBusTableEngineClass IBusTableEngineClass;
+typedef struct _MATCHED MATCHED;
+
+struct _MATCHED
 {
   char code[64 - 16];
   char hanzi[16];
-} MATCHED;
+};
 
 // eng data struct funcs
-typedef struct
+struct _IBusTableEngine
 {
   IBusEngine parent;
   IBusLookupTable *table;
-} IBusTableEngine;
+};
 
-typedef struct
+struct _IBusTableEngineClass
 {
   IBusEngineClass parent;
   GString *icondir;
   PHRASER *phraser;
   int
   (*commit_string)(IBusTableEngine *engine, guint index);
-} IBusTableEngineClass;
+};
 
 #define IBUS_TYPE_TABLE_ENGINE (ibus_table_engine_get_type ())
 #define IBUS_TABLE_ENGINE_GET_CLASS(obj) ((IBusTableEngineClass*)(IBUS_ENGINE_GET_CLASS(obj)))
@@ -34,17 +39,17 @@ GType
 ibus_table_engine_get_type(void);
 
 // PHRASER data struct and funcs
-struct
+struct _PHRASER
 {
   char *filename;
   char *start_ptr; // for nmaped access
   size_t fsize; //for nmaped access
-} PHRASER;
+};
 
 PHRASER *
 phraser_new(const gchar * file);
 void
-phraser_free(PHRASER*phraser);
+phraser_free(PHRASER * phraser);
 int
 phraser_optimise(PHRASER * phraser);
 int

@@ -24,7 +24,7 @@
 #include "engine.h"
 
 // extern vars
-IBusBus bus = NULL;
+IBusBus *bus = NULL;
 const gchar *datafile = PKGDATADIR"/tables/table.txt";
 const char *iconfile = PKGDATADIR"/icons/ibus-table.svg";
 
@@ -70,7 +70,7 @@ main(int argc, char* argv[])
       _("Table Input Method"), PACKAGE_VERSION, "GPL", AUTHOR_EMAIL,
       PACKAGE_BUGREPORT, argv[0], GETTEXT_PACKAGE);
 
-  if (!have_bus)
+  if (!have_ibus)
     {
       // as no daemon, create desc instantly; add eng to component
       IBusEngineDesc *desc = ibus_engine_desc_new("Table", "ibus-table",

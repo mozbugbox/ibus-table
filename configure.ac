@@ -66,7 +66,7 @@ PKG_CHECK_MODULES(IBUS, [
     ibus-1.0 >= 1.2
 ])
 
-AC_DEFINE(MICROCAI_WITHEMAIL,"kaio@fedoraproject.org",[author Caius 'kaio' Chance and his email])
+AC_DEFINE(AUTHOR_EMAIL,"kaio@fedoraproject.org",[author Caius 'kaio' Chance and his email])
 
 # OUTPUT files
 AC_CONFIG_FILES(po/Makefile.in

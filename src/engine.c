@@ -96,7 +96,7 @@ ibus_table_engine_class_init(IBusTableEngineClass *klass)
 
   engine_class->focus_out = ibus_table_engine_focus_out;
 
-  klass->icondir = g_string_new(icondir);
+  klass->icondir = g_string_new(iconfile);
 
   klass->commit_string = ibus_table_engine_commit_string;
 }
