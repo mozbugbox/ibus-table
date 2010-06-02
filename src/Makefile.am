@@ -22,13 +22,13 @@
 
 libexecdir = ${prefix}/share/ibus/engine
 
-INCLUDES =  @ALL_CFLAGS@ -DPKGDATADIR=\"$(pkgdatadir)\" -DPREFIX=\"$(prefix)\"
+INCLUDES =  @IBUS_CFLAGS@ -DPKGDATADIR=\"$(pkgdatadir)\" -DPREFIX=\"$(prefix)\"
 
-LIBS = @ALL_LIBS@
+LIBS = @IBUS_LIBS@
 
 libexec_PROGRAMS = ibus-engine-table
 
-ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h prase.c prase.h lookuptable.c lookuptable.h decoder.c
+ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h
 
 component_DATA = table.xml 
 
@@ -49,4 +49,4 @@ table.xml : table.xml.in
 	) > $@
 
 test: ibus-engine-table
-	./$<  --icon $(top_srcdir)/icons/ --table $(top_srcdir)/tables/table.txt
+	$(builddir)/$<  --icon $(top_srcdir)/icons/ --table $(top_srcdir)/tables/table.txt

@@ -22,110 +22,83 @@
 #endif
 
 #include "engine.h"
-#include "prase.h"
 
-static IBusBus *bus = NULL;
-static IBusFactory *factory = NULL;
+IBusBus *bus = NULL;
 
-static void ibus_disconnected_cb(IBusBus *bus, gpointer user_data)
-{
-	gtk_main_quit();
-}
-
-char DATAFILE[1024] = PKGDATADIR"/tables/table.txt";
-static int have_ibus;
-char icondir[4096] = PKGDATADIR"/icons/";
-struct parameter_tags paramters[] =
-{
-{ "--ibus", (const char*) &have_ibus, NULL, sizeof(have_ibus), 6, BOOL_both },
-{ "--icon", (const char*) icondir, "--icon the icon dir", sizeof(icondir), 6,	STRING },
-{ "--table", (const char*) DATAFILE, "--table the table file", sizeof(DATAFILE), 7,	STRING },
-{ 0 } };
-
-static void init_inside(const char *exefile)
-{
-	IBusComponent *component;
-
-	ibus_init();
-
-	bus = ibus_bus_new();
-	g_signal_connect (bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
-
-	factory = ibus_factory_new(ibus_bus_get_connection(bus));
-
-	ibus_bus_request_name(bus, "org.freedesktop.IBus.Table", 0);
-
-        component = ibus_component_new("org.freedesktop.IBus.Table",
-                        _("Table input method"), PACKAGE_VERSION, "GPL", MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT,
-                        exefile, GETTEXT_PACKAGE);
-
-	ibus_bus_register_component(bus, component);
-
-	ibus_factory_add_engine(factory, "Table", IBUS_TYPE_TABLE_ENGINE);
-
-	g_object_unref(component);
-}
-
-static void init_outside(const char * icon_dir, const char *exefile)
-{
-	char iconfile [1024];
-	strcpy(iconfile,icon_dir);
-	strcat(iconfile,"/ibus-table.svg");
-
-	IBusComponent *component;
-	IBusEngineDesc * desc;
-
-	ibus_init();
-
-	bus = ibus_bus_new();
-	g_signal_connect (bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
-
-	factory = ibus_factory_new(ibus_bus_get_connection(bus));
-
-	ibus_bus_request_name(bus, "org.freedesktop.IBus.TABLE", 0);
-
-
-
-	desc = ibus_engine_desc_new("TABLE", "ibus-TABLE",
-			_("Table input method"), "zh_CN", "GPL",
-			MICROCAI_WITHEMAIL, iconfile, "us");
-
-	component = ibus_component_new("org.freedesktop.IBus.Table",
-			_("Table input method"), PACKAGE_VERSION, "GPL", MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT,
-			exefile, GETTEXT_PACKAGE);
-
-	ibus_component_add_engine(component, desc);
-
-	ibus_bus_register_component(bus, component);
-
-	ibus_factory_add_engine(factory, "Table", IBUS_TYPE_TABLE_ENGINE);
-
-	g_object_unref(component);
-}
+const gchar * datafile = PKGDATADIR"/tables/table.txt";
+const char * icondir = PKGDATADIR"/icons/";
 
 int main(int argc, char* argv[])
 {
-  gtk_init(&argc, &argv);
-  ibus_init();
-  ParseParameters(&argc, &argv, paramters);
-  setlocale(LC_ALL, "");
-  gtk_set_locale();
-  textdomain(GETTEXT_PACKAGE);
-  bindtextdomain(GETTEXT_PACKAGE, PREFIX"/share/locale");
-  char exefile[4096] =
-    { 0 };
+	gboolean have_ibus = FALSE;
+	const gchar * locale_dir = NULL;
+	IBusComponent *component;
+	IBusFactory *factory = NULL;
 
-  if (!have_ibus)
-    {
-      char iconfile[4096] =
-        { 0 };
-      init_outside(realpath(icondir, iconfile), realpath(argv[0], exefile));
-      printf(_("ibus-t9 Version %s Start Up\n"), PACKAGE_VERSION);
-    }
-  else
-    {
-      init_inside(realpath(argv[0], exefile));
-    }
-  gtk_main();
-  return 0;
+	setlocale(LC_ALL, "");
+	textdomain(GETTEXT_PACKAGE);
+
+	GOptionEntry paramters[] =
+	{
+	{ "ibus", '\0', 0, G_OPTION_ARG_NONE, &have_ibus },
+	{ "icon", '\0', 0, G_OPTION_ARG_STRING, &icondir, _("the icon file"), N_(
+			"icon file") },
+	{ "table", '\0', 0, G_OPTION_ARG_STRING, &datafile,
+			_("set table file path"), N_("tablefile") },
+	{ "locale", '\0', 0, G_OPTION_ARG_STRING, &locale_dir,
+			_("set locale path"), N_("locale") },
+	{ 0 } };
+
+	ibus_init();
+
+	GOptionContext * context = g_option_context_new("");
+
+	g_option_context_add_main_entries(context, paramters, GETTEXT_PACKAGE);
+
+	g_assert(g_option_context_parse(context, &argc, &argv, NULL));
+
+	g_option_context_free(context);
+
+	if (locale_dir)
+	{
+		bindtextdomain(GETTEXT_PACKAGE, locale_dir);
+	}
+
+	bus = ibus_bus_new();
+
+	g_signal_connect(bus, "disconnected", G_CALLBACK(ibus_quit), NULL);
+
+	factory = ibus_factory_new(ibus_bus_get_connection(bus));
+
+	ibus_bus_request_name(bus, "org.freedesktop.IBus.T9", 0);
+
+	component = ibus_component_new("org.freedesktop.IBus.T9",
+			_("T9 input method"), PACKAGE_VERSION, "GPL",
+			MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT, argv[0], GETTEXT_PACKAGE);
+
+	if (!have_ibus)
+	{
+		icondir = realpath(icondir, 0);
+
+		char * iconfile = g_strdup_printf("%s/ibus-t9.svg", icondir);
+
+		IBusEngineDesc * desc = ibus_engine_desc_new("T9", "ibus-T9",
+				_("T9 input method"), "zh_CN", "GPL", MICROCAI_WITHEMAIL,
+				iconfile, "us");
+
+		g_free(iconfile);
+
+		ibus_component_add_engine(component, desc);
+	}
+
+	ibus_bus_register_component(bus, component);
+
+	ibus_factory_add_engine(factory, "T9", IBUS_TYPE_TABLE_ENGINE);
+
+	g_object_unref(component);
+
+	printf(_("ibus-t9 Version %s Start Up\n"), PACKAGE_VERSION);
+
+	ibus_main();
+	return 0;
 }
