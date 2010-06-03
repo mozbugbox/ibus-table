@@ -28,7 +28,7 @@ LIBS = @IBUS_LIBS@
 
 libexec_PROGRAMS = ibus-engine-table
 
-ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h
+ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h tabdict.c tabdict.h
 
 component_DATA = table.xml 
 
