@@ -24,11 +24,11 @@ libexecdir = ${prefix}/share/ibus/engine
 
 INCLUDES =  @IBUS_CFLAGS@ -DPKGDATADIR=\"$(pkgdatadir)\" -DPREFIX=\"$(prefix)\"
 
-LIBS = @IBUS_LIBS@
+LIBS = @IBUS_LIBS@ @SQLITE3_LIBS@
 
 libexec_PROGRAMS = ibus-engine-table
 
-ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h tabdict.c tabdict.h
+ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h tabdict.c tabdict.h tabsqlitedb.c tabsqlitedb.h
 
 component_DATA = table.xml 
 

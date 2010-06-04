@@ -96,7 +96,7 @@ ibus_table_engine_class_init(IBusTableEngineClass *klass)
 
   engine_class->focus_out = ibus_table_engine_focus_out;
 
-  klass->icondir = g_string_new(iconfile);
+  klass->icondir = g_string_new(icondir);
 
   klass->commit_string = ibus_table_engine_commit_string;
 }
@@ -107,11 +107,11 @@ ibus_table_engine_init(IBusTableEngine *engine)
   size_t i;
   IBusTableEngineClass* klass;
 
-  GError * err;
+  engine->page_size = 6 ;
+
+  engine->table = ibus_lookup_table_new(engine->page_size,0,TRUE,0);
 
   klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
-
-
 }
 
 static void
