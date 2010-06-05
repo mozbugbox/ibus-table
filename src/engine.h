@@ -38,5 +38,6 @@ ibus_table_engine_get_type(void);
 extern const gchar *datafile;
 extern const char *icondir;
 extern IBusBus *bus;
+extern GHashTable *name_2_db;
 
 #endif
