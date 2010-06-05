@@ -53,8 +53,8 @@ ibus_table_engine_cursor_up(IBusEngine *engine);
 static void
 ibus_table_engine_cursor_down(IBusEngine *engine);
 static void
-ibus_enchant_property_activate(IBusEngine *engine, const gchar *prop_name,
-    gint prop_state);
+ibus_table_property_activate(IBusEngine *engine, const gchar *prop_name,guint prop_state);
+
 static void
 ibus_table_engine_property_show(IBusEngine *engine, const gchar *prop_name);
 static void
@@ -83,6 +83,8 @@ ibus_table_engine_class_init(IBusTableEngineClass *klass)
   engine_class->focus_in = ibus_table_engine_focus_in;
 
   engine_class->focus_out = ibus_table_engine_focus_out;
+
+  engine_class->property_activate = ibus_table_property_activate;
 
   klass->icondir = g_string_new(icondir);
 
@@ -145,7 +147,6 @@ ibus_table_constructor(GType type, guint n_construct_properties,GObjectConstruct
 
   const gchar * name = ibus_engine_get_name(IBUS_ENGINE(obj));
 
-  //TODO:
   //根据引擎的名字，打开对应的 *.db 文件
 
   gchar * dbname = g_hash_table_lookup(name_2_db,name);
@@ -201,6 +202,8 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
 
   modifiers &= (IBUS_CONTROL_MASK | IBUS_MOD1_MASK);
 
+  //TODO: 这里实现 输入法
+
   g_print("%s\n",__func__);
 
   switch (keyval)
@@ -255,4 +258,12 @@ ibus_table_engine_focus_out(IBusEngine *engine)
   IBusTableEngine * ibus_table = IBUS_TABLE_ENGINE(engine);
 
   IBUS_ENGINE_CLASS(ibus_table_engine_parent_class)->focus_out(engine);
+}
+
+static void
+ibus_table_property_activate(IBusEngine *engine, const gchar *prop_name,guint prop_state)
+{
+  //TODO: 切换状态
+
+
 }
