@@ -99,6 +99,41 @@ ibus_table_engine_init(IBusTableEngine *engine)
 
   engine->table = ibus_lookup_table_new(engine->page_size,0,TRUE,0);
 
+  engine->proplist = ibus_prop_list_new();
+
+  g_object_ref_sink(engine->proplist);
+
+  GString * iconname = g_string_new("");
+
+  g_string_printf(iconname,"%s/chinese.svg",icondir);
+
+  IBusProperty * property = ibus_property_new("im-mode",PROP_TYPE_NORMAL,
+      ibus_text_new_from_static_string(_("switch to english")),
+      iconname->str,ibus_text_new_from_static_string(_("switch to english")),
+      TRUE,TRUE,PROP_STATE_INCONSISTENT,NULL);
+
+  ibus_prop_list_append(engine->proplist,property);
+
+  g_string_printf(iconname,"%s/sc-mode.svg",icondir);
+
+  property = ibus_property_new("im-mode",PROP_TYPE_NORMAL,
+      ibus_text_new_from_static_string(_("简繁模式")),
+      iconname->str,ibus_text_new_from_static_string(_("toggle chinese")),
+      TRUE,TRUE,PROP_STATE_INCONSISTENT,NULL);
+
+  ibus_prop_list_append(engine->proplist,property);
+
+  g_string_printf(iconname,"%s/half-letter.svg",icondir);
+
+  property = ibus_property_new("letter-mode", PROP_TYPE_NORMAL,
+      ibus_text_new_from_static_string(_("半角")), iconname->str,
+      ibus_text_new_from_static_string(_("toggle half/full")), TRUE, TRUE,
+      PROP_STATE_INCONSISTENT, NULL);
+
+  ibus_prop_list_append(engine->proplist,property);
+
+  g_string_free(iconname,TRUE);
+
   klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
 
 }
@@ -116,6 +151,8 @@ ibus_table_constructor(GType type, guint n_construct_properties,GObjectConstruct
   gchar * dbname = g_hash_table_lookup(name_2_db,name);
 
   g_print("引擎名字是 %s,数据库文件是 %s\n",name,dbname);
+
+  IBUS_TABLE_ENGINE(obj)->db =  tabsqlitedb_new(dbname,0);
 
   return obj;
 }
@@ -206,6 +243,8 @@ static void
 ibus_table_engine_focus_in(IBusEngine *engine)
 {
   IBusTableEngine * ibus_table = IBUS_TABLE_ENGINE(engine);
+
+  ibus_engine_register_properties(engine,ibus_table->proplist);
 
   IBUS_ENGINE_CLASS(ibus_table_engine_parent_class)->focus_in(engine);
 }

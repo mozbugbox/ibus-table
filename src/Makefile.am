@@ -49,4 +49,4 @@ table.xml : table.xml.in
 	) > $@
 
 test: ibus-engine-table
-	$(builddir)/$<  --icon $(top_srcdir)/icons/ --table $(top_srcdir)/tables/table.txt
+	$(builddir)/$<  --icon $(top_srcdir)/icons/

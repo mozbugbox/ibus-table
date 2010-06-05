@@ -76,16 +76,22 @@ ibus_table_get_component( const gchar * execfile , const gchar * table)
 
   name_2_db = g_hash_table_new(g_str_hash,g_str_equal);
 
-  glob("*.db", GLOB_DOOFFS, NULL, &globs);
-
-  for (int i = 0; i < globs.gl_pathc; i++)
+  if (table)
     {
-      IBusEngineDesc * desc = ibus_table_make_engine(globs.gl_pathv[i]);
-      ibus_component_add_engine(component,desc);
+      IBusEngineDesc * desc = ibus_table_make_engine(table);
+      ibus_component_add_engine(component, desc);
     }
+  else
+    {
+      glob("*.db", GLOB_DOOFFS, NULL, &globs);
 
-  globfree(&globs);
-
+      for (int i = 0; i < globs.gl_pathc; i++)
+        {
+          IBusEngineDesc * desc = ibus_table_make_engine(globs.gl_pathv[i]);
+          ibus_component_add_engine(component, desc);
+        }
+      globfree(&globs);
+    }
   return component;
 }
 
@@ -108,6 +114,7 @@ main(int argc, char* argv[])
 {
   // default if nth spec
 
+  IBusComponent *component;
   gboolean have_ibus = FALSE;
   gboolean have_xml = FALSE;
   gchar *locale_dir = NULL;
@@ -142,8 +149,7 @@ main(int argc, char* argv[])
   if (locale_dir)
     bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 
-
-  IBusComponent *component = ibus_table_get_component(argv[0],dbname);
+  component = ibus_table_get_component(argv[0],dbname);
 
   if (have_xml) //根据 目录里头包含的 *.db 生成 ibus 使用的 xml 引擎描述文件
     {
