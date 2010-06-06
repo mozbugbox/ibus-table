@@ -281,7 +281,5 @@ ibus_table_engine_focus_out(IBusEngine *engine)
 static void
 ibus_table_property_activate(IBusEngine *engine, const gchar *prop_name,guint prop_state)
 {
-  //TODO: 切换状态
-
-
+  IBUS_ENGINE_CLASS(ibus_table_engine_parent_class)->property_activate(engine,prop_name,prop_state);
 }
