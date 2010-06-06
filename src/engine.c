@@ -129,7 +129,25 @@ ibus_table_engine_init(IBusTableEngine *engine)
 
   property = ibus_property_new("letter-mode", PROP_TYPE_NORMAL,
       ibus_text_new_from_static_string(_("半角")), iconname->str,
-      ibus_text_new_from_static_string(_("toggle half/full")), TRUE, TRUE,
+      ibus_text_new_from_static_string(_("toggle half/full letter")), TRUE, TRUE,
+      PROP_STATE_INCONSISTENT, NULL);
+
+  ibus_prop_list_append(engine->proplist,property);
+
+  g_string_printf(iconname,"%s/half-punct.svg",icondir);
+
+  property = ibus_property_new("punct-mode", PROP_TYPE_NORMAL,
+      ibus_text_new_from_static_string(_("")), iconname->str,
+      ibus_text_new_from_static_string(_("toggle half/full punctuation")), TRUE, TRUE,
+      PROP_STATE_INCONSISTENT, NULL);
+
+  ibus_prop_list_append(engine->proplist,property);
+
+  g_string_printf(iconname,"%s/ncommit.svg",icondir);
+
+  property = ibus_property_new("commit-mode", PROP_TYPE_NORMAL,
+      ibus_text_new_from_static_string(_("")), iconname->str,
+      ibus_text_new_from_static_string(_("toggle passive/active commit")), TRUE, TRUE,
       PROP_STATE_INCONSISTENT, NULL);
 
   ibus_prop_list_append(engine->proplist,property);
