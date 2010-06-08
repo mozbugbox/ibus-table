@@ -24,6 +24,9 @@
 #ifndef TABSQLITEDB_H_
 #define TABSQLITEDB_H_
 
+#include <glib.h>
+#include <string.h>
+#include <stdarg.h>
 #include <sqlite3.h>
 
 typedef struct _tabsqlitedb{
@@ -38,5 +41,7 @@ void
 tabsqlitedb_destory(tabsqlitedb * db);
 
 gboolean tabsqlitedb_getime(tabsqlitedb * db, const char * attr, char ** val);
+
+char * tabsqlitedb_convert(tabsqlitedb * db, const char * keys);
 
 #endif /* TABSQLITEDB_H_ */
