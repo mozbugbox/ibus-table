@@ -87,12 +87,13 @@ GList * tabsqlitedb_prase(tabsqlitedb * db , GList * keys )
 
   for ( i = 0; i < g_list_length(keys) ; i ++)
     {
-      g_string_append_printf(query_cond," m%d=\'%d\' ",i, ((Tab_key*) g_list_nth_data(keys,i))->id);
-
-       if (i != g_list_length(keys) - 1)
-         g_string_append(query_cond,"AND");
+      g_string_append_printf(query_cond," and m%d=\'%d\' ",i, ((Tab_key*) g_list_nth_data(keys,i))->id);
     }
-  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE %s limit 80", query_cond->str);
+
+  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE category<4 %s limit 80", query_cond->str);
+
+  g_print("sql is %s",sql);
+
   g_string_free(query_cond,TRUE);
 
   sqlite3_stmt * stm;

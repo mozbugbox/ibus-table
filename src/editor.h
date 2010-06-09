@@ -29,6 +29,8 @@ Editor * editor_new(IBusConfig * config, gchar * valid_inputchars ,gint max_key_
 
 gint editor_get_chinese_mode(Editor * editor);
 
+
+gboolean editor_backspace_input(Editor * editor);
 void editor_append_input(Editor * editor, gchar key);
 
 IBusText *editor_get_auxiliary_text(Editor * editor);

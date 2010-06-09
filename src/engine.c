@@ -195,6 +195,13 @@ ibus_table_engine_destroy(IBusTableEngine *engine)
 static int ibus_table_engine_commit_string(IBusTableEngine *engine, guint index)
 {
   //TODO 提交了就 TRUE
+
+  IBusText * txt = editor_get_prasese(engine->editor,0,index);
+
+  if(txt){
+  ibus_engine_commit_text(IBUS_ENGINE(engine),txt);
+  return TRUE;
+  }
   return FALSE;
 }
 
@@ -261,11 +268,8 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
     return TRUE;
 
   case IBUS_BackSpace:
-//    if (engine->inputed->len)
-      {
-//        g_string_truncate(engine->inputed, (engine->inputed->len) -1);
-        return ibus_table_engine_update(engine);
-      }
+    if(editor_backspace_input(engine->editor))
+      return ibus_table_engine_update(engine);
     return FALSE;
   case IBUS_a ... IBUS_z:
     editor_append_input(engine->editor,keyval);
