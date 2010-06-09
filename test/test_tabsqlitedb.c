@@ -4,6 +4,7 @@
  *  Created on: 2010/06/08
  *      Author: cchance
  */
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,7 +14,8 @@ int
 main(int argc, char ** argv)
 {
   // load db
-  char *dbfile = "./cangjie5.db";
+  chdir("test");
+  char *dbfile = "cangjie5.db";
   tabsqlitedb *ret = tabsqlitedb_new(dbfile, NULL);
   if (ret)
     printf("db is loaded: %s\n", dbfile);

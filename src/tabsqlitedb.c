@@ -80,22 +80,32 @@ tabsqlitedb_convert(tabsqlitedb * db, const char * keys)
   // concat query condition of keys
   int i;
   const int keylen = strlen(keys);
-  char * query_cond = "";
+  GString * query_cond = g_string_new("");
   for (i = 0; i < keylen; i++)
     {
-      query_cond = g_strdup_printf("%s m%d=\'%d\' ", query_cond, i, keys[i]);
+     g_string_append_printf(query_cond," m%d=\'%d\' ",i, keys[i]);
       if (i != keylen - 1)
-        strcat(query_cond, "AND");
+        g_string_append(query_cond,"AND");
     }
 
   // prep query, then statement
-  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE %s", query_cond);
-  sqlite3_stmt * stm;
-  sqlite3_prepare(db->db, sql, strlen(sql), &stm, NULL);
-  sqlite3_step(stm);
-  char *val = g_strdup(sqlite3_column_text(stm, 0));
-  sqlite3_finalize(stm);
+  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE %s", query_cond->str);
+  g_string_free(query_cond,TRUE);
 
+  sqlite3_stmt * stm;
+  char *val=NULL;
+
+  do
+    {
+      if (sqlite3_prepare(db->db, sql, strlen(sql), &stm, NULL))
+        break;
+      if (sqlite3_step(stm)==SQLITE_ERROR)
+        break;
+      val = g_strdup(sqlite3_column_text(stm, 0));
+      sqlite3_finalize(stm);
+    }
+  while (0);
+  g_free(sql);
   return val;
 }
 
