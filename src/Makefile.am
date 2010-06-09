@@ -28,7 +28,14 @@ LIBS = @IBUS_LIBS@ @SQLITE3_LIBS@
 
 libexec_PROGRAMS = ibus-engine-table
 
-ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h tabdict.c tabdict.h tabsqlitedb.c tabsqlitedb.h
+ibus_engine_table_SOURCES = main.c \
+								 engine.c \
+								 engine.h \
+								 tabdict.c \
+								 tabdict.h \
+								 tabsqlitedb.c \
+								 tabsqlitedb.h \
+								 editor.c
 
 component_DATA = table.xml 
 
