@@ -20,7 +20,7 @@
  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
  */
-
+#include "tabdict.h"
 #include "tabsqlitedb.h"
 
 tabsqlitedb *
@@ -72,6 +72,52 @@ tabsqlitedb_destory(tabsqlitedb * db)
   sqlite3_close(db->db);
   if (db->udb)
     sqlite3_close(db->udb);
+}
+/*
+ * @keys : 元素为 Tab_Key 类型的链表
+ * Return: a list of prased words
+ */
+GList * tabsqlitedb_prase(tabsqlitedb * db , GList * keys )
+{
+  int i;
+
+  GList * list = NULL;
+
+  GString * query_cond = g_string_new("");
+
+  for ( i = 0; i < g_list_length(keys) ; i ++)
+    {
+      g_string_append_printf(query_cond," m%d=\'%d\' ",i, ((Tab_key*) g_list_nth_data(keys,i))->id);
+
+       if (i != g_list_length(keys) - 1)
+         g_string_append(query_cond,"AND");
+    }
+  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE %s limit 80", query_cond->str);
+  g_string_free(query_cond,TRUE);
+
+  sqlite3_stmt * stm;
+  char *val=NULL;
+
+  if (sqlite3_prepare(db->db, sql, strlen(sql), &stm, NULL))
+    {
+      g_free(sql);
+      return NULL;
+    }
+
+  g_free(sql);
+
+  int ret ;
+
+  while ( (ret = sqlite3_step(stm)) == SQLITE_ROW)
+    {
+      g_print("ret code is %d, text is %s\n",ret,sqlite3_column_text(stm,0));
+
+      list = g_list_append(list,g_strdup(sqlite3_column_text(stm,0)));
+    }
+
+  sqlite3_finalize(stm);
+
+  return list;
 }
 
 char *

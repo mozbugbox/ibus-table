@@ -43,5 +43,6 @@ tabsqlitedb_destory(tabsqlitedb * db);
 gboolean tabsqlitedb_getime(tabsqlitedb * db, const char * attr, char ** val);
 
 char * tabsqlitedb_convert(tabsqlitedb * db, const char * keys);
+GList * tabsqlitedb_prase(tabsqlitedb * db , GList * keys );
 
 #endif /* TABSQLITEDB_H_ */

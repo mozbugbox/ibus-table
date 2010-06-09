@@ -14,6 +14,7 @@ int
 main(int argc, char ** argv)
 {
   // load db
+  ibus_init();
   chdir("test");
   char *dbfile = "cangjie5.db";
   tabsqlitedb *ret = tabsqlitedb_new(dbfile, NULL);

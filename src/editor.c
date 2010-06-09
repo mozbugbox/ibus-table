@@ -25,21 +25,98 @@
 #define N_(x) (x)
 #endif
 
+#include <ibus.h>
 #include "editor.h"
+#include "tabdict.h"
 
 static void editor_class_init(EditorClass*);
 static void editor_init(Editor*);
+static void editor_finalize(Editor* editor);
+static void editor_set_property(Editor *object, guint property_id, const GValue *value,GParamSpec *pspec);
 
 G_DEFINE_TYPE(Editor,editor,G_TYPE_OBJECT)
 
 static void editor_class_init(EditorClass*klass)
 {
+  GParamSpec * spec;
+
+  G_OBJECT_CLASS(klass)->finalize = (gpointer)editor_finalize;
+
+  G_OBJECT_CLASS(klass)->set_property = (gpointer)editor_set_property;
+
+  spec = g_param_spec_object("config","config","config",IBUS_TYPE_CONFIG,G_PARAM_WRITABLE);
+
+  g_object_class_install_property(G_OBJECT_CLASS(klass),1,spec);
+
+  spec = g_param_spec_pointer("db","db","db",G_PARAM_WRITABLE);
+
+  g_object_class_install_property(G_OBJECT_CLASS(klass),2,spec);
+
 
 }
 
 static void editor_init(Editor* editor)
 {
+  editor->input = g_string_new("");
+}
 
+static void editor_finalize(Editor* editor)
+{
+  g_string_free(editor->input,1);
+}
+
+static void editor_set_property(Editor *object, guint property_id, const GValue *value,GParamSpec *pspec)
+{
+  switch(property_id)
+  {
+  case 1:
+
+  break;
+  case 2:
+    object->db = g_value_get_pointer(value);
+    break;
+  }
+}
+
+Editor *
+editor_new(IBusConfig * config, gchar * valid_inputchars, gint max_key_length,tabsqlitedb * db)
+{
+  return g_object_new(G_TYPE_EDITOR,"db",db,"config",config,NULL);
+}
+
+static void
+editor_do_prasese(Editor * editor)
+{
+  //先 del 掉老旧
+  g_list_foreach(editor->prased,(GFunc)g_free,NULL);
+  g_list_free(editor->prased);
+
+  //转化，呵呵
+  editor->prased = tabsqlitedb_prase(editor->db,editor->inputed);
+}
+
+void editor_append_input(Editor * editor, gchar key)
+{
+  Tab_key * tkey = tab_key_new(key);
+  editor->inputed = g_list_append(editor->inputed,tkey);
+  g_string_append_c(editor->input,key);
+
+  editor_do_prasese(editor);
+}
+
+IBusText *editor_get_auxiliary_text(Editor * editor)
+{
+  return ibus_text_new_from_string(editor->input->str);
+}
+
+IBusText * editor_get_prasese(Editor * editor, guint page , guint index)
+{
+  return ibus_text_new_from_string(g_list_nth_data(editor->prased,page*10+index));
+}
+
+gint editor_get_prasesed_count(Editor * editor)
+{
+  return g_list_length(editor->prased);
 }
 
 /*
@@ -50,7 +127,7 @@ static void editor_init(Editor* editor)
  * 3 is Big charset mode, but traditional Chinese first
  * 4 is Big charset mode.
  */
-gint editor_get_chinese_mode()
+gint editor_get_chinese_mode(Editor * editor)
 {
   //到环境变量拿
   char * lc = getenv("LC_CTYPE");

@@ -24,6 +24,8 @@
 #ifndef TABDICT_H_
 #define TABDICT_H_
 
+#include <glib-object.h>
+
 typedef struct _Tab_key{
   GObject parent_class;
   guint   key;
@@ -31,7 +33,7 @@ typedef struct _Tab_key{
 }Tab_key;
 
 typedef struct _tab_key_class{
-  GObject parent_class;
+  GObjectClass parent_class;
   GTree * tab_dict;
 }Tab_keyClass;
 

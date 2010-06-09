@@ -149,6 +149,11 @@ main(int argc, char* argv[])
   if (locale_dir)
     bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 
+  if(icondir)
+    {
+      icondir = realpath(icondir,NULL);
+    }
+
   component = ibus_table_get_component(argv[0],dbname);
 
   if (have_xml) //根据 目录里头包含的 *.db 生成 ibus 使用的 xml 引擎描述文件
