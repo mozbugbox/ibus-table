@@ -31,7 +31,7 @@ tabsqlitedb_new(const gchar * db, const gchar * udb)
     {
       g_once_init_leave(&sqlite_initialized, !sqlite3_initialize());
     }
-  tabsqlitedb * ret = g_new0(tabsqlitedb,1);
+  tabsqlitedb * ret = g_new0(tabsqlitedb, 1);
 
   sqlite3_open(db, &ret->db);
 
@@ -74,7 +74,8 @@ tabsqlitedb_destory(tabsqlitedb * db)
     sqlite3_close(db->udb);
 }
 
-GList * tabsqlitedb_prase(tabsqlitedb * db , GList * keys )
+GList *
+tabsqlitedb_prase(tabsqlitedb * db, GList * keys)
 {
   int i;
 
@@ -82,18 +83,19 @@ GList * tabsqlitedb_prase(tabsqlitedb * db , GList * keys )
 
   GString * query_cond = g_string_new("");
 
-  for ( i = 0; i < g_list_length(keys) ; i ++)
+  for (i = 0; i < g_list_length(keys); i++)
     {
-      g_string_append_printf(query_cond," m%d=\'%d\' ",i, ((Tab_key*) g_list_nth_data(keys,i))->id);
-
-       if (i != g_list_length(keys) - 1)
-         g_string_append(query_cond,"AND");
+      g_string_append_printf(query_cond, " and m%d=\'%d\' ", i,
+          ((Tab_key*) g_list_nth_data(keys, i))->id);
     }
-  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE %s limit 80", query_cond->str);
-  g_string_free(query_cond,TRUE);
+  char *sql = g_strdup_printf(
+      "SELECT phrase FROM phrases WHERE category<4 %s limit 80",
+      query_cond->str);
+  g_print("sql is %s", sql);
+  g_string_free(query_cond, TRUE);
 
   sqlite3_stmt * stm;
-  char *val=NULL;
+  char *val = NULL;
 
   if (sqlite3_prepare(db->db, sql, strlen(sql), &stm, NULL))
     {
@@ -103,13 +105,13 @@ GList * tabsqlitedb_prase(tabsqlitedb * db , GList * keys )
 
   g_free(sql);
 
-  int ret ;
+  int ret;
 
-  while ( (ret = sqlite3_step(stm)) == SQLITE_ROW)
+  while ((ret = sqlite3_step(stm)) == SQLITE_ROW)
     {
-      g_print("ret code is %d, text is %s\n",ret,sqlite3_column_text(stm,0));
+      g_print("ret code is %d, text is %s\n", ret, sqlite3_column_text(stm, 0));
 
-      list = g_list_append(list,g_strdup(sqlite3_column_text(stm,0)));
+      list = g_list_append(list, g_strdup(sqlite3_column_text(stm, 0)));
     }
 
   sqlite3_finalize(stm);
@@ -126,23 +128,24 @@ tabsqlitedb_convert(tabsqlitedb * db, const char * keys)
   GString * query_cond = g_string_new("");
   for (i = 0; i < keylen; i++)
     {
-        g_string_append_printf(query_cond," m%d=\'%d\' ",i, keys[i]);
-        if (i != keylen - 1)
+      g_string_append_printf(query_cond, " m%d=\'%d\' ", i, keys[i]);
+      if (i != keylen - 1)
         g_string_append(query_cond, "AND");
     }
 
   // prep query, then statement
-  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE %s", query_cond->str);
-  g_string_free(query_cond,TRUE);
+  char *sql = g_strdup_printf("SELECT phrase FROM phrases WHERE %s",
+      query_cond->str);
+  g_string_free(query_cond, TRUE);
   sqlite3_stmt * stm;
 
-  char *val=NULL;
+  char *val = NULL;
 
   do
     {
       if (sqlite3_prepare(db->db, sql, strlen(sql), &stm, NULL))
         break;
-      if (sqlite3_step(stm)==SQLITE_ERROR)
+      if (sqlite3_step(stm) == SQLITE_ERROR)
         break;
       val = g_strdup(sqlite3_column_text(stm, 0));
       sqlite3_finalize(stm);

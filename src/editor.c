@@ -109,6 +109,25 @@ editor_append_input(Editor * editor, gchar key)
   editor_do_prasese(editor);
 }
 
+gboolean
+editor_backspace_input(Editor * editor)
+{
+  if (g_list_length(editor->inputed))
+    {
+
+      g_object_unref(g_list_last(editor->inputed)->data);
+
+      editor->inputed = g_list_delete_link(editor->inputed, g_list_last(
+          editor->inputed));
+
+      g_string_truncate(editor->input, editor->input->len - 1);
+
+      editor_do_prasese(editor);
+      return TRUE;
+    }
+  return FALSE;
+}
+
 IBusText *
 editor_get_auxiliary_text(Editor * editor)
 {
@@ -118,8 +137,11 @@ editor_get_auxiliary_text(Editor * editor)
 IBusText *
 editor_get_prasese(Editor * editor, guint page, guint index)
 {
-  return ibus_text_new_from_string(g_list_nth_data(editor->prased, page * 10
-      + index));
+  gchar * str ;
+
+  if(g_list_length(editor->prased) >= page*6+index)
+    return ibus_text_new_from_string(g_list_nth_data(editor->prased,page*6+index));
+  return NULL;
 }
 
 gint

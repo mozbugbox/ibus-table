@@ -39,4 +39,6 @@ GType editor_get_type();
 
   IBusText * editor_get_prasese(Editor * editor, guint page , guint index);
 
+  gboolean editor_backspace_input(Editor * editor);
+
 #endif /* EDITOR_H_ */
