@@ -2,9 +2,9 @@
 #
 # ibus-table - The table engine for IBus
 #
-# Copyright (c) 2007 Yu Yuwei <acevery at gmail.com>
-# Copyright (c) 2010 microcai  <microcai at fedoraproject.org>
-# Copyright (c) 2010 Caius 'kaio' Chance <kaio at fedoraproject.net>
+# Copyright (c) 2007 Yu Yuwei <acevery@gmail.com>
+# Copyright (c) 2009 Caius 'kaio' Chance <cchance@redhat.com>
+# Copyright (c) 2010 microcai  <microcai@fedoraproject.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,4 +49,4 @@ table.xml : table.xml.in
 	) > $@
 
 test: ibus-engine-table
-	$(builddir)/$<  --icon $(top_srcdir)/icons/ --table $(top_srcdir)/tables/table.txt
+	$(builddir)/$<  --icon $(top_srcdir)/icons/
