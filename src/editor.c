@@ -52,6 +52,9 @@ static void editor_class_init(EditorClass*klass)
 
   g_object_class_install_property(G_OBJECT_CLASS(klass),2,spec);
 
+  spec = g_param_spec_string("valid_input_chars","valid_input_chars","valid_input_chars","abcdefghijklmnopqrstuvwxz",G_PARAM_WRITABLE);
+
+  g_object_class_install_property(G_OBJECT_CLASS(klass),3,spec);
 
 }
 
@@ -75,13 +78,18 @@ static void editor_set_property(Editor *object, guint property_id, const GValue 
   case 2:
     object->db = g_value_get_pointer(value);
     break;
+  case 3:
+    g_free(object->valid_input_chars);
+    object->valid_input_chars = g_value_dup_string(value);
   }
 }
 
 Editor *
 editor_new(IBusConfig * config, gchar * valid_inputchars, gint max_key_length,tabsqlitedb * db)
 {
-  return g_object_new(G_TYPE_EDITOR,"db",db,"config",config,NULL);
+  return g_object_new(G_TYPE_EDITOR,"db",db,"config",config,
+      "valid_input_chars",valid_inputchars,
+      NULL);
 }
 
 static void
@@ -95,13 +103,18 @@ editor_do_prasese(Editor * editor)
   editor->prased = tabsqlitedb_prase(editor->db,editor->inputed);
 }
 
-void editor_append_input(Editor * editor, gchar key)
+gboolean editor_append_input(Editor * editor, gchar key)
 {
-  Tab_key * tkey = tab_key_new(key);
-  editor->inputed = g_list_append(editor->inputed,tkey);
-  g_string_append_c(editor->input,key);
+  if (strchr(editor->valid_input_chars,key))
+    {
+      Tab_key * tkey = tab_key_new(key);
+      editor->inputed = g_list_append(editor->inputed, tkey);
+      g_string_append_c(editor->input,key);
 
-  editor_do_prasese(editor);
+      editor_do_prasese(editor);
+      return TRUE;
+    }
+  return FALSE;
 }
 
 gboolean

@@ -163,6 +163,7 @@ ibus_table_engine_init(IBusTableEngine *engine)
 static GObject *
 ibus_table_constructor(GType type, guint n_construct_properties,GObjectConstructParam *construct_properties)
 {
+  gchar * valid_input_chars;
   GObject *  obj =  G_OBJECT_CLASS(ibus_table_engine_parent_class)->constructor(type,n_construct_properties,construct_properties);
 
   const gchar * name = ibus_engine_get_name(IBUS_ENGINE(obj));
@@ -175,8 +176,11 @@ ibus_table_constructor(GType type, guint n_construct_properties,GObjectConstruct
 
   IBUS_TABLE_ENGINE(obj)->db =  tabsqlitedb_new(dbname,0);
 
-  IBUS_TABLE_ENGINE(obj)->editor = editor_new(NULL,"abcdefghijklmnopqrstuvwxyz",16,IBUS_TABLE_ENGINE(obj)->db);
+  tabsqlitedb_getime(IBUS_TABLE_ENGINE(obj)->db,"valid_input_chars",&valid_input_chars);
 
+  IBUS_TABLE_ENGINE(obj)->editor = editor_new(NULL,valid_input_chars,16,IBUS_TABLE_ENGINE(obj)->db);
+
+  IBUS_TABLE_ENGINE(obj)->valid_input_chars = valid_input_chars;
   return obj;
 }
 
@@ -184,6 +188,8 @@ static void
 ibus_table_engine_destroy(IBusTableEngine *engine)
 {
   g_print("%s\n", __func__);//, engine->laststate.x, engine->laststate.y);
+
+  g_free(engine->valid_input_chars);
 
   g_object_unref(engine->editor);
   tabsqlitedb_destory(engine->db);
@@ -272,8 +278,9 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
       return ibus_table_engine_update(engine);
     return FALSE;
   case IBUS_a ... IBUS_z:
-    editor_append_input(engine->editor,keyval);
-    return ibus_table_engine_update(engine);
+    if(editor_append_input(engine->editor,keyval))
+      return ibus_table_engine_update(engine);
+    return FALSE;
   case IBUS_0 ... IBUS_9:
     return ibus_table_engine_commit_string(engine, keyval - IBUS_0);
     }

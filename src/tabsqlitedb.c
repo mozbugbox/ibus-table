@@ -66,6 +66,7 @@ tabsqlitedb_getime(tabsqlitedb * db, const char * attr, char ** val)
   sqlite3_finalize(stm);
 }
 
+
 void
 tabsqlitedb_destory(tabsqlitedb * db)
 {
