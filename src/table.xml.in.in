@@ -1,0 +1,27 @@
+<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!-- filename: ibus-table.xml -->
+<component>
+	<name>org.freedesktop.IBus.Table</name>
+	<description>Table Input Method</description>
+	<exec>${libexecdir}/ibus-engine-table --ibus </exec>
+	<version>@VERSION@</version>
+	<author>Caius 'kaio' Chance &lt;kaio AT fedoraproject DOT org &gt;</author>
+	<license>GPL</license>
+	<homepage>http://code.google.com/p/ibus</homepage>
+	<textdomain>ibus-table</textdomain>
+
+	<engines>
+		<engine>
+			<name>Table</name>
+			<language>zh_CN</language>
+			<license>GPL</license>
+			<author>Microcai &lt;microcai AT fedoraproject DOT org &gt;</author>
+			<icon>${pkgdatadir}/icons/ibus-t9.svg</icon>
+			<layout>us</layout>
+			<longname>T9</longname>
+			<description>T9输入法</description>
+			<rank>0</rank>
+		</engine>
+	</engines>
+
+</component>
