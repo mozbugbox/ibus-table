@@ -150,6 +150,9 @@ main(int argc, char* argv[])
   if (locale_dir)
     bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 
+  if (icondir)
+    icondir = realpath(icondor, NULL);
+
   component = ibus_table_get_component(argv[0],dbname);
 
   if (have_xml) // according to *.db generation for ibus usable xml desc file in dir

@@ -174,6 +174,8 @@ ibus_table_constructor(GType type, guint n_construct_properties,GObjectConstruct
 
   IBUS_TABLE_ENGINE(obj)->db =  tabsqlitedb_new(dbname,0);
 
+  IBUS_TABLE_ENGINE(obj)->editor = editor_new(NULL,"abcdefghijklmnopqrstuvwxyz",16,IBUS_TABLE_ENGINE(obj)->db);
+
   return obj;
 }
 
@@ -182,28 +184,39 @@ ibus_table_engine_destroy(IBusTableEngine *engine)
 {
   g_print("%s\n", __func__);//, engine->laststate.x, engine->laststate.y);
 
+  g_object_unref(engine->editor);
+  tabsqlitedb_destory(engine->db);
   IBUS_OBJECT_CLASS(ibus_table_engine_parent_class)->destroy(IBUS_OBJECT(engine));
+  g_object_unref(engine->table);
+  tabsqlitedb_destory(engine->proplist);
 }
 
 static int ibus_table_engine_commit_string(IBusTableEngine *engine, guint index)
 {
-//	if (engine->matched->len > index)
-//	{
-//		ibus_engine_commit_text((IBusEngine *) engine,
-//				ibus_text_new_from_static_string(
-//						g_array_index(engine->matched,MATCHED,index).hanzi));
-//		g_string_truncate(engine->inputed, 0);
-//		return TRUE;
-//	}
-	return FALSE;
+  // TODO when submitted, return true.
+  return TRUE;
 }
 
 static gboolean
 ibus_table_engine_update(IBusTableEngine *engine)
 {
-//	gtk_container_remove(GTK_CONTAINER(engine->box),engine->tables);
- //gdk_window_invalidate_rect(engine->LookupTable->window,0,0);
- return TRUE;
+  // show auxiliary_text
+  int i;
+
+  ibus_engine_update_auxiliary_text(IBUS_ENGINE(engine),editor_get_auxiliary_text(engine->editor),TRUE);
+
+  ibus_lookup_table_clear(engine->table);
+
+  for (i = 0; i < MIN(6,editor_get_prasesed_count(engine->editor)); i++)
+    {
+      // show the 1st page at this stage
+      ibus_lookup_table_append_candidate(engine->table, editor_get_prasese(engine->editor, 0, i));
+    }
+
+  ibus_engine_update_lookup_table(IBUS_ENGINE(engine),engine->table,TRUE);
+
+  return TRUE;
+
 }
 
 #define is_alpha(c) (((c) >= IBUS_a && (c) <= IBUS_z) || ((c) >= IBUS_A && (c) <= IBUS_Z))
@@ -222,7 +235,7 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
   modifiers &= (IBUS_CONTROL_MASK | IBUS_MOD1_MASK);
 
   // impl input method magic here
-  g_print("%s\n",__func__);
+  g_print("%s %c\n",__func__, keyval);
 
   switch (keyval)
     {
@@ -253,6 +266,9 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
         return ibus_table_engine_update(engine);
       }
     return FALSE;
+  case IBUS_a ... IBUS_z:
+      editor_append_input(engine->editor,keyval);
+      return ibus_table_engine_update(engine);
   case IBUS_0 ... IBUS_9:
     return ibus_table_engine_commit_string(engine, keyval - IBUS_0);
     }

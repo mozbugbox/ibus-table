@@ -16,6 +16,7 @@ struct _IBusTableEngine
   IBusEngine parent;
   IBusLookupTable *table;
   IBusPropList * proplist;
+  Editor * editor;
   guint page_size;
   tabsqlitedb * db;
 };

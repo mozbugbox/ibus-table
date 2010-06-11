@@ -4,16 +4,15 @@
  *  Created on: 2010/06/08
  *      Author: cchance
  */
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
 #include "tabsqlitedb.h"
+#include "tabdict"
 
 int
 main(int argc, char ** argv)
 {
   // load db
+  ibus_init();
   chdir("test");
   char *dbfile = "chanjie5.db";
   tabsqlitedb *ret = tabsqlitedb_new(dbfile, NULL);
