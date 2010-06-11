@@ -54,16 +54,16 @@ struct _IBusT9EngineClass
   int  (*commit_string)(IBusT9Engine *engine, guint index);
 };
 
-#define IBUS_TYPE_T9_ENGINE	\
-	(ibus_t9_engine_get_type ())
+#define IBUS_TYPE_TABLE_ENGINE	\
+	(ibus_table_engine_get_type ())
 
 GType
-ibus_t9_engine_get_type(void);
+ibus_table_engine_get_type(void);
 
-#define IBUS_T9_ENGINE_GET_CLASS(obj)	((IBusT9EngineClass*)(IBUS_ENGINE_GET_CLASS(obj)))
+#define IBUS_TABLE_ENGINE_GET_CLASS(obj)	((IBusT9EngineClass*)(IBUS_ENGINE_GET_CLASS(obj)))
 
-#define IBUS_T9_ENGINE(obj)             \
-    (G_TYPE_CHECK_INSTANCE_CAST ((obj), IBUS_TYPE_T9_ENGINE, IBusT9Engine))
+#define IBUS_TABLE_ENGINE(obj)             \
+    (G_TYPE_CHECK_INSTANCE_CAST ((obj), IBUS_TYPE_TABLE_ENGINE, IBusT9Engine))
 
 struct _PHRASER
 {

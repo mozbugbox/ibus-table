@@ -53,15 +53,15 @@ static void init_inside(const char *exefile)
 
 	factory = ibus_factory_new(ibus_bus_get_connection(bus));
 
-	ibus_bus_request_name(bus, "org.freedesktop.IBus.T9", 0);
+	ibus_bus_request_name(bus, "org.freedesktop.IBus.Table", 0);
 
-        component = ibus_component_new("org.freedesktop.IBus.T9",
-                        _("T9 input method"), PACKAGE_VERSION, "GPL", MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT,
+        component = ibus_component_new("org.freedesktop.IBus.Table",
+                        _("Table input method"), PACKAGE_VERSION, "GPL", MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT,
                         exefile, GETTEXT_PACKAGE);
 
 	ibus_bus_register_component(bus, component);
 
-	ibus_factory_add_engine(factory, "T9", IBUS_TYPE_T9_ENGINE);
+	ibus_factory_add_engine(factory, "Table", IBUS_TYPE_TABLE_ENGINE);
 
 	g_object_unref(component);
 }
@@ -70,7 +70,7 @@ static void init_outside(const char * icon_dir, const char *exefile)
 {
 	char iconfile [1024];
 	strcpy(iconfile,icon_dir);
-	strcat(iconfile,"/ibus-t9.svg");
+	strcat(iconfile,"/ibus-table.svg");
 
 	IBusComponent *component;
 	IBusEngineDesc * desc;
@@ -82,23 +82,23 @@ static void init_outside(const char * icon_dir, const char *exefile)
 
 	factory = ibus_factory_new(ibus_bus_get_connection(bus));
 
-	ibus_bus_request_name(bus, "org.freedesktop.IBus.T9", 0);
+	ibus_bus_request_name(bus, "org.freedesktop.IBus.TABLE", 0);
 
 
 
-	desc = ibus_engine_desc_new("T9", "ibus-T9",
-			_("T9 input method"), "zh_CN", "GPL",
+	desc = ibus_engine_desc_new("TABLE", "ibus-TABLE",
+			_("Table input method"), "zh_CN", "GPL",
 			MICROCAI_WITHEMAIL, iconfile, "us");
 
-	component = ibus_component_new("org.freedesktop.IBus.T9",
-			_("T9 input method"), PACKAGE_VERSION, "GPL", MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT,
+	component = ibus_component_new("org.freedesktop.IBus.Table",
+			_("Table input method"), PACKAGE_VERSION, "GPL", MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT,
 			exefile, GETTEXT_PACKAGE);
 
 	ibus_component_add_engine(component, desc);
 
 	ibus_bus_register_component(bus, component);
 
-	ibus_factory_add_engine(factory, "T9", IBUS_TYPE_T9_ENGINE);
+	ibus_factory_add_engine(factory, "Table", IBUS_TYPE_TABLE_ENGINE);
 
 	g_object_unref(component);
 }
