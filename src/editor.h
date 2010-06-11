@@ -10,11 +10,13 @@
 
 typedef struct _Editor{
   GObject parent;
-
   GString * input;
   tabsqlitedb * db;
+  gchar * valid_input_chars;
   GList * inputed;
   GList * prased;
+  guint pagesize;
+  guint curpage;
 
 }Editor;
 
@@ -31,7 +33,7 @@ GType editor_get_type();
 
   gint editor_get_chinese_mode(Editor * editor);
 
-  void editor_append_input(Editor * editor, gchar key);
+  gboolean editor_append_input(Editor * editor, gchar key);
 
   IBusText *editor_get_auxiliary_text(Editor * editor);
 

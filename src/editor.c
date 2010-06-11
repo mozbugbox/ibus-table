@@ -32,8 +32,11 @@ static void
 editor_class_init(EditorClass*);
 static void
 editor_init(Editor*);
-static void editor_finalize(Editor* editor);
-static void editor_set_property(Editor *object, guint property_id, const GValue *value,GParamSpec *pspec);
+static void
+editor_finalize(Editor* editor);
+static void
+editor_set_property(Editor *object, guint property_id, const GValue *value,
+    GParamSpec *pspec);
 
 G_DEFINE_TYPE(Editor,editor,G_TYPE_OBJECT)
 
@@ -52,6 +55,10 @@ static void editor_class_init(EditorClass*klass)
     spec = g_param_spec_pointer("db","db","db",G_PARAM_WRITABLE);
 
     g_object_class_install_property(G_OBJECT_CLASS(klass),2,spec);
+
+    spec = g_param_spec_string("valid_input_chars","valid_input_chars","valid_input_chars","abcdefghijklmnopqrstuvwxz",G_PARAM_WRITABLE);
+
+    g_object_class_install_property(G_OBJECT_CLASS(klass),3,spec);
   }
 
 static void
@@ -78,6 +85,9 @@ editor_set_property(Editor *object, guint property_id, const GValue *value,
   case 2:
     object->db = g_value_get_pointer(value);
     break;
+  case 3:
+    g_free(object->valid_input_chars);
+    object->valid_input_chars = g_value_dup_string(value);
     }
 }
 
@@ -85,7 +95,8 @@ Editor *
 editor_new(IBusConfig * config, gchar * valid_inputchars, gint max_key_length,
     tabsqlitedb * db)
 {
-  return g_object_new(G_TYPE_EDITOR, "db", db, "config", config, NULL);
+  return g_object_new(G_TYPE_EDITOR, "db", db, "config", config,
+      "valid_input_chars", valid_inputchars, NULL);
 }
 
 static void
@@ -99,14 +110,21 @@ editor_do_prasese(Editor * editor)
   editor->prased = tabsqlitedb_prase(editor->db, editor->inputed);
 }
 
-void
+gboolean
 editor_append_input(Editor * editor, gchar key)
 {
   Tab_key * tkey = tab_key_new(key);
   editor->inputed = g_list_append(editor->inputed, tkey);
   g_string_append_c(editor->input, key);
-
-  editor_do_prasese(editor);
+  if (strchr(editor->valid_input_chars, key))
+    {
+      Tab_key * tkey = tab_key_new(key);
+      editor->inputed = g_list_append(editor->inputed, tkey);
+      g_string_append_c(editor->input, key);
+      editor_do_prasese(editor);
+      return TRUE;
+    }
+  return FALSE;
 }
 
 gboolean
@@ -137,10 +155,11 @@ editor_get_auxiliary_text(Editor * editor)
 IBusText *
 editor_get_prasese(Editor * editor, guint page, guint index)
 {
-  gchar * str ;
+  gchar * str;
 
-  if(g_list_length(editor->prased) >= page*6+index)
-    return ibus_text_new_from_string(g_list_nth_data(editor->prased,page*6+index));
+  if (g_list_length(editor->prased) >= page * 6 + index)
+    return ibus_text_new_from_string(g_list_nth_data(editor->prased, page * 6
+        + index));
   return NULL;
 }
 
@@ -161,28 +180,28 @@ editor_get_prasesed_count(Editor * editor)
 gint
 editor_get_chinese_mode(Editor * editor)
 {
-// get from env var
-char * lc = getenv("LC_CTYPE");
-if (!lc)
-lc = getenv("LANG");
-lc = g_utf8_strdown(g_strdup(lc), -1);
+  // get from env var
+  char * lc = getenv("LC_CTYPE");
+  if (!lc)
+    lc = getenv("LANG");
+  lc = g_utf8_strdown(g_strdup(lc), -1);
 
-char * zh = strstr(lc, "zh_");
+  char * zh = strstr(lc, "zh_");
 
-if (zh)
-{
-  // SC | TC
-  GStrv v = g_strsplit(zh, "_", 3);
-
-  g_free(lc);
-
-  if (g_strcmp0(v[1], "cn") == 0)
+  if (zh)
     {
+      // SC | TC
+      GStrv v = g_strsplit(zh, "_", 3);
+
+      g_free(lc);
+
+      if (g_strcmp0(v[1], "cn") == 0)
+        {
+          g_strfreev(v);
+          return 0;
+        }
       g_strfreev(v);
-      return 0;
+      return 1;
     }
-  g_strfreev(v);
-  return 1;
-}
-return -1;
+  return -1;
 }
