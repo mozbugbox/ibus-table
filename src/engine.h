@@ -3,11 +3,10 @@
 #define __ENGINE_H__
 
 #include <ibus.h>
-#include <gtk/gtk.h>
 
 typedef struct _PHRASER PHRASER;
-typedef struct _IBusT9Engine IBusT9Engine;
-typedef struct _IBusT9EngineClass IBusT9EngineClass;
+typedef struct _IBusTableEngine IBusTableEngine;
+typedef struct _IBusTableEngineClass IBusTableEngineClass;
 
 typedef struct _MATCHED MATCHED;
 
@@ -16,42 +15,21 @@ struct _MATCHED{
   char  hanzi[16];
 };
 
-struct button_data
-{
-	IBusT9Engine * engine;
-	int index;
-};
-
-struct _IBusT9Engine
+struct _IBusTableEngine
 {
   IBusEngine parent;
 
   /* members */
 
-  //  IBusLookupTable *table;
-  GtkWidget* LookupTable;
-  GtkWidget* tables;
-  GtkWidget* box;
-  GdkRectangle laststate;
-  GdkPoint lastpoint;
-  guint drag;
-  GdkPixbuf *keysicon[5];
-  gboolean iconstate[5];
-
-  GString * inputed;
-  GArray * matched;
-  guint    page;
-
-  struct button_data	stok_botton_call_back[5];
-  struct button_data	table_botton_call_back[10];
+  IBusLookupTable *table;
 };
 
-struct _IBusT9EngineClass
+struct _IBusTableEngineClass
 {
   IBusEngineClass parent;
   GString * icondir;
   PHRASER * phraser;
-  int  (*commit_string)(IBusT9Engine *engine, guint index);
+  int  (*commit_string)(IBusTableEngine *engine, guint index);
 };
 
 #define IBUS_TYPE_TABLE_ENGINE	\
@@ -60,10 +38,10 @@ struct _IBusT9EngineClass
 GType
 ibus_table_engine_get_type(void);
 
-#define IBUS_TABLE_ENGINE_GET_CLASS(obj)	((IBusT9EngineClass*)(IBUS_ENGINE_GET_CLASS(obj)))
+#define IBUS_TABLE_ENGINE_GET_CLASS(obj)	((IBusTableEngineClass*)(IBUS_ENGINE_GET_CLASS(obj)))
 
 #define IBUS_TABLE_ENGINE(obj)             \
-    (G_TYPE_CHECK_INSTANCE_CAST ((obj), IBUS_TYPE_TABLE_ENGINE, IBusT9Engine))
+    (G_TYPE_CHECK_INSTANCE_CAST ((obj), IBUS_TYPE_TABLE_ENGINE, IBusTableEngine))
 
 struct _PHRASER
 {
@@ -71,11 +49,13 @@ struct _PHRASER
   char * start_ptr; // for nmaped access
   size_t fsize; //for nmaped access
 };
-PHRASER * phraser_new(char * file);
+PHRASER * phraser_new(const gchar * file);
 void phraser_free(PHRASER*phraser);
 int phraser_optimise(PHRASER * phraser);
 int phraser_get_phrases(GArray * result, GString * input, PHRASER * phraser);
 
-extern char DATAFILE[]; //= "data/handwriting-zh_CN.model";
-extern char icondir[];
+extern const gchar * datafile;
+extern const char * icondir;
+extern IBusBus *bus;
+
 #endif
