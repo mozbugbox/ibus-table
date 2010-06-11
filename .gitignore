@@ -27,3 +27,5 @@ ABOUT-NLS
 .*
 src/ibus-engine-table
 po/stamp-po
+test/test_tabsqlitedb
+test/testsqlite3

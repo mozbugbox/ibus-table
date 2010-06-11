@@ -82,6 +82,7 @@ src/Makefile
 src/table.xml.in
 icons/Makefile
 tables/Makefile
+test/Makefile
 )
 
 AC_OUTPUT
