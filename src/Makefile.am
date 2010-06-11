@@ -2,9 +2,9 @@
 #
 # ibus-table - The table engine for IBus
 #
-# Copyright (c) 2007 Yu Yuwei <acevery@gmail.com>
-# Copyright (c) 2009 Caius 'kaio' Chance <cchance@redhat.com>
-# Copyright (c) 2010 microcai  <microcai@fedoraproject.org>
+# Copyright (c) 2007 Yu Yuwei <acevery at gmail.com>
+# Copyright (c) 2010 microcai  <microcai at fedoraproject.org>
+# Copyright (c) 2010 Caius 'kaio' Chance <kaio at fedoraproject.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,11 +24,18 @@ libexecdir = ${prefix}/share/ibus/engine
 
 INCLUDES =  @IBUS_CFLAGS@ -DPKGDATADIR=\"$(pkgdatadir)\" -DPREFIX=\"$(prefix)\"
 
-LIBS = @IBUS_LIBS@
+LIBS = @IBUS_LIBS@ @SQLITE3_LIBS@
 
 libexec_PROGRAMS = ibus-engine-table
 
-ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h tabdict.c tabdict.h
+ibus_engine_table_SOURCES = main.c \
+								 engine.c \
+								 engine.h \
+								 tabdict.c \
+								 tabdict.h \
+								 tabsqlitedb.c \
+								 tabsqlitedb.h \
+								 editor.c
 
 component_DATA = table.xml 
 
