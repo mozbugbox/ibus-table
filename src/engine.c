@@ -206,5 +206,5 @@ ibus_table_engine_focus_in(IBusEngine *engine)
 static void
 ibus_table_engine_focus_out(IBusEngine *engine)
 {
-	IBusTableEngine * ibus_table = IBUS_TABLE_ENGINE(engine);
+  IBusTableEngine * ibus_table = IBUS_TABLE_ENGINE(engine);
 }

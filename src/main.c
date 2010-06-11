@@ -1,10 +1,16 @@
 /* vim:set et sts=4: */
+
+
+#ifdef HAVE_CONFIG_H
+#include <config.h> // autotools
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h> // *nix
 #include <execinfo.h> // dbg
-#include <config.h> // autotools
+
 // gettext
 #ifdef HAVE_GETTEXT
 
@@ -16,9 +22,8 @@
 #define N_(String) gettext_noop (String)
 
 #else
-
 #define _(x) (x)
-
+#define N_(x) (x)
 #endif
 
 #include "engine.h"
