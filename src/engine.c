@@ -107,11 +107,11 @@ ibus_table_engine_init(IBusTableEngine *engine)
   size_t i;
   IBusTableEngineClass* klass;
 
-  GError * err;
+  engine->page_size = 6 ;
+
+  engine->table = ibus_lookup_table_new(engine->page_size,0,TRUE,0);
 
   klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
-
-
 }
 
 static void

@@ -10,17 +10,14 @@
 #include <string.h>
 #include <unistd.h> // *nix
 #include <execinfo.h> // dbg
-
+#include <glob.h>
 // gettext
 #ifdef HAVE_GETTEXT
-
 #include <locale.h>
 #include <libintl.h>
-
 #define _(String) gettext (String)
 #define gettext_noop(String) String
 #define N_(String) gettext_noop (String)
-
 #else
 #define _(x) (x)
 #define N_(x) (x)
@@ -29,9 +26,77 @@
 #include "engine.h"
 
 // extern vars
-IBusBus bus = NULL;
-const gchar *datafile = PKGDATADIR"/tables/table.txt";
-const char *iconfile = PKGDATADIR"/icons/ibus-table.svg";
+IBusBus *bus = NULL;
+const gchar *tabledbdir = PKGDATADIR"/tables";
+const char *icondir = PKGDATADIR"/icons/";
+
+IBusEngineDesc *
+ibus_table_make_engine(const gchar * tablename)
+{
+  gchar * name , * longname ,* description,*license,*author,*icon;
+  // open db file
+  tabsqlitedb * db = tabsqlitedb_new(tablename,NULL);
+
+  tabsqlitedb_getime(db,"name",&name);
+  tabsqlitedb_getime(db,"name.zh_cn",&longname);
+  tabsqlitedb_getime(db,"description",&description);
+  tabsqlitedb_getime(db,"author",&author);
+  tabsqlitedb_getime(db,"license",&license);
+  tabsqlitedb_getime(db,"icon",&icon);
+
+  char * iconfile = g_strdup_printf("%s/%s",icondir,icon);
+
+  IBusEngineDesc * desc = ibus_engine_desc_new(name,longname,description,"zh",license,author,iconfile,"us");
+
+  g_free(name);
+  g_free(longname);
+  g_free(description);
+  g_free(author);
+  g_free(icon);
+  g_free(license);
+
+  tabsqlitedb_destory(db);
+  return desc;
+}
+
+static IBusComponent *
+ibus_table_get_component( const gchar * execfile , const gchar * table)
+{
+  glob_t globs =  { 0 };
+
+  IBusComponent * component = ibus_component_new("org.freedesktop.IBus.Table",
+        _("Table Input Method"), PACKAGE_VERSION, "GPL", AUTHOR_EMAIL,
+        PACKAGE_BUGREPORT, execfile, GETTEXT_PACKAGE);
+
+  // change to the directory
+  chdir(tabledbdir);
+
+  glob("*.db", GLOB_DOOFFS, NULL, &globs);
+
+  for (int i = 0; i < globs.gl_pathc; i++)
+    {
+      IBusEngineDesc * desc = ibus_table_make_engine(globs.gl_pathv[i]);
+      ibus_component_add_engine(component,desc);
+    }
+
+  globfree(&globs);
+
+  return component;
+}
+
+static void
+print_engines_xml (IBusComponent *component)
+{
+    GString *output;
+
+    output = g_string_new ("");
+
+    ibus_component_output_engines (component, output, 0);
+
+    write(STDOUT_FILENO,output->str,output->len);
+
+    exit(EXIT_SUCCESS);
+}
 
 int
 main(int argc, char* argv[])
@@ -39,7 +104,9 @@ main(int argc, char* argv[])
   // default if nth spec
 
   gboolean have_ibus = FALSE;
+  gboolean have_xml = FALSE;
   gchar *locale_dir = NULL;
+  gchar *dbname = NULL;
 
   setlocale(LC_ALL, "");
   textdomain(GETTEXT_PACKAGE);
@@ -47,10 +114,14 @@ main(int argc, char* argv[])
   GOptionEntry parameters[] =
     {
       { "ibus", '\0', 0, G_OPTION_ARG_NONE, &have_ibus },
-      { "icon", '\0', 0, G_OPTION_ARG_STRING, &iconfile,
+      { "xml", '\0', 0, G_OPTION_ARG_NONE, &have_xml },
+      { "table", 't', 0, G_OPTION_ARG_STRING, &dbname,
+              _("name of the table."), N_("table name") },
+//========= for test
+      { "icon", '\0', 0, G_OPTION_ARG_STRING, &icondir,
           _("Location of the logo."), N_("logofile") },
-      { "table", '\0', 0, G_OPTION_ARG_STRING, &datafile,
-          _("Location of the table."), N_("tablefile") },
+      { "tabledir", '\0', 0, G_OPTION_ARG_STRING, &tabledbdir,
+          _("Location of the tables."), N_("table dir") },
       { "locale", '\0', 0, G_OPTION_ARG_STRING, &locale_dir,
           _("Path of the locale."), N_("locale") },
       { 0 } };
@@ -66,27 +137,33 @@ main(int argc, char* argv[])
   if (locale_dir)
     bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 
+
+  IBusComponent *component = ibus_table_get_component(argv[0],dbname);
+
+  if (have_xml) // according to *.db generation for ibus useable xml dec file in directory 
+    {
+      print_engines_xml(component);
+    }
+
   // create bus, factory, component
   bus = ibus_bus_new();
   g_signal_connect(bus, "disconnected", G_CALLBACK(ibus_quit), NULL);
-  IBusFactory *factory = ibus_factory_new(ibus_bus_get_connection(bus));
-  ibus_bus_request_name(bus, "org.freedesktop.IBus.Table", 0);
-  IBusComponent *component = ibus_component_new("org.freedesktop.IBus.Table",
-      _("Table Input Method"), PACKAGE_VERSION, "GPL", AUTHOR_EMAIL,
-      PACKAGE_BUGREPORT, argv[0], GETTEXT_PACKAGE);
 
-  if (!have_bus)
+  IBusFactory *factory = ibus_factory_new(ibus_bus_get_connection(bus));
+
+  GList *p,*engines = ibus_component_get_engines (component);
+  for (p = engines; p != NULL; p = p->next) {
+      IBusEngineDesc *engine = (IBusEngineDesc *)p->data;
+      ibus_factory_add_engine (factory, engine->name, IBUS_TYPE_TABLE_ENGINE);
+  }
+
+  if (!have_ibus)
     {
-      // as no daemon, create desc instantly; add eng to component
-      IBusEngineDesc *desc = ibus_engine_desc_new("Table", "ibus-table",
-          _("Table Input Method"), "zh_CN", "GPL", AUTHOR_EMAIL, iconfile,
-          "us");
-      ibus_component_add_engine(component, desc);
+      // reg component to daemon; add eng to factory
+      ibus_bus_register_component(bus, component);
     }
 
-  // reg component to daemon; add eng to factory
-  ibus_bus_register_component(bus, component);
-  ibus_factory_add_engine(factory, "Table", IBUS_TYPE_TABLE_ENGINE);
+  ibus_bus_request_name(bus, "org.freedesktop.IBus.Table", 0);
 
   g_object_unref(component);
 
@@ -96,3 +173,4 @@ main(int argc, char* argv[])
   ibus_main();
   return 0;
 }
+

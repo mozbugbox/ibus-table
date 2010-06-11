@@ -46,7 +46,8 @@ AC_CONFIG_MACRO_DIR([m4])
 # AM_MAINTAINER_MODE
 # AM_DISABLE_STATIC
 AC_PROG_CC
-# AM_PROG_CC_C_O
+AC_PROG_CC_STDC
+
 # AC_PROG_CXX
 # AC_ISC_POSIX
 AC_HEADER_STDC
@@ -63,10 +64,15 @@ AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.16.1)
 
 PKG_CHECK_MODULES(IBUS, [
-    ibus-1.0 >= 1.2
+    ibus-1.0 >= 1.2 glib-2.0 gobject-2.0
 ])
 
-AC_DEFINE(MICROCAI_WITHEMAIL,"kaio@fedoraproject.org",[author Caius 'kaio' Chance and his email])
+PKG_CHECK_MODULES(SQLITE3, [
+    sqlite3
+])
+
+
+AC_DEFINE(AUTHOR_EMAIL,"kaio@fedoraproject.org",[author Caius 'kaio' Chance and his email])
 
 # OUTPUT files
 AC_CONFIG_FILES(po/Makefile.in

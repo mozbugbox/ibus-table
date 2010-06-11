@@ -12,7 +12,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-        <title>src/Makefile.am at 4ea9b877e7e8aa0a7524c3bd7ff61de47f734679 from kaio's ibus-table - GitHub</title>
+        <title>src/tabsqlitedb.c at 4ea9b877e7e8aa0a7524c3bd7ff61de47f734679 from kaio's ibus-table - GitHub</title>
     <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub" />
     <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub" />
 
@@ -240,17 +240,17 @@
         
           
           
-            <li><a href="/kaio/ibus-table/blob/master/src/Makefile.am" action="show">master</a></li>
+            <li><a href="/kaio/ibus-table/blob/master/src/tabsqlitedb.c" action="show">master</a></li>
           
         
           
           
-            <li><a href="/kaio/ibus-table/blob/rewrite_c/src/Makefile.am" action="show">rewrite_c</a></li>
+            <li><a href="/kaio/ibus-table/blob/rewrite_c/src/tabsqlitedb.c" action="show">rewrite_c</a></li>
           
         
           
           
-            <li><a href="/kaio/ibus-table/blob/rh/src/Makefile.am" action="show">rh</a></li>
+            <li><a href="/kaio/ibus-table/blob/rh/src/tabsqlitedb.c" action="show">rh</a></li>
           
         
       </ul>
@@ -259,16 +259,16 @@
       <a href="#" class="dropdown ">Switch Tags (4)</a>
               <ul>
                       
-              <li><a href="/kaio/ibus-table/blob/0.1.2.20090104/src/Makefile.am">0.1.2.20090104</a></li>
+              <li><a href="/kaio/ibus-table/blob/0.1.2.20090104/src/tabsqlitedb.c">0.1.2.20090104</a></li>
             
                       
-              <li><a href="/kaio/ibus-table/blob/0.1.2.20090101/src/Makefile.am">0.1.2.20090101</a></li>
+              <li><a href="/kaio/ibus-table/blob/0.1.2.20090101/src/tabsqlitedb.c">0.1.2.20090101</a></li>
             
                       
-              <li><a href="/kaio/ibus-table/blob/0.1.1.20081115/src/Makefile.am">0.1.1.20081115</a></li>
+              <li><a href="/kaio/ibus-table/blob/0.1.1.20081115/src/tabsqlitedb.c">0.1.1.20081115</a></li>
             
                       
-              <li><a href="/kaio/ibus-table/blob/0.1.1.20081014/src/Makefile.am">0.1.1.20081014</a></li>
+              <li><a href="/kaio/ibus-table/blob/0.1.1.20081014/src/tabsqlitedb.c">0.1.1.20081014</a></li>
             
                   </ul>
       
@@ -452,7 +452,7 @@
 
   
     <div id="path">
-      <b><a href="/kaio/ibus-table/tree/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679">ibus-table</a></b> / <a href="/kaio/ibus-table/tree/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679/src">src</a> / Makefile.am       <span style="display:none" id="clippy_1825">src/Makefile.am</span>
+      <b><a href="/kaio/ibus-table/tree/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679">ibus-table</a></b> / <a href="/kaio/ibus-table/tree/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679/src">src</a> / tabsqlitedb.c       <span style="display:none" id="clippy_4672">src/tabsqlitedb.c</span>
       
       <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
               width="110"
@@ -463,7 +463,7 @@
       <param name="allowScriptAccess" value="always" />
       <param name="quality" value="high" />
       <param name="scale" value="noscale" />
-      <param NAME="FlashVars" value="id=clippy_1825&amp;copied=copied!&amp;copyto=copy to clipboard">
+      <param NAME="FlashVars" value="id=clippy_4672&amp;copied=copied!&amp;copyto=copy to clipboard">
       <param name="bgcolor" value="#FFFFFF">
       <param name="wmode" value="opaque">
       <embed src="https://assets3.github.com/flash/clippy.swf?v5"
@@ -474,7 +474,7 @@
              allowScriptAccess="always"
              type="application/x-shockwave-flash"
              pluginspage="http://www.macromedia.com/go/getflashplayer"
-             FlashVars="id=clippy_1825&amp;copied=copied!&amp;copyto=copy to clipboard"
+             FlashVars="id=clippy_4672&amp;copied=copied!&amp;copyto=copy to clipboard"
              bgcolor="#FFFFFF"
              wmode="opaque"
       />
@@ -490,23 +490,23 @@
             <span class="icon"><img alt="Txt" height="16" src="https://assets0.github.com/images/icons/txt.png?3e7242cb1377e86d7cea496bd64f459f6cc8c4cf" width="16" /></span>
             <span class="mode" title="File Mode">100644</span>
             
-              <span>53 lines (41 sloc)</span>
+              <span>80 lines (59 sloc)</span>
             
-            <span>1.607 kb</span>
+            <span>1.9 kb</span>
           </div>
           <ul class="actions">
             
-              <li><a id="file-edit-link" href="#" rel="/kaio/ibus-table/file-edit/__ref__/src/Makefile.am">edit</a></li>
+              <li><a id="file-edit-link" href="#" rel="/kaio/ibus-table/file-edit/__ref__/src/tabsqlitedb.c">edit</a></li>
             
-            <li><a href="/kaio/ibus-table/raw/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679/src/Makefile.am" id="raw-url">raw</a></li>
+            <li><a href="/kaio/ibus-table/raw/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679/src/tabsqlitedb.c" id="raw-url">raw</a></li>
             
-              <li><a href="/kaio/ibus-table/blame/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679/src/Makefile.am">blame</a></li>
+              <li><a href="/kaio/ibus-table/blame/4ea9b877e7e8aa0a7524c3bd7ff61de47f734679/src/tabsqlitedb.c">blame</a></li>
             
-            <li><a href="/kaio/ibus-table/commits/master/src/Makefile.am">history</a></li>
+            <li><a href="/kaio/ibus-table/commits/master/src/tabsqlitedb.c">history</a></li>
           </ul>
         </div>
         
-  <div class="data syntax type-plain">
+  <div class="data syntax type-c">
     
       <table cellpadding="0" cellspacing="0">
         <tr>
@@ -564,11 +564,38 @@
 <span id="LID51" rel="#L51">51</span>
 <span id="LID52" rel="#L52">52</span>
 <span id="LID53" rel="#L53">53</span>
+<span id="LID54" rel="#L54">54</span>
+<span id="LID55" rel="#L55">55</span>
+<span id="LID56" rel="#L56">56</span>
+<span id="LID57" rel="#L57">57</span>
+<span id="LID58" rel="#L58">58</span>
+<span id="LID59" rel="#L59">59</span>
+<span id="LID60" rel="#L60">60</span>
+<span id="LID61" rel="#L61">61</span>
+<span id="LID62" rel="#L62">62</span>
+<span id="LID63" rel="#L63">63</span>
+<span id="LID64" rel="#L64">64</span>
+<span id="LID65" rel="#L65">65</span>
+<span id="LID66" rel="#L66">66</span>
+<span id="LID67" rel="#L67">67</span>
+<span id="LID68" rel="#L68">68</span>
+<span id="LID69" rel="#L69">69</span>
+<span id="LID70" rel="#L70">70</span>
+<span id="LID71" rel="#L71">71</span>
+<span id="LID72" rel="#L72">72</span>
+<span id="LID73" rel="#L73">73</span>
+<span id="LID74" rel="#L74">74</span>
+<span id="LID75" rel="#L75">75</span>
+<span id="LID76" rel="#L76">76</span>
+<span id="LID77" rel="#L77">77</span>
+<span id="LID78" rel="#L78">78</span>
+<span id="LID79" rel="#L79">79</span>
+<span id="LID80" rel="#L80">80</span>
 </pre>
           </td>
           <td width="100%">
             
-              <div class="highlight"><pre><div class='line' id='LC1'># vim:set et ts=4:</div><div class='line' id='LC2'>#</div><div class='line' id='LC3'># ibus-table - The table engine for IBus</div><div class='line' id='LC4'>#</div><div class='line' id='LC5'># Copyright (c) 2007 Yu Yuwei &lt;acevery at gmail.com&gt;</div><div class='line' id='LC6'># Copyright (c) 2010 microcai  &lt;microcai at fedoraproject.org&gt;</div><div class='line' id='LC7'># Copyright (c) 2010 Caius 'kaio' Chance &lt;kaio at fedoraproject.net&gt;</div><div class='line' id='LC8'>#</div><div class='line' id='LC9'># This program is free software; you can redistribute it and/or modify</div><div class='line' id='LC10'># it under the terms of the GNU General Public License as published by</div><div class='line' id='LC11'># the Free Software Foundation; either version 3, or (at your option)</div><div class='line' id='LC12'># any later version.</div><div class='line' id='LC13'>#</div><div class='line' id='LC14'># This program is distributed in the hope that it will be useful,</div><div class='line' id='LC15'># but WITHOUT ANY WARRANTY; without even the implied warranty of</div><div class='line' id='LC16'># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</div><div class='line' id='LC17'># GNU General Public License for more details.</div><div class='line' id='LC18'>#</div><div class='line' id='LC19'># You should have received a copy of the GNU General Public License</div><div class='line' id='LC20'># along with this program; if not, write to the Free Software</div><div class='line' id='LC21'># Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</div><div class='line' id='LC22'><br/></div><div class='line' id='LC23'>libexecdir = ${prefix}/share/ibus/engine</div><div class='line' id='LC24'><br/></div><div class='line' id='LC25'>INCLUDES =  @IBUS_CFLAGS@ -DPKGDATADIR=\&quot;$(pkgdatadir)\&quot; -DPREFIX=\&quot;$(prefix)\&quot;</div><div class='line' id='LC26'><br/></div><div class='line' id='LC27'>LIBS = @IBUS_LIBS@ @SQLITE3_LIBS@</div><div class='line' id='LC28'><br/></div><div class='line' id='LC29'>libexec_PROGRAMS = ibus-engine-table</div><div class='line' id='LC30'><br/></div><div class='line' id='LC31'>ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h tabdict.c tabdict.h tabsqlitedb.c tabsqlitedb.h</div><div class='line' id='LC32'><br/></div><div class='line' id='LC33'>component_DATA = table.xml </div><div class='line' id='LC34'><br/></div><div class='line' id='LC35'>componentdir = @datadir@/ibus/component</div><div class='line' id='LC36'><br/></div><div class='line' id='LC37'>EXTRA_DIST = table.xml.in</div><div class='line' id='LC38'><br/></div><div class='line' id='LC39'>CLEANFILES = \</div><div class='line' id='LC40'>	table.xml \</div><div class='line' id='LC41'>	$(NULL)</div><div class='line' id='LC42'><br/></div><div class='line' id='LC43'>table.xml : table.xml.in</div><div class='line' id='LC44'>	( \</div><div class='line' id='LC45'>		libexecdir=${libexecdir}; \</div><div class='line' id='LC46'>		pkgdatadir=${pkgdatadir}; \</div><div class='line' id='LC47'>		s=`cat $&lt;`; \</div><div class='line' id='LC48'>		eval &quot;echo \&quot;$${s}\&quot;&quot;; \</div><div class='line' id='LC49'>	) &gt; $@</div><div class='line' id='LC50'><br/></div><div class='line' id='LC51'>test: ibus-engine-table</div><div class='line' id='LC52'>	$(builddir)/$&lt;  --icon $(top_srcdir)/icons/ --table $(top_srcdir)/tables/table.txt</div><div class='line' id='LC53'><br/></div></pre></div>
+              <div class="highlight"><pre><div class='line' id='LC1'><span class="cm">/*- coding: utf-8 -*-</span></div><div class='line' id='LC2'><span class="cm"> * vim:et sts=4 sw=4</span></div><div class='line' id='LC3'><br/></div><div class='line' id='LC4'><span class="cm">#  ibus-table - The Tables engine for IBus</span></div><div class='line' id='LC5'><span class="cm">#</span></div><div class='line' id='LC6'><span class="cm"># Copyright (c) 2008-2009 Yu Yuwei &lt;acevery@gmail.com&gt;</span></div><div class='line' id='LC7'><span class="cm">#</span></div><div class='line' id='LC8'><span class="cm"># This library is free software; you can redistribute it and/or</span></div><div class='line' id='LC9'><span class="cm"># modify it under the terms of the GNU Lesser General Public</span></div><div class='line' id='LC10'><span class="cm"># License as published by the Free Software Foundation; either</span></div><div class='line' id='LC11'><span class="cm"># version 2.1 of the License, or (at your option) any later version.</span></div><div class='line' id='LC12'><span class="cm">#</span></div><div class='line' id='LC13'><span class="cm"># This library is distributed in the hope that it will be useful,</span></div><div class='line' id='LC14'><span class="cm"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div><div class='line' id='LC15'><span class="cm"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span></div><div class='line' id='LC16'><span class="cm"># Lesser General Public License for more details.</span></div><div class='line' id='LC17'><span class="cm">#</span></div><div class='line' id='LC18'><span class="cm"># You should have received a copy of the GNU Lesser General Public</span></div><div class='line' id='LC19'><span class="cm"># License along with this library; if not, write to the Free Software</span></div><div class='line' id='LC20'><span class="cm"># Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA</span></div><div class='line' id='LC21'><br/></div><div class='line' id='LC22'><span class="cm">*/</span></div><div class='line' id='LC23'><br/></div><div class='line' id='LC24'><br/></div><div class='line' id='LC25'><span class="cp">#include &lt;glib.h&gt;</span></div><div class='line' id='LC26'><span class="cp">#include &lt;string.h&gt;</span></div><div class='line' id='LC27'><span class="cp">#include &lt;stdarg.h&gt;</span></div><div class='line' id='LC28'><br/></div><div class='line' id='LC29'><span class="cp">#include &quot;tabsqlitedb.h&quot;</span></div><div class='line' id='LC30'><br/></div><div class='line' id='LC31'><br/></div><div class='line' id='LC32'><span class="n">tabsqlitedb</span> <span class="o">*</span></div><div class='line' id='LC33'><span class="nf">tabsqlitedb_new</span><span class="p">(</span><span class="k">const</span> <span class="n">gchar</span> <span class="o">*</span> <span class="n">db</span><span class="p">,</span> <span class="k">const</span> <span class="n">gchar</span> <span class="o">*</span> <span class="n">udb</span><span class="p">)</span></div><div class='line' id='LC34'><span class="p">{</span></div><div class='line' id='LC35'>&nbsp;&nbsp;<span class="k">static</span> <span class="n">gsize</span> <span class="n">sqlite_initialized</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span></div><div class='line' id='LC36'>&nbsp;&nbsp;<span class="k">if</span> <span class="p">(</span><span class="n">g_once_init_enter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sqlite_initialized</span><span class="p">))</span></div><div class='line' id='LC37'>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">{</span></div><div class='line' id='LC38'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="n">g_once_init_leave</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sqlite_initialized</span><span class="p">,</span> <span class="o">!</span><span class="n">sqlite3_initialize</span><span class="p">());</span></div><div class='line' id='LC39'>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">}</span></div><div class='line' id='LC40'>&nbsp;&nbsp;<span class="n">tabsqlitedb</span> <span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">g_new0</span><span class="p">(</span><span class="n">tabsqlitedb</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span></div><div class='line' id='LC41'><br/></div><div class='line' id='LC42'>&nbsp;&nbsp;<span class="n">sqlite3_open</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ret</span><span class="o">-&gt;</span><span class="n">db</span><span class="p">);</span></div><div class='line' id='LC43'><br/></div><div class='line' id='LC44'>&nbsp;&nbsp;<span class="k">if</span><span class="p">(</span><span class="n">udb</span><span class="p">)</span></div><div class='line' id='LC45'>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">{</span></div><div class='line' id='LC46'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="n">sqlite3_open</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ret</span><span class="o">-&gt;</span><span class="n">udb</span><span class="p">);</span></div><div class='line' id='LC47'>&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">}</span></div><div class='line' id='LC48'><br/></div><div class='line' id='LC49'>&nbsp;&nbsp;<span class="k">return</span> <span class="n">ret</span><span class="p">;</span></div><div class='line' id='LC50'><span class="p">}</span></div><div class='line' id='LC51'><br/></div><div class='line' id='LC52'><span class="n">sqlite3_stmt</span> <span class="o">*</span><span class="nf">tabsqlitedb_prepare</span><span class="p">(</span><span class="n">tabsqlitedb</span> <span class="o">*</span> <span class="n">db</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">sql</span><span class="p">)</span></div><div class='line' id='LC53'><span class="p">{</span></div><div class='line' id='LC54'><br/></div><div class='line' id='LC55'><span class="p">}</span></div><div class='line' id='LC56'><br/></div><div class='line' id='LC57'><br/></div><div class='line' id='LC58'><span class="n">gboolean</span> <span class="nf">tabsqlitedb_getime</span><span class="p">(</span><span class="n">tabsqlitedb</span> <span class="o">*</span> <span class="n">db</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">attr</span><span class="p">,</span><span class="kt">char</span> <span class="o">**</span> <span class="n">val</span><span class="p">)</span></div><div class='line' id='LC59'><span class="p">{</span></div><div class='line' id='LC60'>&nbsp;&nbsp;<span class="k">const</span> <span class="n">gchar</span> <span class="o">*</span> <span class="n">sql</span> <span class="p">,</span> <span class="o">*</span> <span class="n">tail</span> <span class="p">;</span></div><div class='line' id='LC61'>&nbsp;&nbsp;<span class="n">sqlite3_stmt</span> <span class="o">*</span> <span class="n">stm</span><span class="p">;</span></div><div class='line' id='LC62'><br/></div><div class='line' id='LC63'>&nbsp;&nbsp;<span class="n">sql</span> <span class="o">=</span> <span class="n">g_strdup_printf</span><span class="p">(</span><span class="s">&quot;select val from ime where attr=</span><span class="se">\&#39;</span><span class="s">%s</span><span class="se">\&#39;</span><span class="s">&quot;</span><span class="p">,</span><span class="n">attr</span><span class="p">);</span></div><div class='line' id='LC64'><br/></div><div class='line' id='LC65'>&nbsp;&nbsp;<span class="n">sqlite3_prepare</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">db</span><span class="p">,</span><span class="n">sql</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">sql</span><span class="p">),</span><span class="o">&amp;</span><span class="n">stm</span><span class="p">,</span><span class="o">&amp;</span><span class="n">tail</span><span class="p">);</span></div><div class='line' id='LC66'><br/></div><div class='line' id='LC67'>&nbsp;&nbsp;<span class="n">sqlite3_step</span><span class="p">(</span><span class="n">stm</span><span class="p">);</span></div><div class='line' id='LC68'><br/></div><div class='line' id='LC69'>&nbsp;&nbsp;<span class="o">*</span><span class="n">val</span> <span class="o">=</span> <span class="n">g_strdup</span><span class="p">(</span><span class="n">sqlite3_column_text</span><span class="p">(</span><span class="n">stm</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span></div><div class='line' id='LC70'><br/></div><div class='line' id='LC71'>&nbsp;&nbsp;<span class="n">sqlite3_finalize</span><span class="p">(</span><span class="n">stm</span><span class="p">);</span></div><div class='line' id='LC72'><span class="p">}</span></div><div class='line' id='LC73'><br/></div><div class='line' id='LC74'><span class="kt">void</span> <span class="nf">tabsqlitedb_destory</span><span class="p">(</span><span class="n">tabsqlitedb</span> <span class="o">*</span> <span class="n">db</span><span class="p">)</span></div><div class='line' id='LC75'><span class="p">{</span></div><div class='line' id='LC76'>&nbsp;&nbsp;<span class="n">sqlite3_close</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">db</span><span class="p">);</span></div><div class='line' id='LC77'>&nbsp;&nbsp;<span class="k">if</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">udb</span><span class="p">)</span></div><div class='line' id='LC78'>&nbsp;&nbsp;&nbsp;&nbsp;<span class="n">sqlite3_close</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">udb</span><span class="p">);</span></div><div class='line' id='LC79'><span class="p">}</span></div><div class='line' id='LC80'><br/></div></pre></div>
             
           </td>
         </tr>
@@ -595,7 +622,7 @@
         <div class="info">
           <div class="links">
             <a href="http://github.com/blog"><b>Blog</b></a> |
-            <a href="http://support.github.com?sso=_-D9qfwBNALVWtVhGCwVCzX3G3akBoO36XQ8M-kMER3mItaw2V5DpBTBMMTZiae47v8sw9RrMxtFR5rXTbh-V3DL8BvJu5WWFrIoRztjIMJPBRyj6Jw62tToQeG7RSdtFIrEhXjTTDAnuGfkaFN1Z1HD4WjQgHn5B3_DM9McrB8Gjqf8h-vKw8WCV7ioZNEXIRAjBlaCC5ya-90SCM0-HBt34WTJKVBDN_YUg2qdhtQ">Support</a> |
+            <a href="http://support.github.com?sso=fJglILVplEP9XzAKdgghAQDu1FWBrNSwFXhDefE-_G7d_HKmxb4DiUmrb6S3K-kg_vp8Dz3aiP7xlDYcsrfhhRtB_G2AbzPLShdS0J23Yz9Tt-Yw-JDOTzPP49Rg_7iP4-vlSi78g7CAhmXzoQDlNo0eTn8rhEA7BiAq7qGKw8l2a5mezCPUDoZ_HzNS8q_LNeY1gxDrjeZdjUtv7J59lH5wruZRYShsrJGj4jZc6-U">Support</a> |
             <a href="http://github.com/training">Training</a> |
             <a href="http://github.com/contact">Contact</a> |
             <a href="http://develop.github.com">API</a> |
@@ -607,7 +634,7 @@
           <div class="company">
             &copy;
             2010
-            <span id="_rrt" title="0.57516s from fe3.rs.github.com">GitHub</span> Inc.
+            <span id="_rrt" title="0.25874s from fe3.rs.github.com">GitHub</span> Inc.
             All rights reserved. |
             <a href="/site/terms">Terms of Service</a> |
             <a href="/site/privacy">Privacy Policy</a>
