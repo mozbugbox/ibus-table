@@ -29,6 +29,7 @@
 IBusBus *bus = NULL;
 const gchar *tabledbdir = PKGDATADIR"/tables";
 const char *icondir = PKGDATADIR"/icons/";
+GHashTable *name_2_db;
 
 IBusEngineDesc *
 ibus_table_make_engine(const gchar * tablename)
@@ -44,11 +45,11 @@ ibus_table_make_engine(const gchar * tablename)
   tabsqlitedb_getime(db,"license",&license);
   tabsqlitedb_getime(db,"icon",&icon);
 
+
   char * iconfile = g_strdup_printf("%s/%s",icondir,icon);
 
   IBusEngineDesc * desc = ibus_engine_desc_new(name,longname,description,"zh",license,author,iconfile,"us");
 
-  g_free(name);
   g_free(longname);
   g_free(description);
   g_free(author);
@@ -56,6 +57,8 @@ ibus_table_make_engine(const gchar * tablename)
   g_free(license);
 
   tabsqlitedb_destory(db);
+
+  g_hash_table_insert(name_2_db,name,g_strdup(tablename));
   return desc;
 }
 
@@ -68,8 +71,10 @@ ibus_table_get_component( const gchar * execfile , const gchar * table)
         _("Table Input Method"), PACKAGE_VERSION, "GPL", AUTHOR_EMAIL,
         PACKAGE_BUGREPORT, execfile, GETTEXT_PACKAGE);
 
-  // change to the directory
+  // change to table directory
   chdir(tabledbdir);
+
+  name_2_db = g_hash_table_new(g_str_hash,g_str_equal);
 
   glob("*.db", GLOB_DOOFFS, NULL, &globs);
 
@@ -140,7 +145,7 @@ main(int argc, char* argv[])
 
   IBusComponent *component = ibus_table_get_component(argv[0],dbname);
 
-  if (have_xml) // according to *.db generation for ibus useable xml dec file in directory 
+  if (have_xml) // according to *.db generation for ibus usable xml desc file in dir
     {
       print_engines_xml(component);
     }

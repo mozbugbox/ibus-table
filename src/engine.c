@@ -22,6 +22,10 @@
 /* functions prototype */
 static void
 ibus_table_engine_class_init(IBusTableEngineClass *klass);
+
+static GObject *
+ibus_table_constructor(GType type, guint n_construct_properties,GObjectConstructParam *construct_properties);
+
 static void
 ibus_table_engine_init(IBusTableEngine *engine);
 static void
@@ -58,31 +62,15 @@ ibus_table_engine_property_hide(IBusEngine *engine, const gchar *prop_name);
 static int
 ibus_table_engine_commit_string(IBusTableEngine *engine, guint index);
 
-GType
-ibus_table_engine_get_type(void)
-{
-  static GType type = 0;
-
-  static const GTypeInfo type_info =
-    { sizeof(IBusTableEngineClass), (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL, (GClassInitFunc) ibus_table_engine_class_init,
-        NULL, NULL, sizeof(IBusTableEngine), 0,
-        (GInstanceInitFunc) ibus_table_engine_init, };
-
-  if (type == 0)
-    {
-      type = g_type_register_static(IBUS_TYPE_ENGINE, "IBusTableEngine",
-          &type_info, (GTypeFlags) 0);
-    }
-
-  return type;
-}
+G_DEFINE_TYPE(IBusTableEngine,ibus_table_engine,IBUS_TYPE_ENGINE);
 
 static void
 ibus_table_engine_class_init(IBusTableEngineClass *klass)
 {
   IBusObjectClass *ibus_object_class = IBUS_OBJECT_CLASS (klass);
   IBusEngineClass *engine_class = IBUS_ENGINE_CLASS (klass);
+
+  G_OBJECT_CLASS(klass)->constructor = ibus_table_constructor ;
 
   ibus_object_class->destroy = (IBusObjectDestroyFunc) ibus_table_engine_destroy;
 
@@ -112,6 +100,23 @@ ibus_table_engine_init(IBusTableEngine *engine)
   engine->table = ibus_lookup_table_new(engine->page_size,0,TRUE,0);
 
   klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
+
+}
+
+static GObject *
+ibus_table_constructor(GType type, guint n_construct_properties,GObjectConstructParam *construct_properties)
+{
+  GObject *  obj =  G_OBJECT_CLASS(ibus_table_engine_parent_class)->constructor(type,n_construct_properties,construct_properties);
+
+  const gchar * name = ibus_engine_get_name(IBUS_ENGINE(obj));
+
+  //TODO: open .db file according to engine name
+
+  gchar * dbname = g_hash_table_lookup(name_2_db,name);
+
+  g_print("引擎名字是 %s,数据库文件是 %s\n",name,dbname);
+
+  return obj;
 }
 
 static void
@@ -119,7 +124,7 @@ ibus_table_engine_destroy(IBusTableEngine *engine)
 {
   g_print("%s\n", __func__);//, engine->laststate.x, engine->laststate.y);
 
-  IBUS_OBJECT_CLASS(g_type_class_peek_parent(IBUS_ENGINE_GET_CLASS(engine)))->destroy(IBUS_OBJECT(engine));
+  IBUS_OBJECT_CLASS(ibus_table_engine_parent_class)->destroy(IBUS_OBJECT(engine));
 }
 
 static int ibus_table_engine_commit_string(IBusTableEngine *engine, guint index)
@@ -150,7 +155,6 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
     guint keycode, guint modifiers)
 {
 
-
   IBusText *text;
   IBusTableEngine *engine = (IBusTableEngine *) ibusengine;
 
@@ -159,7 +163,7 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
 
   modifiers &= (IBUS_CONTROL_MASK | IBUS_MOD1_MASK);
 
-  g_printf("%s\n",__func__);
+  g_print("%s\n",__func__);
 
   switch (keyval)
     {
@@ -201,10 +205,14 @@ static void
 ibus_table_engine_focus_in(IBusEngine *engine)
 {
   IBusTableEngine * ibus_table = IBUS_TABLE_ENGINE(engine);
+
+  IBUS_ENGINE_CLASS(ibus_table_engine_parent_class)->focus_in(engine);
 }
 
 static void
 ibus_table_engine_focus_out(IBusEngine *engine)
 {
   IBusTableEngine * ibus_table = IBUS_TABLE_ENGINE(engine);
+
+  IBUS_ENGINE_CLASS(ibus_table_engine_parent_class)->focus_out(engine);
 }
