@@ -1,11 +1,11 @@
 /* vim:set et sts=4: */
-#include <config.h>
-#include <unistd.h>
-#include <execinfo.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-
+#include <unistd.h> // *nix
+#include <execinfo.h> // dbg
+#include <config.h> // autotools
+// gettext
 #ifdef HAVE_GETTEXT
 
 #include <locale.h>
@@ -23,82 +23,71 @@
 
 #include "engine.h"
 
-IBusBus *bus = NULL;
+// extern vars
+IBusBus bus = NULL;
+const gchar *datafile = PKGDATADIR"/tables/table.txt";
+const char *iconfile = PKGDATADIR"/icons/ibus-table.svg";
 
-const gchar * datafile = PKGDATADIR"/tables/table.txt";
-const char * icondir = PKGDATADIR"/icons/";
-
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
-	gboolean have_ibus = FALSE;
-	const gchar * locale_dir = NULL;
-	IBusComponent *component;
-	IBusFactory *factory = NULL;
+  // default if nth spec
 
-	setlocale(LC_ALL, "");
-	textdomain(GETTEXT_PACKAGE);
+  gboolean have_ibus = FALSE;
+  gchar *locale_dir = NULL;
 
-	GOptionEntry paramters[] =
-	{
-	{ "ibus", '\0', 0, G_OPTION_ARG_NONE, &have_ibus },
-	{ "icon", '\0', 0, G_OPTION_ARG_STRING, &icondir, _("the icon file"), N_(
-			"icon file") },
-	{ "table", '\0', 0, G_OPTION_ARG_STRING, &datafile,
-			_("set table file path"), N_("tablefile") },
-	{ "locale", '\0', 0, G_OPTION_ARG_STRING, &locale_dir,
-			_("set locale path"), N_("locale") },
-	{ 0 } };
+  setlocale(LC_ALL, "");
+  textdomain(GETTEXT_PACKAGE);
 
-	ibus_init();
+  GOptionEntry parameters[] =
+    {
+      { "ibus", '\0', 0, G_OPTION_ARG_NONE, &have_ibus },
+      { "icon", '\0', 0, G_OPTION_ARG_STRING, &iconfile,
+          _("Location of the logo."), N_("logofile") },
+      { "table", '\0', 0, G_OPTION_ARG_STRING, &datafile,
+          _("Location of the table."), N_("tablefile") },
+      { "locale", '\0', 0, G_OPTION_ARG_STRING, &locale_dir,
+          _("Path of the locale."), N_("locale") },
+      { 0 } };
 
-	GOptionContext * context = g_option_context_new("");
+  ibus_init();
 
-	g_option_context_add_main_entries(context, paramters, GETTEXT_PACKAGE);
+  // arg params
+  GOptionContext *context = g_option_context_new("");
+  g_option_context_add_main_entries(context, parameters, GETTEXT_PACKAGE);
+  g_assert(g_option_context_parse(context, &argc, &argv, NULL));
+  g_option_context_free(context);
 
-	g_assert(g_option_context_parse(context, &argc, &argv, NULL));
+  if (locale_dir)
+    bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 
-	g_option_context_free(context);
+  // create bus, factory, component
+  bus = ibus_bus_new();
+  g_signal_connect(bus, "disconnected", G_CALLBACK(ibus_quit), NULL);
+  IBusFactory *factory = ibus_factory_new(ibus_bus_get_connection(bus));
+  ibus_bus_request_name(bus, "org.freedesktop.IBus.Table", 0);
+  IBusComponent *component = ibus_component_new("org.freedesktop.IBus.Table",
+      _("Table Input Method"), PACKAGE_VERSION, "GPL", AUTHOR_EMAIL,
+      PACKAGE_BUGREPORT, argv[0], GETTEXT_PACKAGE);
 
-	if (locale_dir)
-	{
-		bindtextdomain(GETTEXT_PACKAGE, locale_dir);
-	}
+  if (!have_bus)
+    {
+      // as no daemon, create desc instantly; add eng to component
+      IBusEngineDesc *desc = ibus_engine_desc_new("Table", "ibus-table",
+          _("Table Input Method"), "zh_CN", "GPL", AUTHOR_EMAIL, iconfile,
+          "us");
+      ibus_component_add_engine(component, desc);
+    }
 
-	bus = ibus_bus_new();
+  // reg component to daemon; add eng to factory
+  ibus_bus_register_component(bus, component);
+  ibus_factory_add_engine(factory, "Table", IBUS_TYPE_TABLE_ENGINE);
 
-	g_signal_connect(bus, "disconnected", G_CALLBACK(ibus_quit), NULL);
+  g_object_unref(component);
 
-	factory = ibus_factory_new(ibus_bus_get_connection(bus));
+  printf(_("ibus-table Version %s started.\n"), PACKAGE_VERSION);
 
-	ibus_bus_request_name(bus, "org.freedesktop.IBus.T9", 0);
-
-	component = ibus_component_new("org.freedesktop.IBus.T9",
-			_("T9 input method"), PACKAGE_VERSION, "GPL",
-			MICROCAI_WITHEMAIL, PACKAGE_BUGREPORT, argv[0], GETTEXT_PACKAGE);
-
-	if (!have_ibus)
-	{
-		icondir = realpath(icondir, 0);
-
-		char * iconfile = g_strdup_printf("%s/ibus-t9.svg", icondir);
-
-		IBusEngineDesc * desc = ibus_engine_desc_new("T9", "ibus-T9",
-				_("T9 input method"), "zh_CN", "GPL", MICROCAI_WITHEMAIL,
-				iconfile, "us");
-
-		g_free(iconfile);
-
-		ibus_component_add_engine(component, desc);
-	}
-
-	ibus_bus_register_component(bus, component);
-
-	ibus_factory_add_engine(factory, "T9", IBUS_TYPE_TABLE_ENGINE);
-
-	g_object_unref(component);
-
-	printf(_("ibus-t9 Version %s Start Up\n"), PACKAGE_VERSION);
-
-	ibus_main();
-	return 0;
+  // call ibus after all sent
+  ibus_main();
+  return 0;
 }
