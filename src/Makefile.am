@@ -30,17 +30,17 @@ libexec_PROGRAMS = ibus-engine-table
 
 ibus_engine_table_SOURCES =  main.c 	engine.c 	engine.h prase.c prase.h lookuptable.c lookuptable.h decoder.c
 
-component_DATA = ibus-table.xml 
+component_DATA = table.xml 
 
 componentdir = @datadir@/ibus/component
 
-EXTRA_DIST = ibus-table.xml.in
+EXTRA_DIST = table.xml.in
 
 CLEANFILES = \
-	ibus-table.xml \
+	table.xml \
 	$(NULL)
 
-ibus-t9.xml : ibus-table.xml.in
+table.xml : table.xml.in
 	( \
 		libexecdir=${libexecdir}; \
 		pkgdatadir=${pkgdatadir}; \
