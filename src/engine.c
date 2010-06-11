@@ -84,6 +84,8 @@ ibus_table_engine_class_init(IBusTableEngineClass *klass)
 
   engine_class->focus_out = ibus_table_engine_focus_out;
 
+  engine_class->property_activate = ibus_table_property_activate;
+
   klass->icondir = g_string_new(icondir);
 
   klass->commit_string = ibus_table_engine_commit_string;
@@ -125,7 +127,26 @@ ibus_table_engine_init(IBusTableEngine *engine)
 
   property = ibus_property_new("letter-mode", PROP_TYPE_NORMAL,
       ibus_text_new_from_static_string(_("半角")), iconname->str,
-      ibus_text_new_from_static_string(_("toggle half/full")), TRUE, TRUE,
+      ibus_text_new_from_static_string(_("toggle half/full letter")), TRUE, TRUE,
+      PROP_STATE_INCONSISTENT, NULL);
+
+  ibus_prop_list_append(engine->proplist,property);
+
+  g_string_printf(iconname,"%s/half-punct.svg",icondir);
+
+  property = ibus_property_new("punct-mode", PROP_TYPE_NORMAL,
+      ibus_text_new_from_static_string(_("")), iconname->str,
+      ibus_text_new_from_static_string(_("toggle half/full punctuation")), TRUE, TRUE,
+      PROP_STATE_INCONSISTENT, NULL);
+
+  ibus_prop_list_append(engine->proplist,property);
+
+  g_string_printf(iconname,"%s/ncommit.svg",icondir);
+
+  property = ibus_property_new("commit-mode", PROP_TYPE_NORMAL,
+      ibus_text_new_from_static_string(_("")), iconname->str,
+      ibus_text_new_from_static_string(_("toggle passive/active commit")), TRUE, TRUE,
+
       PROP_STATE_INCONSISTENT, NULL);
 
   ibus_prop_list_append(engine->proplist,property);
@@ -133,8 +154,6 @@ ibus_table_engine_init(IBusTableEngine *engine)
   g_string_free(iconname,TRUE);
 
   engine->table = ibus_lookup_table_new(engine->page_size,0,TRUE,0);
-
-
 
   klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
 
@@ -202,6 +221,7 @@ ibus_table_engine_process_key_event(IBusEngine *ibusengine, guint keyval,
 
   modifiers &= (IBUS_CONTROL_MASK | IBUS_MOD1_MASK);
 
+  // impl input method magic here
   g_print("%s\n",__func__);
 
   switch (keyval)
@@ -256,4 +276,10 @@ ibus_table_engine_focus_out(IBusEngine *engine)
   IBusTableEngine * ibus_table = IBUS_TABLE_ENGINE(engine);
 
   IBUS_ENGINE_CLASS(ibus_table_engine_parent_class)->focus_out(engine);
+}
+
+static void
+ibus_table_property_activate(IBusEngine *engine, const gchar *prop_name, guint prop_state)
+{
+  IBUS_ENGINE_CLASS(ibus_table_engine_parent_class)->property_activate(engine,prop_name,prop_state);
 }
