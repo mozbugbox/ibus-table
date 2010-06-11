@@ -1,25 +1,24 @@
-# Process this file with autoconf to produce a configure script.
 # vim:set et ts=4:
 #
-# ibus-table - The Tables engine for IBus
+# ibus-table - The table engine for IBus
 #
-# Copyright (c) 2008 Yu Yuwei <acevery at gmail.com>
-# Copyright (c) 2008 Caius 'kaio' Chance <kaio at fedoraproject.org>
+# Copyright (c) 2007 Yu Yuwei <acevery at gmail.com>
+# Copyright (c) 2010 microcai  <microcai at fedoraproject.org>
+# Copyright (c) 2009 Caius 'kaio' Chance <kaio at fedoraproject.org>
 #
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
 #
-# This library is distributed in the hope that it will be useful,
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # if not 1, append datestamp to the version number.
 m4_define([package_name], [ibus-table])
@@ -35,50 +34,56 @@ m4_define([ibus_version],
 
 AC_INIT([package_name], [ibus_version], [http://code.google.com/p/ibus/issues/entry], [package_name])
 AM_INIT_AUTOMAKE([1.10])
-AM_MAINTAINER_MODE
 # AC_GNU_SOURCE
 
-# AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
-#check python
-AM_PATH_PYTHON([2.5])
+# define PACKAGE_VERSION_* variables
+# AS_VERSION
+# AS_NANO
+# AM_SANITY_CHECK
+# AM_MAINTAINER_MODE
+# AM_DISABLE_STATIC
+AC_PROG_CC
+# AM_PROG_CC_C_O
+# AC_PROG_CXX
+# AC_ISC_POSIX
+AC_HEADER_STDC
+# AM_PROG_LIBTOOL
 
-# check for ibus
-PKG_CHECK_MODULES([IBUS],[ibus-1.0 >= 1.2])
+AC_PREFIX_DEFAULT(/usr)
 
 # define GETTEXT_* variables
-GETTEXT_PACKAGE=ibus-table
+GETTEXT_PACKAGE="$PACKAGE_NAME"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define to the read-only architecture-independent data directory.])
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.16.1)
 
+PKG_CHECK_MODULES(IBUS, [
+    ibus-1.0 >= 1.2
+])
 
-# ARGUMENTS
-AC_ARG_ENABLE([additional],
-    [AC_HELP_STRING([--disable-additional],
-        [Don't generate additional Engine])], ,
-    [enable_additional=yes])
+PKG_CHECK_MODULES(GTK2, [
+    gtk+-2.0 >= 2.10
+])
 
-AM_CONDITIONAL([IBUS_TABLE_BUILD_ADDITIONAL],[test x"$enable_additional" = x"yes"])
+PKG_CHECK_MODULES(ALL, [
+	gtk+-2.0 >= 2.10 ibus-1.0 >= 1.2
+])
+
+AC_DEFINE(MICROCAI_WITHEMAIL,"kaio@fedoraproject.org",[author Caius 'kaio' Chance and his email])
 
 # OUTPUT files
 AC_CONFIG_FILES(po/Makefile.in
-    Makefile
-    src/Makefile
-    src/table.xml.in
-    icons/Makefile
-    tables/Makefile
-    ibus-table.spec
+Makefile
+ibus-table.spec
+src/Makefile
+src/table.xml.in
+icons/Makefile
+tables/Makefile
 )
 
 AC_OUTPUT
-
-AC_MSG_RESULT([
-Build options:
-  Version                   $VERSION
-  Install prefix            $prefix
-  Build Additional          $enable_additional
-])
