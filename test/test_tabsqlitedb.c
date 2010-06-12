@@ -4,9 +4,12 @@
  *  Created on: 2010/06/08
  *      Author: cchance
  */
-
+#include <unistd.h>
+#include <stdio.h>
+#include <ibus.h>
 #include "tabsqlitedb.h"
-#include "tabdict"
+#include "tabdict.h"
+
 
 int
 main(int argc, char ** argv)

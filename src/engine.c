@@ -54,8 +54,8 @@ ibus_table_engine_cursor_up(IBusEngine *engine);
 static void
 ibus_table_engine_cursor_down(IBusEngine *engine);
 static void
-ibus_enchant_property_activate(IBusEngine *engine, const gchar *prop_name,
-    gint prop_state);
+ibus_table_property_activate(IBusEngine *engine, const gchar *prop_name,
+    guint prop_state);
 static void
 ibus_table_engine_property_show(IBusEngine *engine, const gchar *prop_name);
 static void
@@ -194,11 +194,12 @@ ibus_table_engine_destroy(IBusTableEngine *engine)
   g_print("%s\n", __func__);//, engine->laststate.x, engine->laststate.y);
   g_free(engine->valid_input_chars);
   g_object_unref(engine->editor);
+  g_object_unref(engine->table);
+  g_object_unref(engine->proplist);
+
   tabsqlitedb_destory(engine->db);
   IBUS_OBJECT_CLASS(ibus_table_engine_parent_class)->destroy(
       IBUS_OBJECT(engine));
-  g_object_unref(engine->table);
-  tabsqlitedb_destory(engine->proplist);
 }
 
 static int

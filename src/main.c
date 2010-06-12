@@ -10,6 +10,7 @@
 #include <unistd.h> // *nix
 #include <execinfo.h> // dbg
 #include <glob.h>
+#include <unistd.h>
 // gettext
 #ifdef HAVE_GETTEXT
 #include <locale.h>
@@ -151,7 +152,7 @@ main(int argc, char* argv[])
     bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 
   if (icondir)
-    icondir = realpath(icondor, NULL);
+    icondir = realpath(icondir, NULL);
 
   component = ibus_table_get_component(argv[0],dbname);
 

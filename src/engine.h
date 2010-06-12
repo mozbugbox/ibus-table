@@ -6,6 +6,7 @@
 #include <ibus.h>
 #include "tabsqlitedb.h"
 #include "tabdict.h"
+#include "editor.h"
 
 typedef struct _IBusTableEngine IBusTableEngine;
 typedef struct _IBusTableEngineClass IBusTableEngineClass;
