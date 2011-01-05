@@ -158,6 +158,8 @@ ibus_table_engine_init(IBusTableEngine *engine)
 
   engine->table = ibus_lookup_table_new(engine->page_size, 0, TRUE, 0);
 
+  g_object_ref_sink(engine->table);
+
   klass = IBUS_TABLE_ENGINE_GET_CLASS(engine);
 
 }
@@ -228,8 +230,9 @@ ibus_table_engine_update(IBusTableEngine *engine)
   for (i = 0; i < MIN(6, editor_get_prasesed_count(engine->editor)); i++)
     {
       // show the 1st page at this stage
-      ibus_lookup_table_append_candidate(engine->table, editor_get_prasese(
-          engine->editor, 0, i));
+      IBusText * candidate = editor_get_prasese(engine->editor, 0, i);
+      if (candidate)
+        ibus_lookup_table_append_candidate(engine->table, candidate);
     }
 
   ibus_engine_update_lookup_table(IBUS_ENGINE(engine), engine->table, TRUE);
