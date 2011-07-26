@@ -993,17 +993,17 @@ class tabengine (ibus.EngineBase):
 
         if self._full_width_letter[self._mode]:
             self._letter_property.set_icon ( u'%s%s' % (self._icon_dir, 'full-letter.svg') )
-            self._letter_property.set_tooltip ( _(u'Switch to half letter') )
+            self._letter_property.set_tooltip ( _(u'Switch to half-width letter') )
         else:
             self._letter_property.set_icon ( u'%s%s' % (self._icon_dir, 'half-letter.svg') )
-            self._letter_property.set_tooltip ( _(u'Switch to full letter') )
+            self._letter_property.set_tooltip ( _(u'Switch to full-width letter') )
 
         if self._full_width_punct[self._mode]:
             self._punct_property.set_icon ( u'%s%s' % (self._icon_dir, 'full-punct.svg') )
-            self._punct_property.set_tooltip ( _( u'Switch to half punction' ) )
+            self._punct_property.set_tooltip ( _( u'Switch to half-width punctuation' ) )
         else:
             self._punct_property.set_icon ( u'%s%s' % (self._icon_dir,'half-punct.svg' ) )
-            self._punct_property.set_tooltip ( _( u'Switch to full punction' ) )
+            self._punct_property.set_tooltip ( _( u'Switch to full-width punctuation' ) )
         
         if self._editor._py_mode:
             self._py_property.set_icon ( u'%s%s' % (self._icon_dir, 'py-mode.svg' ) )
