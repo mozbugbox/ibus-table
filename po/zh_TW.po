@@ -33,19 +33,19 @@ msgid "Switch to Table mode"
 msgstr "切換成形碼模式"
 
 #: engine/table.py:995
-msgid "Switch to half letter"
+msgid "Switch to half-width letter"
 msgstr "切換成半形字元"
 
 #: engine/table.py:998
-msgid "Switch to full letter"
+msgid "Switch to full-width letter"
 msgstr "切換成全形字元"
 
 #: engine/table.py:1002
-msgid "Switch to half punction"
+msgid "Switch to half-width punctuation"
 msgstr "切換成半形標點"
 
 #: engine/table.py:1005
-msgid "Switch to full punction"
+msgid "Switch to full-width punctuation"
 msgstr "切換成全形標點"
 
 #: engine/table.py:1013
