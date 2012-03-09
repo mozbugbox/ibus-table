@@ -1181,7 +1181,7 @@ class tabengine (ibus.EngineBase):
 
     def _convert_to_full_width (self, c):
         '''convert half width character to full width'''
-        if c in [u".", u"\\", u"^", u"_", u"$", u"\"", u"'", u">", u"<" ]:
+        if c in [u".", u"\\", u"^", u"_", u"$", u"\"", u"'", u">", u"<", u"[", u"]", u"{", u"}" ]:
             if c == u".":
                 if self._prev_char and self._prev_char.isdigit () \
                     and self._prev_key and chr (self._prev_key.code) == self._prev_char:
@@ -1214,6 +1214,18 @@ class tabengine (ibus.EngineBase):
             elif c == u">":
                 if self._mode:
                     return u"\u300b"
+            elif c == u"[":
+                if self._mode:
+                    return u"\u300c"
+            elif c == u"]":
+                if self._mode:
+                    return u"\u300d"
+            elif c == u"{":
+                if self._mode:
+                    return u"\u300e"
+            elif c == u"}":
+                if self._mode:
+                    return u"\u300f"
             
         return ibus.unichar_half_to_full (c)
     
