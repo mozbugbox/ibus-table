@@ -84,7 +84,12 @@ class editor(object):
         self._cursor = [0,0]
         # self._candidates: hold candidates selected from database [[now],[pre]]
         self._candidates = [[],[]]
-        self._lookup_table = ibus.LookupTable (tabengine._page_size)
+        # self._page_size: lookup table page size
+        self._page_size = self._config.get_value (
+                self._config_section,
+                "PageSize",
+                self.db.get_page_size())
+        self._lookup_table = ibus.LookupTable (self._page_size)
         # self._py_mode: whether in pinyin mode
         self._py_mode = False
         # self._zi: the last Zi commit to preedit
@@ -828,13 +833,9 @@ class tabengine (ibus.EngineBase):
 #    _user_phrase_color         = 0xffffff
 #    _new_phrase_color         = 0xffffff
 
-    # lookup table page size
-    _page_size = 6
-
     def __init__ (self, bus, obj_path, db ):
         super(tabengine,self).__init__ (bus,obj_path)
         self._bus = bus
-        self._lookup_table = ibus.LookupTable (tabengine._page_size)
         # this is the backend sql db we need for our IME
         # we receive this db from IMEngineFactory
         #self.db = tabsqlitedb.tabsqlitedb( name = dbname )
