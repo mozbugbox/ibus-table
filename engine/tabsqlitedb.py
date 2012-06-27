@@ -260,6 +260,16 @@ class tabsqlitedb:
                     return True
         return False
 
+    def get_chinese_mode (self):
+        __dict = {'cm0':0,'cm1':1,'cm2':2,'cm3':3,'cm4':4,'cm5':5}
+        __lang = self.get_ime_property ('languages')
+        if __lang:
+            __langs = __lang.split(',')
+            for _l in __langs:
+                if _l.lower() in __dict:
+                    return __dict[_l.lower()]
+        return -1
+
     def get_page_size (self):
         __dict = {'ps1':1,'ps2':2,'ps3':3,'ps4':4,'ps5':5,'ps6':6,'ps7':7,'ps8':8,'ps9':9,'ps10':10}
         __lang = self.get_ime_property ('languages')

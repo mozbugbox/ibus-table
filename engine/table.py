@@ -111,7 +111,12 @@ class editor(object):
                 self.get_chinese_mode())
 
     def get_chinese_mode (self):
-        '''Use LC_CTYPE in your box to determine the _chinese_mode'''
+        '''Use db value or LC_CTYPE in your box to determine the _chinese_mode'''
+        # use db value, if applicable
+        __db_chinese_mode = self.db.get_chinese_mode()
+        if __db_chinese_mode >= 0:
+            return __db_chinese_mode
+        # otherwise
         try:
             if os.environ.has_key('LC_CTYPE'):
                 __lc = os.environ['LC_CTYPE'].split('.')[0].lower()
