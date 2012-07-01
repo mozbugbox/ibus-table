@@ -89,7 +89,13 @@ class editor(object):
                 self._config_section,
                 "PageSize",
                 self.db.get_page_size())
+        # self._orientation: lookup table orientation
+        self._orientation = self._config.get_value (
+                self._config_section,
+                "LookupTableOrientation",
+                1)
         self._lookup_table = ibus.LookupTable (self._page_size)
+        self._lookup_table.set_orientation(self._orientation)
         # self._py_mode: whether in pinyin mode
         self._py_mode = False
         # self._zi: the last Zi commit to preedit
