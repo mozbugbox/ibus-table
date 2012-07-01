@@ -1597,13 +1597,13 @@ class tabengine (ibus.EngineBase):
         self._on = False
 
 
-    def lookup_table_page_up (self):
+    def page_up (self):
         if self._editor.page_up ():
             self._update_lookup_table ()
             return True
         return True
 
-    def lookup_table_page_down (self):
+    def page_down (self):
         if self._editor.page_down ():
             self._update_lookup_table ()
             return True
