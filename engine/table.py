@@ -84,19 +84,19 @@ class editor(object):
         self._cursor = [0,0]
         # self._candidates: hold candidates selected from database [[now],[pre]]
         self._candidates = [[],[]]
-        # self._page_size: lookup table page size
-        self._page_size = self._config.get_value (
+        # __page_size: lookup table page size
+        __page_size = self._config.get_value (
                 self._config_section,
                 "LookupTablePageSize",
                 self.db.get_page_size())
-        # self._orientation: lookup table orientation
-        self._orientation = self._config.get_value (
+        # __orientation: lookup table orientation
+        __orientation = self._config.get_value (
                 self._config_section,
                 "LookupTableOrientation",
                 1)
         # self._lookup_table: lookup table
-        self._lookup_table = ibus.LookupTable (self._page_size)
-        self._lookup_table.set_orientation(self._orientation)
+        self._lookup_table = ibus.LookupTable (__page_size)
+        self._lookup_table.set_orientation (__orientation)
         # self._py_mode: whether in pinyin mode
         self._py_mode = False
         # self._zi: the last Zi commit to preedit
