@@ -897,6 +897,7 @@ class tabengine (ibus.EngineBase):
         
         # config module
         self._config = self._bus.get_config ()
+        self._config.connect ("value-changed", self.config_value_changed_cb)
         # Containers we used:
         self._editor = editor(self._config, self._pt, self._valid_input_chars, self._ml, self.db)
 
@@ -1615,6 +1616,27 @@ class tabengine (ibus.EngineBase):
             self._update_lookup_table ()
             return True
         return False
+
+    def config_value_changed_cb (self, config, section, name, value):
+        if section == self._config_section:
+            if name == u'AutoCommit':
+                self._auto_commit = value
+            elif name == u'ChineseMode':
+                self._editor._chinese_mode = value
+            elif name == u'EnDefFullWidthLetter':
+                self._full_width_letter[0] = value
+            elif name == u'EnDefFullWidthPunct':
+                self._full_width_punct[0] = value
+            elif name == u'LookupTableOrientation':
+                self._editor._lookup_table.set_orientation (value)
+            elif name == u'LookupTablePageSize':
+                self._editor._lookup_table.set_page_size (value)
+            elif name == u'OneChar':
+                self._editor._onechar = value
+            elif name == u'TabDefFullWidthLetter':
+                self._full_width_letter[1] = value
+            elif name == u'TabDefFullWidthPunct':
+                self._full_width_punct[1] = value
 
     # for further implementation :)
     @classmethod
