@@ -87,13 +87,14 @@ class editor(object):
         # self._page_size: lookup table page size
         self._page_size = self._config.get_value (
                 self._config_section,
-                "PageSize",
+                "LookupTablePageSize",
                 self.db.get_page_size())
         # self._orientation: lookup table orientation
         self._orientation = self._config.get_value (
                 self._config_section,
                 "LookupTableOrientation",
                 1)
+        # self._lookup_table: lookup table
         self._lookup_table = ibus.LookupTable (self._page_size)
         self._lookup_table.set_orientation(self._orientation)
         # self._py_mode: whether in pinyin mode
@@ -1607,7 +1608,7 @@ class tabengine (ibus.EngineBase):
         if self._editor.page_up ():
             self._update_lookup_table ()
             return True
-        return True
+        return False
 
     def page_down (self):
         if self._editor.page_down ():
