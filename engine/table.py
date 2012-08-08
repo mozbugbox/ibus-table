@@ -84,7 +84,19 @@ class editor(object):
         self._cursor = [0,0]
         # self._candidates: hold candidates selected from database [[now],[pre]]
         self._candidates = [[],[]]
-        self._lookup_table = ibus.LookupTable (tabengine._page_size)
+        # __page_size: lookup table page size
+        __page_size = self._config.get_value (
+                self._config_section,
+                "LookupTablePageSize",
+                self.db.get_page_size())
+        # __orientation: lookup table orientation
+        __orientation = self._config.get_value (
+                self._config_section,
+                "LookupTableOrientation",
+                1)
+        # self._lookup_table: lookup table
+        self._lookup_table = ibus.LookupTable (__page_size)
+        self._lookup_table.set_orientation (__orientation)
         # self._py_mode: whether in pinyin mode
         self._py_mode = False
         # self._zi: the last Zi commit to preedit
@@ -106,7 +118,12 @@ class editor(object):
                 self.get_chinese_mode())
 
     def get_chinese_mode (self):
-        '''Use LC_CTYPE in your box to determine the _chinese_mode'''
+        '''Use db value or LC_CTYPE in your box to determine the _chinese_mode'''
+        # use db value, if applicable
+        __db_chinese_mode = self.db.get_chinese_mode()
+        if __db_chinese_mode >= 0:
+            return __db_chinese_mode
+        # otherwise
         try:
             if os.environ.has_key('LC_CTYPE'):
                 __lc = os.environ['LC_CTYPE'].split('.')[0].lower()
@@ -828,13 +845,9 @@ class tabengine (ibus.EngineBase):
 #    _user_phrase_color         = 0xffffff
 #    _new_phrase_color         = 0xffffff
 
-    # lookup table page size
-    _page_size = 6
-
     def __init__ (self, bus, obj_path, db ):
         super(tabengine,self).__init__ (bus,obj_path)
         self._bus = bus
-        self._lookup_table = ibus.LookupTable (tabengine._page_size)
         # this is the backend sql db we need for our IME
         # we receive this db from IMEngineFactory
         #self.db = tabsqlitedb.tabsqlitedb( name = dbname )
@@ -884,6 +897,7 @@ class tabengine (ibus.EngineBase):
         
         # config module
         self._config = self._bus.get_config ()
+        self._config.connect ("value-changed", self.config_value_changed_cb)
         # Containers we used:
         self._editor = editor(self._config, self._pt, self._valid_input_chars, self._ml, self.db)
 
@@ -1619,17 +1633,38 @@ class tabengine (ibus.EngineBase):
         self._on = False
 
 
-    def lookup_table_page_up (self):
+    def page_up (self):
         if self._editor.page_up ():
             self._update_lookup_table ()
             return True
-        return True
+        return False
 
-    def lookup_table_page_down (self):
+    def page_down (self):
         if self._editor.page_down ():
             self._update_lookup_table ()
             return True
         return False
+
+    def config_value_changed_cb (self, config, section, name, value):
+        if section == self._config_section:
+            if name == u'AutoCommit':
+                self._auto_commit = value
+            elif name == u'ChineseMode':
+                self._editor._chinese_mode = value
+            elif name == u'EnDefFullWidthLetter':
+                self._full_width_letter[0] = value
+            elif name == u'EnDefFullWidthPunct':
+                self._full_width_punct[0] = value
+            elif name == u'LookupTableOrientation':
+                self._editor._lookup_table.set_orientation (value)
+            elif name == u'LookupTablePageSize':
+                self._editor._lookup_table.set_page_size (value)
+            elif name == u'OneChar':
+                self._editor._onechar = value
+            elif name == u'TabDefFullWidthLetter':
+                self._full_width_letter[1] = value
+            elif name == u'TabDefFullWidthPunct':
+                self._full_width_punct[1] = value
 
     # for further implementation :)
     @classmethod
