@@ -22,7 +22,6 @@
 #
 
 SUBDIRS = \
-	additional \
 	$(NULL)
 
 template_DATA = \
