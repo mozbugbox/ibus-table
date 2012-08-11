@@ -84,6 +84,7 @@ class tabsqlitedb:
                       'icon':'ibus-table.svg',
                       'license':'LGPL',
                       'languages':'',
+                      'language_filter':'',
                       'valid_input_chars':'abcdefghijklmnopqrstuvwxyz',
                       'max_key_length':'4',
             #          'commit_keys':'space',
