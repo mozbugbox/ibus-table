@@ -54,15 +54,6 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define to the read-only 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.16.1)
 
-
-# ARGUMENTS
-AC_ARG_ENABLE([additional],
-    [AC_HELP_STRING([--disable-additional],
-        [Don't generate additional Engine])], ,
-    [enable_additional=yes])
-
-AM_CONDITIONAL([IBUS_TABLE_BUILD_ADDITIONAL],[test x"$enable_additional" = x"yes"])
-
 # OUTPUT files
 AC_CONFIG_FILES([po/Makefile.in
     Makefile
@@ -72,9 +63,7 @@ AC_CONFIG_FILES([po/Makefile.in
     engine/table.xml.in
     data/Makefile
     icons/Makefile
-    icons/additional/Makefile
     tables/Makefile
-    tables/additional/Makefile
     m4/Makefile
     ibus-table.spec
     ibus-table.pc]
@@ -86,5 +75,4 @@ AC_MSG_RESULT([
 Build options:
   Version                   $VERSION
   Install prefix            $prefix
-  Build Additional          $enable_additional
 ])

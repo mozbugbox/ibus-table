@@ -20,7 +20,6 @@
 #
 
 SUBDIRS = \
-	additional \
 	$(NULL)
 
 icons_DATA = \
