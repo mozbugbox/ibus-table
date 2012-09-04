@@ -1,4 +1,592 @@
-# Regularly generated manually by command `git log > ChangeLog`
+commit d752b0274768e6d593c32cefebecdc24e197dbf0
+Merge: eaa6927 2c8d938
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Thu Aug 9 17:04:33 2012 +1000
+
+    Merge remote-tracking branch 'fujiwarat/master' into rel20120901
+
+commit eaa692761096f527c5ae7c663612cce0dbfb5b56
+Merge: f3a8c98 13d3f16
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Wed Aug 8 21:07:23 2012 +1000
+
+    Merge remote-tracking branch 'maxiaojun/master' into rel20120901
+
+commit f3a8c98972877dee89ed51c1a0a067eb5c84b4a9
+Merge: e31b470 277814c
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Tue Aug 7 23:32:23 2012 +1000
+
+    Merge branch 'menu-label' into rel20120901
+    
+    Conflicts:
+    	engine/table.py
+
+commit 277814cac5d5dcd46bfb17574553a744f7a61e78
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Tue Aug 7 21:41:20 2012 +1000
+
+    Add labels for property for self-descriptive, when menus are embedded in traybar.
+
+commit 13d3f16498efc3683d7392d5c0e2342a01f90d35
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sun Jul 1 22:28:28 2012 +0800
+
+    trivial change
+
+commit 8506e81fde93c5136d63888f6408dc5a88e23b4c
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sun Jul 1 22:23:32 2012 +0800
+
+    add value-changed signal handler for config; prepare for #639
+
+commit 225fe2f4477ab7798dbbb753de60a1f748646d47
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sun Jul 1 11:11:49 2012 +0800
+
+    trivial change
+
+commit c3236d649a13329fdf8e5067a5421bfbb27be9d0
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sun Jul 1 11:08:07 2012 +0800
+
+    add per table lookup table orientation; fix #1475
+
+commit edf6fc4c80dc98869e5db692a3e5126996de1b58
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sun Jul 1 10:41:09 2012 +0800
+
+    fix #704
+
+commit e092b5b65393a6795361823a69959b6ab46c5eba
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Wed Jun 27 23:18:16 2012 +0800
+
+    add per table chinese mode; fix #1188
+
+commit d93a3ff13f69c431c851fe663138e143bfe953e7
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Wed Jun 27 23:01:02 2012 +0800
+
+    add per table page size; fix #1474
+
+commit e31b4706825cbf1c1256c555323c4d87ec1610d8
+Merge: e04a10b 0e89c17
+Author: Caius Chance <me@kaio.net>
+Date:   Sat Mar 10 00:15:15 2012 +1000
+
+    Merge remote-tracking branch 'mvv/python-path-fix' into rel20120309
+
+commit e04a10b15dff4b3322cbe752e99e761b372d2c5b
+Merge: 820ee65 418ea16
+Author: Caius Chance <me@kaio.net>
+Date:   Sat Mar 10 00:14:42 2012 +1000
+
+    Merge remote-tracking branch 'mvv/coloncolon' into rel20120309
+
+commit 820ee65a18e8f966372959bab88a542d084e0357
+Merge: 6ac623b 5eef930
+Author: Caius Chance <me@kaio.net>
+Date:   Fri Mar 9 23:48:09 2012 +1000
+
+    Merge remote-tracking branch 'seanf/master' into 2012-03-09
+    
+    Conflicts:
+    	po/zh_CN.po
+    	po/zh_HK.po
+    	po/zh_TW.po
+
+commit 6ac623ba7b7a59b7032d1916ee53bd249801dd28
+Author: Caius Chance <me@kaio.net>
+Date:   Fri Mar 9 19:06:05 2012 +1000
+
+    - Add direct input of Chinese bracket to mid-brackets and large-brackets.
+
+commit a44d50c6face110c7cd1252067eade3f8a9193e8
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Wed Mar 7 15:16:49 2012 +0800
+
+    add _mo into locale test
+
+commit d4df7ed4c361a30f9c5d505e9ffc8b5fc7c163a7
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Tue Mar 6 01:06:50 2012 +0800
+
+    modify locale detecting code
+
+commit 487d9b6825492498cfc1f49b66e243c2eb4c5bcf
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Mon Mar 5 08:57:08 2012 +0800
+
+    enable en_HK user to use chinese mode
+
+commit 24596c02c86a0453c59485f8b0031279803f1581
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Sun Oct 2 11:53:53 2011 +0800
+
+    add some key for translit; fix #1318
+
+commit 8b54742f9648366abe8690513289337a43254621
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Mon Aug 1 23:53:46 2011 +0800
+
+    add NOSYMBOL to be a null target phrase
+
+commit 5eef930473edc31588444762bbbda5273fc6feff
+Author: Sean Flanigan <sflaniga@redhat.com>
+Date:   Tue Jul 26 17:31:19 2011 +1000
+
+    modify English text for clarity
+
+commit 418ea16b60614657285d23e31b511c41185322f8
+Author: Mikhail Vorozhtsov <mikhail.vorozhtsov@gmail.com>
+Date:   Sat Jun 18 17:10:31 2011 +0700
+
+    Added \coloncolon to the LaTeX table.
+
+commit 0e89c1738bf7722e1bd39c00b9d7f8e9214a05c5
+Author: Mikhail Vorozhtsov <mikhail.vorozhtsov@gmail.com>
+Date:   Sat Jun 18 16:20:49 2011 +0700
+
+    Use Python executable found by autotools in scripts.
+
+commit 4a35882e82c8d879252e4518974feba60ba802c1
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Wed Apr 27 10:14:43 2011 +0800
+
+    update reg pattern in tabcreatedb.py to allow leading or trailing space in tab separated columns
+
+commit 2a1bb20de7fd3373d1c9bf1d7f5305a93d663cf9
+Merge: 1850d89 8d6e9ff
+Author: Yu Yuwei <acevery@gmail.com>
+Date:   Tue Apr 26 18:39:25 2011 -0700
+
+    Merged pull request #4 from sagara-/master.
+    
+    Bugfix for issue 787
+
+commit 8d6e9ff11307d05d336f696ceffa02ffb0a9cb8b
+Author: Kevin Tardif <kiyoka@gmail.com>
+Date:   Tue Apr 26 17:50:20 2011 -0400
+
+    Added detection of invalid table names
+    
+    - detects NAME attributes in table specifications that violate GConf
+      keyname restrictions
+    - see issue 787 (http://code.google.com/p/ibus/issues/detail?id=787) for
+      details
+
+commit 1850d891300ce777b474d782b347ea1b05b8a7cc
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Fri Feb 18 08:50:57 2011 +0800
+
+    update latex.txt from Giuseppe Castagna (gc@pps.jussieu.fr)
+
+commit 1e3e9139378e751570e3046bc1bfa27e6517b70f
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Dec 30 23:51:35 2010 +0800
+
+    update README; fix pinyin mode under direct commit mode
+
+commit 932f8b25737ace30859abac8972adb381c7287ab
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Tue Dec 7 10:20:02 2010 +0800
+
+    add goucima use non chinese character
+
+commit ea4397b69cc63572bdb8f42478bbe319bfab95d3
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Nov 11 16:35:17 2010 +0800
+
+    fix remove before char bug
+
+commit 1c51b7bdcdcb59bdfaf7f050eeb84316b2551f0e
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sun Sep 12 23:12:20 2010 +0800
+
+    fix config saving bug in Cangjie
+
+commit c7de864861c1259409c97fe4d8d6634c46383cef
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Sep 6 18:12:34 2010 +0800
+
+    fix py_mode tabkey length bug
+
+commit 8790fc860ee043168c3995e78cd070e0ffee4f19
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sun Sep 5 00:34:06 2010 +0800
+
+    fix py_mode update bug
+
+commit b95f174efe70dc39d9558a9fb13903b48753ba1a
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Tue Aug 31 15:52:59 2010 +0800
+
+    little hack to allow ibus-table to import space in gvim
+
+commit f64cf33e2e40a6b78338cf3c6f6f8fde51c5d146
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sun Jun 13 08:43:23 2010 +0800
+
+    comment out a debug print
+
+commit c42319f81d63f5e4bf6dedaf12e130bfd26f2b20
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Wed Apr 7 15:32:08 2010 +0800
+
+    fix typo in issue836, thanks fujiwarat
+
+commit 2c8d93828af175bf06a0b30dc1146547005f70f4
+Author: fujiwarat <takao.fujiwara1@gmail.com>
+Date:   Tue Apr 6 13:03:14 2010 +0900
+
+    Fix self.db._is_chinese in table.py by issue 836
+
+commit 57e985f1748d9376be2c4c77854fb273579d7058
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Mar 29 23:29:45 2010 +0800
+
+    fix phrase rule parsing for p-11. see issuse 827
+
+commit ac190e3990bb03f52091cdce8e98093e0c1fd135
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Jan 8 15:41:01 2010 +0800
+
+    only extract first 3 element from table source
+
+commit c6a36522c5db68d67c90599d1a608663901aefab
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Nov 13 10:31:51 2009 +0800
+
+    remove speedmeter from am
+
+commit 26eb25fa9b7f8469ab9d1fc0f8b4e3330be48dc0
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Nov 13 10:08:27 2009 +0800
+
+    remove speedmeter, which cause ibus hang;
+
+commit 170e0934de4e3e2a1a4b72f9bd4a3f7998c53554
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Oct 19 09:27:20 2009 +0800
+
+    improve ibus-engine-table file
+
+commit ae527927f8d9895b026f87567084bb23b12a61ac
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Oct 19 07:43:55 2009 +0800
+
+    add START_CHARS to latex engine
+
+commit 8066019f30926c971361c4e9a78033daa761fb39
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Oct 19 07:35:07 2009 +0800
+
+    fix typo in tabsqlite; fix broken behaivor in latex engine.
+
+commit d06720dd03032a66af791af5183827830a6ddb68
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sun Oct 18 11:11:31 2009 +0800
+
+    fix pkelen type error which cause latex engine encounters error
+
+commit a57878713c8c8477cf2221c7c8cd9c868f6cf79b
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Wed Oct 14 13:46:17 2009 +0800
+
+    fix issue 584, thanks Huang :)
+
+commit 96722e02aafcf096f71dacdbbb3e9970edc91626
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Wed Oct 14 13:28:20 2009 +0800
+
+    output <engines /> when no db under tables dir
+
+commit 24852aba91f14006c924e70d7699cc941164908c
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sun Sep 27 15:24:08 2009 +0800
+
+    fix bug in tabsqlitedb, which stop ibus-table to start
+
+commit 9d64913a4c17ad368a10590f604406659cdc06ac
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sun Sep 27 15:10:22 2009 +0800
+
+    add least_commit_length to db, which allow "autocommit" feature in Compose IME
+
+commit 92524c12444354025690d30c0c7f861a7d883096
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Sep 25 22:31:11 2009 +0800
+
+    add acknowledgement for Ye, Yuan
+
+commit 2ccb94af0e2c575c1b327a95854e70f359e78a88
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Sep 25 22:26:23 2009 +0800
+
+    add some key use - and = back to compose.txt; change max_key_length to 3 in compose.txt
+
+commit b965e5204644c0aa310149fd7429a589f3caed0b
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Sep 25 22:04:27 2009 +0800
+
+    fix bug in tabcreate.py to allow = as input key; improve table.py to allow filter out =/- from page_down/up keys
+
+commit d0909f926112284db508e338aabbc0a82ce1f0ec
+Author: 袁野 <yuanyelele@gmail.com>
+Date:   Fri Sep 25 16:45:13 2009 +0800
+
+    compose: add more characters
+    
+    Add more characters, most important a-z, A-Z and German letters. Also
+    avoid using - and = in input keys, as they are default page chage
+    hotkeys.
+    
+    Signed-off-by: 袁野 <yuanyelele@gmail.com>
+
+commit 05373eafe0f5a171222e52922b29dc3852d7508d
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sat Sep 12 22:37:06 2009 +0800
+
+    fix typo...
+
+commit d3739a81ddf14d2344053feff92afde2485a3f75
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sat Sep 12 14:38:43 2009 +0800
+
+    Save user config to gconf module :)
+
+commit dc4bebd5c459226c2cde3c55cc723a0ec7b96e25
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Aug 21 22:02:36 2009 +0800
+
+    allow use last code in phrase construction
+
+commit 0d5f89654244fa90cff877537b6dc127baffd9e7
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Jul 30 20:05:42 2009 +0800
+
+    try to fix spec.in
+
+commit d64df85de06b3b2074b5f4926b93c076ba5a08c1
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Jul 23 02:07:53 2009 +0800
+
+    fix a editor.commit_string bug
+
+commit 1fd5242306b954787a28d4ae2afeda392b835b6f
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Jul 17 02:43:01 2009 +0800
+
+    do not recreat index when load user_db
+
+commit 19d8c81b2bf70e6b57a2513e5f1cce476324863e
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Jul 9 22:43:36 2009 +0800
+
+    do syncing after normal return from MainLoop.run()
+
+commit 77da827f603e70b2d6c0578f460a490c665fafbf
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Jun 22 23:13:03 2009 +0800
+
+    add SIGINT handler for ibus exits sync
+
+commit 1522707acceec09a8f0bbf6fef0df4ff3b5b0b3a
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Jun 15 16:39:21 2009 +0800
+
+    update to ibus-1.2.0
+
+commit a6679cd443365abf792895cd0f9ffc84acf5c784
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Jun 15 00:57:44 2009 +0800
+
+    update process_key_events as ibus
+
+commit 7e41759b9ea37b7ede5da541d4599333de1182b7
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Jun 15 00:41:51 2009 +0800
+
+    fall back for ibus-1.1.0.20090612
+
+commit 19d6cdf9348e4ba6cb18a50e6c07fb349dd7e8cf
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Jun 15 00:29:28 2009 +0800
+
+    port to new process_key_event
+
+commit 83b433d3f696601413a5a5afa2d18c189290116e
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Tue Jun 2 12:08:09 2009 +0800
+
+    update compose.txt
+
+commit 8dd226c87542f3f1c1f237bf81972970f2f611f6
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Tue Jun 2 12:03:20 2009 +0800
+
+    update icons/Makefile.am; update template.txt
+
+commit 4d07083b7fac8372f942ebfe064ad269a20e507b
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Tue Jun 2 11:58:56 2009 +0800
+
+    rename direct_commit to auto_commit; allow auto_commit with one candidates in non-Chinese IME
+
+commit a2eaa3b6b1e4e443916590fd64b0c68e131abf1e
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Jun 1 10:37:47 2009 +0800
+
+    use LANG as LC_CTYPE fallback
+
+commit 366761995e13b8df21db2bcfa3e16c8b9a0a0c6f
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sun May 31 23:41:00 2009 +0800
+
+    fix fresh new ibus-table startup failure
+
+commit 1bb92eeef08e275998d323908fe34af2ade017f2
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Sat May 30 15:38:25 2009 +0800
+
+    merge from kaio.git; fix tabsqlitedb.compare, which cause wrong ordering in tabsqlitedb.select_words
+
+commit 638275afccc68bb3c397f2a3953034912ca158c0
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Tue May 26 11:16:45 2009 +0800
+
+    merge from kaio.git
+
+commit c07348108b6fc4b17ca617a06d76f2637edfa491
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Tue May 5 01:12:45 2009 +0800
+
+    fix user phrase check bug
+
+commit 96f89769c5c1365802ab495335e7fc52e6235aab
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri May 1 23:30:14 2009 +0800
+
+    allow the create_engine to fail
+
+commit e3b22b14602b55a5054a0224834eac7e24a8049e
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri May 1 22:59:52 2009 +0800
+
+    replace all invalid character in engine_path to under_score
+
+commit 490daacfdee8aa5f9af1e67a6ef3c90fd649bb7c
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri May 1 22:04:20 2009 +0800
+
+    replace the "-" to "_" in engine_path
+
+commit 751296ceede357d5010864298f21e408446ed751
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Apr 30 16:14:41 2009 +0800
+
+    add sigterm handler to sync userdb
+
+commit 1c792bcb904df77c4873302e2042abca8eb19d94
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Wed Apr 29 11:32:39 2009 +0800
+
+    fix pinyin mode bug
+
+commit 3fab1911c5055505dced11842555f07d050e5e9e
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Wed Apr 29 01:04:03 2009 +0800
+
+    fix xml mode bug cause by debug
+
+commit 6a13b9a02919f011ec83e7e78968945d379c4c4f
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Wed Apr 29 00:53:28 2009 +0800
+
+    redirect stdout,stderr to debug.log; readd arrow_up, arrow_down for candidates selection
+
+commit b21289c1af9301ad9f8a398db35870380d2b392b
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Apr 24 13:42:34 2009 +0800
+
+    remove the id from user_db.desc
+
+commit 8b2e0db12ddf5c2a72111187c40c3fb999345176
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Apr 23 14:55:56 2009 +0800
+
+    fix check_phrase bug, which caused by recording tabkeys
+
+commit 9a5602a8a90fc4e4a5dc826720d15ce07570aabd
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Wed Apr 22 14:38:31 2009 +0800
+
+    support record user_freq of phrases with user inputted keys; fix bugs cause by last commit
+
+commit da76aa709497859a6e3989637429331ee249eeb6
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Mon Apr 20 20:57:29 2009 +0800
+
+    add id key in db to allow better phrase ordering.
+    Users need to regenerate the .db files.
+
+commit 1e894cf358814f0972159b9bd44fc282dad387c6
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Thu Mar 12 16:42:57 2009 +0800
+
+    fix digit ignore when digit in valid_input_chars
+
+commit d819c40a693b7afbe8c8ec4cbf3faf678ffd8a5d
+Author: LI Daobing <lidaobing@gmail.com>
+Date:   Sun Mar 8 22:14:50 2009 +0800
+
+    fix order in pkgconfig
+
+commit 8ef53eb84c9866e77bcc9c28940b98b9972ca274
+Merge: 768e4b8 e926b14
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Mar 6 14:19:01 2009 +0800
+
+    merge from kaio'tree
+
+commit 768e4b851b4b7d6f542fc11d424f2bf483a7f1d6
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Mar 6 14:08:00 2009 +0800
+
+    update Changlog
+
+commit a8e019d4582db1d9142a1efbecd945c4470b3fb0
+Author: 余钰炜 <acevery@gmail.com>
+Date:   Fri Mar 6 14:07:12 2009 +0800
+
+    add Caius into project
+
+commit e926b14b0718c3e02df28d1efd5490a715b7d9e9
+Author: cchance <cchance@dhcp-0-183.bne.redhat.com>
+Date:   Fri Mar 6 15:23:47 2009 +1000
+
+    make pkgconfig noarch
+
+commit 193267080c33cd7aed19151f9199fbb35807d86b
+Author: cchance <cchance@dhcp-0-183.bne.redhat.com>
+Date:   Fri Mar 6 15:17:13 2009 +1000
+
+    Corrected .spec form GPLv2+ to LGPLv2+.
+
+commit b7f63b016d148991cade9c62ea61254fbd390e87
+Author: cchance <cchance@dhcp-0-183.bne.redhat.com>
+Date:   Fri Mar 6 14:57:42 2009 +1000
+
+    Updated author list.
+    Manually generate ChangeLog with `git log > ChangeLog`.
+
+commit a3f8a4667ace5be764973857f6833fff196d66e5
+Merge: 2b0726c fe3f5dc
+Author: cchance <cchance@dhcp-0-183.bne.redhat.com>
+Date:   Fri Mar 6 14:39:46 2009 +1000
+
+    Merge commit 'acevery/master'
 
 commit fe3f5dc73f9b7f3655ab15c4cf52e8fac9dbef1d
 Author: 余钰炜 <acevery@gmail.com>
@@ -7,7 +595,7 @@ Date:   Wed Mar 4 15:27:46 2009 +0800
     hide speedmeter when engine is destroied
 
 commit df131abd2a9a71478437d2efccc8c22f44e19a62
-Merge: 728bf4c... 6b7ed8a...
+Merge: 728bf4c 6b7ed8a
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Wed Mar 4 00:47:54 2009 +0800
 
@@ -85,10 +673,8 @@ Date:   Thu Feb 19 21:16:09 2009 +0800
 
     use xml.etree instead of elementtree
 
-<<<<<<< HEAD:ChangeLog
-=======
 commit 2b0726ce00c2a9512d58b90cb94e3b95481a1ec1
-Merge: 3a5330a... e8ccd01...
+Merge: 3a5330a e8ccd01
 Author: Caius "kaio" Chance <caio@dejieshi.com>
 Date:   Thu Feb 19 15:06:06 2009 +1000
 
@@ -99,7 +685,6 @@ Date:   Thu Feb 19 15:06:06 2009 +1000
     	engine/Makefile.am
     	engine/table.xml.in.in
 
->>>>>>> e926b14b0718c3e02df28d1efd5490a715b7d9e9:ChangeLog
 commit e8ccd0137d01f615dbd92fce41d1d49b77d39796
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Wed Feb 18 21:58:16 2009 +0800
@@ -155,7 +740,7 @@ Date:   Wed Feb 18 15:52:16 2009 +0800
     fix do_destroy bug
 
 commit 0193d86ae74ac34ee56d0038f426ffc759eb099a
-Merge: f7c1977... 7c786b6...
+Merge: f7c1977 7c786b6
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Wed Feb 18 10:59:42 2009 +0800
 
@@ -191,10 +776,8 @@ Date:   Tue Feb 17 23:05:45 2009 +0800
 
     step 3
 
-<<<<<<< HEAD:ChangeLog
-=======
 commit 3a5330ace95f39020407492cdedf4262614a3042
-Merge: f8b80b8... ffa04fe...
+Merge: f8b80b8 ffa04fe
 Author: Caius "kaio" Chance <caio@dejieshi.com>
 Date:   Mon Feb 16 18:11:05 2009 +1000
 
@@ -215,17 +798,14 @@ Date:   Mon Feb 16 18:11:05 2009 +1000
     	tables/Makefile.am
     	tables/additional/Makefile.am
 
->>>>>>> e926b14b0718c3e02df28d1efd5490a715b7d9e9:ChangeLog
 commit ffa04fe490dd89a0ef8de2335ef5ad8971a2c265
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Mon Feb 16 00:07:01 2009 +0800
 
     second step for ibus-1
 
-<<<<<<< HEAD:ChangeLog
-=======
 commit f8b80b85b7a774a734720dd973574b9b77dee482
-Merge: b1a8593... 198cf85...
+Merge: b1a8593 198cf85
 Author: Caius Chance <cchance@hako.localdomain>
 Date:   Mon Feb 16 01:37:05 2009 +1000
 
@@ -237,7 +817,6 @@ Date:   Mon Feb 16 00:50:20 2009 +1000
 
     added table spec xml
 
->>>>>>> e926b14b0718c3e02df28d1efd5490a715b7d9e9:ChangeLog
 commit 24f5090106d6c7ea8ec203bc428654d9db0b64de
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Sun Feb 15 21:00:40 2009 +0800
@@ -317,8 +896,6 @@ Date:   Sat Jan 3 23:31:21 2009 +0800
 
     fix License conflict
 
-<<<<<<< HEAD:ChangeLog
-=======
 commit 198cf85c7ec2f498a95f49e49fd4af8ebce834c4
 Author: LI Daobing <lidaobing@gmail.com>
 Date:   Sat Jan 3 14:52:37 2009 +0800
@@ -327,7 +904,6 @@ Date:   Sat Jan 3 14:52:37 2009 +0800
     
     ChangJie -> CangJie
 
->>>>>>> e926b14b0718c3e02df28d1efd5490a715b7d9e9:ChangeLog
 commit 3d4042fd2ff4072ef29a1b806b88aadd018b0206
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Sun Dec 28 21:59:13 2008 +0800
@@ -464,7 +1040,7 @@ Date:   Thu Dec 4 16:35:19 2008 +0800
     use pkgconfig to record metainfo
 
 commit 719c4f5dc8b30df8f95b4d0ade2dd464baef4b32
-Merge: 814fd89... ea21559...
+Merge: 814fd89 ea21559
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Wed Dec 3 21:43:38 2008 +0800
 
@@ -681,7 +1257,7 @@ Date:   Tue Sep 23 09:44:58 2008 +0800
     fix extra_phrase rename error in Makefile.am
 
 commit 74107088584f5b8fc8e60a1c94f0e5e69172b1b1
-Merge: 5a6a517... ed88e42...
+Merge: 5a6a517 ed88e42
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Mon Sep 22 21:03:04 2008 +0800
 
@@ -706,14 +1282,14 @@ Date:   Thu Sep 18 22:47:50 2008 +0800
     fix a direct commit bug
 
 commit 8b0b8f773146f2212a8e700ac1093dff96060cda
-Merge: 8760d94... bcf8109...
+Merge: 8760d94 bcf8109
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Thu Sep 18 22:44:56 2008 +0800
 
     Merge branch 'master' of git@github.com:acevery/ibus-table
 
 commit bcf8109b174f170562a1c9e9b4a9ce6c9818ff0e
-Merge: b07dbaf... 40eda9c...
+Merge: b07dbaf 40eda9c
 Author: Huang Peng <shawn.p.huang@gmail.com>
 Date:   Sun Sep 14 16:44:56 2008 +0800
 
@@ -840,7 +1416,7 @@ Date:   Sun Aug 31 10:59:18 2008 +0800
     Add tabcreatedb.py from origin
 
 commit f7289fb312ec8cb421b4101cd928ab7849e86408
-Merge: fb6858a... 62af461...
+Merge: fb6858a 62af461
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Sun Aug 31 10:51:49 2008 +0800
 
@@ -1221,7 +1797,7 @@ Date:   Fri Aug 22 01:15:31 2008 +0800
     support adding extra words during creating dababase
 
 commit cffbb866304cdec1654251958d9610eaba6d5065
-Merge: 7010cda... 3f1ee02...
+Merge: 7010cda 3f1ee02
 Author: 余钰炜 <acevery@gmail.com>
 Date:   Fri Aug 22 00:30:01 2008 +0800
 
