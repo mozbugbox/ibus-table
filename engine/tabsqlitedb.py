@@ -84,11 +84,12 @@ class tabsqlitedb:
                       'icon':'ibus-table.svg',
                       'license':'LGPL',
                       'languages':'',
+                      'language_filter':'',
                       'valid_input_chars':'abcdefghijklmnopqrstuvwxyz',
                       'max_key_length':'4',
             #          'commit_keys':'space',
             #          'forward_keys':'Return',
-            #          'select_keys':'1,2,3,4,5,6,7,8,9,0',
+                      'select_keys':'1,2,3,4,5,6,7,8,9,0',
             #          'page_up_keys':'Page_Up,minus',
             #          'page_down_keys':'Page_Down,equal',
                       'status_prompt':'',
@@ -261,24 +262,19 @@ class tabsqlitedb:
         return False
 
     def get_chinese_mode (self):
-        __dict = {'cm0':0,'cm1':1,'cm2':2,'cm3':3,'cm4':4,'cm5':5}
-        __lang = self.get_ime_property ('languages')
-        if __lang:
-            __langs = __lang.split(',')
-            for _l in __langs:
-                if _l.lower() in __dict:
-                    return __dict[_l.lower()]
-        return -1
+        try:
+            __dict = {'cm0':0,'cm1':1,'cm2':2,'cm3':3,'cm4':4}
+            __filt = self.get_ime_property ('language_filter')
+            return __dict[__filt]
+        except:
+            return -1
 
     def get_page_size (self):
-        __dict = {'ps1':1,'ps2':2,'ps3':3,'ps4':4,'ps5':5,'ps6':6,'ps7':7,'ps8':8,'ps9':9,'ps10':10}
-        __lang = self.get_ime_property ('languages')
-        if __lang:
-            __langs = __lang.split(',')
-            for _l in __langs:
-                if _l.lower() in __dict:
-                    return __dict[_l.lower()]
-        return 6
+        try:
+            __select_keys = self.get_ime_property ('select_keys')
+            return len (__select_keys.split (','))
+        except:
+            return 6
 
     def create_tables (self, database):
         '''Create tables that contain all phrase'''

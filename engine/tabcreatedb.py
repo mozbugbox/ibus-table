@@ -208,9 +208,7 @@ def main ():
                 attr,val = unicode (l,"utf-8").strip().split ('=')
             except:
                 attr,val = unicode (l,"utf-8").strip().split ('==')
-            attr = attr.strip()
-            origin_attr = attr
-            attr = attr.lower()
+            attr = attr.strip().lower()
             val = val.strip()
             if attr == 'name' and not gconf_valid_keyname(val):
                 raise InvalidTableName(val)
