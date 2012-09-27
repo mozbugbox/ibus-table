@@ -555,7 +555,7 @@ class editor(object):
                 if self._candidates[0]:
                     self._candidates[0] = self.filter_candidates (self._candidates[0])
                 if self._candidates[0]:
-                    map ( self.ap_candidate,self._candidates[0] )
+                    self.fill_lookup_table()
                 else:
                     if self._chars[0]:
                         ## old manner:
@@ -675,9 +675,27 @@ class editor(object):
             if len (cstr ) > 1:
                 aux_string += (u'\t#: ' + self.db.parse_phrase_to_tabkeys (cstr))
         return aux_string
+
+    def fill_lookup_table(self):
+        '''Fill more entries to self._lookup_table if needed.
+
+        If the cursor in _lookup_table moved beyond current length,
+        add more entries from _candidiate[0] to _lookup_table.'''
+
+        lookup = self._lookup_table
+        looklen = len(lookup)
+        psize = lookup.get_page_size()
+        if (lookup.get_cursor_pos() + psize >=  looklen and
+                looklen < len(self._candidates[0])):
+            endpos = looklen + psize
+            batch = self._candidates[0][looklen:endpos]
+            map(self.ap_candidate, batch)
+
     def arrow_down(self):
         '''Process Arrow Down Key Event
         Move Lookup Table cursor down'''
+        self.fill_lookup_table()
+
         res = self._lookup_table.cursor_down()
         self.update_candidates ()
         if not res and self._candidates[0]:
@@ -696,6 +714,7 @@ class editor(object):
     def page_down(self):
         '''Process Page Down Key Event
         Move Lookup Table page down'''
+        self.fill_lookup_table()
         res = self._lookup_table.page_down()
         self.update_candidates ()
         if not res and self._candidates[0]:
