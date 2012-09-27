@@ -713,52 +713,14 @@ class tabsqlitedb:
             if len(result) >0:
                 break
             x_len += 1
-        # here in order to get high speed, I use complicated map
-        # to subtitute for
-        sysdb={}
-        usrdb={}
-        mudb={}
-        _cand = []
-        #searchres = map ( lambda res: res[-2] and [ True, [(res[:-2],[res[:-1],res[-1:]])] ]\
-        #        or [ False, [(res[:-2] , [res[:-1],res[-1:]])] ] \
-        #        , result )
-        searchres = map ( lambda res: [ int(res[-2]), int(res[-1]),
-            [(res[1:-2],[res[:-1],res[-1:]])] ], result)
-        # for sysdb
-        reslist=filter( lambda x: not x[1], searchres )
-        map (lambda x: sysdb.update(x[2]), reslist)
-        # for usrdb
-        reslist=filter( lambda x: ( x[0] in [0,-1] ) and x[1], searchres )
-        map (lambda x: usrdb.update(x[2]), reslist)
-        # for mudb
-        reslist=filter( lambda x: ( x[0] not in [0,-1] ) and x[1], searchres )
-        map (lambda x: mudb.update(x[2]), reslist)
 
-        # first process mudb
-        searchres = map ( lambda key: mudb[key][0] + mudb[key][1], mudb )
-        #print searchres
-        map (_cand.append, searchres)
-
-        # now process usrdb and sysdb
-        searchres = map ( lambda key:  (not mudb.has_key(key))  and usrdb[key][0] + usrdb[key][1]\
-                or None , usrdb )
-        searchres = filter(lambda x: bool(x), searchres )
-        #print searchres
-        map (_cand.append, searchres)
-        searchres = map ( lambda key: ((not mudb.has_key(key)) and (not usrdb.has_key(key)) )and sysdb[key][0] + sysdb[key][1]\
-                or None, sysdb )
-        searchres = filter (lambda x: bool(x), searchres)
-        map (_cand.append, searchres)
-        #for key in usrdb:
-        #    if not sysdb.has_key (key):
-        #        _cand.append( usrdb[key][0] + usrdb[key][1] )
-        #    else:
-        #        _cand.append( sysdb[key][0] + usrdb[key][1] )
-        #for key in sysdb:
-        #    if not usrdb.has_key (key):
-        #        _cand.append( sysdb[key][0] + sysdb[key][1] )
-        _cand.sort(cmp=self.compare)
-        return _cand[:]
+        # Remove duplicated entries other than different id,freq,user_freq
+        box_uniq = set()
+        def add2box(x):
+            box_uniq.add(x[1:-2])
+            return x
+        result = [add2box(x) for x in result if x[1:-2] not in box_uniq]
+        return result[:]
 
     def select_zi( self, tabkeys ):
         '''
