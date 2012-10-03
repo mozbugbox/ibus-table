@@ -907,6 +907,15 @@ class tabengine (ibus.EngineBase):
             self._page_down_keys.append (keysyms.equal)
             self._page_up_keys.append (keysyms.minus)
 
+        pageup_prop = self.db.get_ime_property('page_up_keys')
+        pagedown_prop = self.db.get_ime_property('page_down_keys')
+        if pageup_prop is not None:
+            self._page_up_keys = [keysyms.name_to_keycode(x) for x in
+                    pageup_prop.split(",")]
+        if pagedown_prop is not None:
+            self._page_down_keys = [keysyms.name_to_keycode(x) for x in
+                    pagedown_prop.split(",")]
+
         self._pt = self.db.get_phrase_table_index ()
         self._ml = int(self.db.get_ime_property ('max_key_length'))
 
