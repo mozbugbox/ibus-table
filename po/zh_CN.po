@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.20080819\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2012-09-04 21:56+1000\n"
+"POT-Creation-Date: 2012-10-03 17:05+1000\n"
 "PO-Revision-Date: 2008-08-19 15:08+0800\n"
 "Last-Translator: Yu Yuwei <acevery@gmail.com>\n"
 "Language-Team: Yu Yuwei <acevery@gmail.com>\n"
@@ -16,147 +16,147 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: engine/table.py:998
+#: engine/table.py:1026
 msgid "Chinese Mode"
 msgstr ""
 
-#: engine/table.py:1002
+#: engine/table.py:1030
 msgid "Switch to English mode"
 msgstr "切换到英文模式"
 
-#: engine/table.py:1005
+#: engine/table.py:1033
 #, fuzzy
 msgid "English Mode"
 msgstr "切换到英文模式"
 
-#: engine/table.py:1006 engine/table.py:1029
+#: engine/table.py:1034 engine/table.py:1057
 msgid "Switch to Table mode"
 msgstr "切换到形码模式"
 
-#: engine/table.py:1010
+#: engine/table.py:1038
 msgid "Full Letter"
 msgstr ""
 
-#: engine/table.py:1011
+#: engine/table.py:1039
 msgid "Switch to half-width letter"
 msgstr "切换到半角字符"
 
-#: engine/table.py:1014
+#: engine/table.py:1042
 msgid "Half Letter"
 msgstr ""
 
-#: engine/table.py:1015
+#: engine/table.py:1043
 msgid "Switch to full-width letter"
 msgstr "切换到全角字符"
 
-#: engine/table.py:1019
+#: engine/table.py:1047
 #, fuzzy
 msgid "Full-width Punctuation"
 msgstr "切换到全角标点"
 
-#: engine/table.py:1020
+#: engine/table.py:1048
 msgid "Switch to half-width punctuation"
 msgstr "切换到半角标点"
 
-#: engine/table.py:1023
+#: engine/table.py:1051
 #, fuzzy
 msgid "Half-width Punctuation"
 msgstr "切换到半角标点"
 
-#: engine/table.py:1024
+#: engine/table.py:1052
 msgid "Switch to full-width punctuation"
 msgstr "切换到全角标点"
 
-#: engine/table.py:1028
+#: engine/table.py:1056
 #, fuzzy
 msgid "PinYin Mode"
 msgstr "切换到拼音反查模式"
 
-#: engine/table.py:1033
+#: engine/table.py:1061
 #, fuzzy
 msgid "Table Mode"
 msgstr "切换到形码模式"
 
-#: engine/table.py:1034
+#: engine/table.py:1062
 msgid "Switch to PinYin mode"
 msgstr "切换到拼音反查模式"
 
-#: engine/table.py:1038
+#: engine/table.py:1066
 #, fuzzy
 msgid "Single Char Mode"
 msgstr "切换到单字模式"
 
-#: engine/table.py:1039
+#: engine/table.py:1067
 msgid "Switch to phrase mode"
 msgstr "切换到词组模式"
 
-#: engine/table.py:1042
+#: engine/table.py:1070
 msgid "Phrase Mode"
 msgstr ""
 
-#: engine/table.py:1043
+#: engine/table.py:1071
 msgid "Switch to single char mode"
 msgstr "切换到单字模式"
 
-#: engine/table.py:1046
+#: engine/table.py:1074
 #, fuzzy
 msgid "Direct Commit Mode"
 msgstr "切换直接提交模式"
 
-#: engine/table.py:1047
+#: engine/table.py:1075
 msgid "Switch to normal commit mode, which use space to commit"
 msgstr "切换到普通提交模式，即用空格键提交"
 
-#: engine/table.py:1050
+#: engine/table.py:1078
 msgid "Normal Commit Mode"
 msgstr ""
 
-#: engine/table.py:1051
+#: engine/table.py:1079
 msgid "Switch to direct commit mode"
 msgstr "切换直接提交模式"
 
-#: engine/table.py:1057
+#: engine/table.py:1085
 #, fuzzy
 msgid "Simplified Chinese Mode"
 msgstr "切换到简体模式"
 
-#: engine/table.py:1058
+#: engine/table.py:1086
 msgid "Switch to Traditional Chinese mode"
 msgstr "切换到繁体模式"
 
-#: engine/table.py:1062
+#: engine/table.py:1090
 #, fuzzy
 msgid "Traditional Chinese Mode"
 msgstr "切换到繁体模式"
 
-#: engine/table.py:1063
+#: engine/table.py:1091
 msgid "Switch to Simplify Chinese first Big Charset Mode"
 msgstr "切换到简体优先的大字集模式"
 
-#: engine/table.py:1067
+#: engine/table.py:1095
 #, fuzzy
 msgid "Simplified Chinese First Big Charset Mode"
 msgstr "切换到简体优先的大字集模式"
 
-#: engine/table.py:1068
+#: engine/table.py:1096
 msgid "Switch to Traditional Chinese first Big Charset Mode"
 msgstr "切换到繁体优先的大字集模式"
 
-#: engine/table.py:1072
+#: engine/table.py:1100
 #, fuzzy
 msgid "Traditional Chinese Big First Charset Mode"
 msgstr "切换到繁体优先的大字集模式"
 
-#: engine/table.py:1073
+#: engine/table.py:1101
 msgid "Switch to Big Charset Mode"
 msgstr "切换到大字集模式"
 
-#: engine/table.py:1077
+#: engine/table.py:1105
 #, fuzzy
 msgid "Big Chinese Mode"
 msgstr "切换到大字集模式"
 
-#: engine/table.py:1078
+#: engine/table.py:1106
 msgid "Switch to Simplify Chinese Mode"
 msgstr "切换到简体模式"
 
