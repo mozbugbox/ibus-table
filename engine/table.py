@@ -1021,92 +1021,57 @@ class tabengine (ibus.EngineBase):
         # taken and modified from PinYin.py :)
         if self._mode == 1: # refresh mode
             if self._status == u'CN':
-                self._status_property.set_icon( u'%s%s' % (self._icon_dir, 'chinese.svg') )
-
-                self._status_property.set_label(  _(u'Chinese Mode') )
+                self._set_property(self._status_property, 'chinese.svg', 'Chinese Mode', 'Switch to English mode')
             else:
-                self._status_property.set_icon( u'%s%s' % (self._icon_dir, 'ibus-table.svg') )
-                self._status_property.set_label(  self._status )
-            self._status_property.set_tooltip (  _(u'Switch to English mode') )
+                self._set_property(self._status_property, 'ibus-table.svg', self._status, 'Switch to English mode')
         else:
-            self._status_property.set_icon( u'%s%s' % (self._icon_dir, 'english.svg') )
-            self._status_property.set_label( _(u'English Mode') )
-            self._status_property.set_tooltip (  _(u'Switch to Table mode') )
+            self._set_property(self._status_property, 'english.svg', 'English Mode', 'Switch to Table mode')
 
         if self._full_width_letter[self._mode]:
-            self._letter_property.set_icon ( u'%s%s' % (self._icon_dir, 'full-letter.svg') )
-            self._letter_property.set_label ( _(u'Full Letter') )
-            self._letter_property.set_tooltip ( _(u'Switch to half-width letter') )
+            self._set_property(self._letter_property, 'full-letter.svg', 'Full Letter', 'Switch to half-width letter')
         else:
-            self._letter_property.set_icon ( u'%s%s' % (self._icon_dir, 'half-letter.svg') )
-            self._letter_property.set_label ( _(u'Half Letter') )
-            self._letter_property.set_tooltip ( _(u'Switch to full-width letter') )
+            self._set_property(self._letter_property, 'half-letter.svg', 'Half Letter', 'Switch to full-width letter')
 
         if self._full_width_punct[self._mode]:
-            self._punct_property.set_icon ( u'%s%s' % (self._icon_dir, 'full-punct.svg') )
-            self._punct_property.set_label ( _(u'Full-width Punctuation') )
-            self._punct_property.set_tooltip ( _( u'Switch to half-width punctuation' ) )
+            self._set_property(self._punct_property, 'full-punct.svg', 'Full-width Punctuation', 'Switch to half-width punctuation')
         else:
-            self._punct_property.set_icon ( u'%s%s' % (self._icon_dir,'half-punct.svg' ) )
-            self._punct_property.set_label ( _(u'Half-width Punctuation') )
-            self._punct_property.set_tooltip ( _( u'Switch to full-width punctuation' ) )
+            self._set_property(self._punct_property, 'half-punct.svg', 'Half-width Punctuation', 'Switch to full-width punctuation')
 
         if self._editor._py_mode:
-            self._py_property.set_icon ( u'%s%s' % (self._icon_dir, 'py-mode.svg' ) )
-            self._py_property.set_label ( _(u'PinYin Mode') )
-            self._py_property.set_tooltip ( _(u'Switch to Table mode') )
-
+            self._set_property(self._py_property, 'py-mode.svg', 'PinYin Mode', 'Switch to Table mode')
         else:
-            self._py_property.set_icon ( u'%s%s' % (self._icon_dir, 'tab-mode.svg' ) )
-            self._py_property.set_label ( _(u'Table Mode') )
-            self._py_property.set_tooltip ( _(u'Switch to PinYin mode') )
+            self._set_property(self._py_property, 'tab-mode.svg', 'Table Mode', 'Switch to PinYin mode')
 
         if self._editor._onechar:
-            self._onechar_property.set_icon ( u'%s%s' % (self._icon_dir, 'onechar.svg' ))
-            self._onechar_property.set_label ( _(u'Single Char Mode') )
-            self._onechar_property.set_tooltip ( _(u'Switch to phrase mode') )
+            self._set_property(self._onechar_property, 'onechar.svg', 'Single Char Mode', 'Switch to phrase mode')
         else:
-            self._onechar_property.set_icon ( u'%s%s' % (self._icon_dir, 'phrase.svg' ))
-            self._onechar_property.set_label ( _(u'Phrase Mode') )
-            self._onechar_property.set_tooltip ( _(u'Switch to single char mode') )
+            self._set_property(self._onechar_property, 'phrase.svg', 'Phrase Mode', 'Switch to single char mode')
+
         if self._auto_commit:
-            self._auto_commit_property.set_icon ( u'%s%s' % (self._icon_dir, 'acommit.svg' ) ) 
-            self._auto_commit_property.set_label ( _(u'Direct Commit Mode') )
-            self._auto_commit_property.set_tooltip ( _(u'Switch to normal commit mode, which use space to commit') ) 
+            self._set_property(self._auto_commit_property, 'acommit.svg', 'Direct Commit Mode', 'Switch to normal commit mode, which use space to commit') 
         else:
-            self._auto_commit_property.set_icon ( u'%s%s' % (self._icon_dir, 'ncommit.svg' ) ) 
-            self._auto_commit_property.set_label ( _(u'Normal Commit Mode') )
-            self._auto_commit_property.set_tooltip ( _(u'Switch to direct commit mode') ) 
+            self._set_property(self._auto_commit_property, 'ncommit.svg', 'Normal Commit Mode', 'Switch to direct commit mode')
+
         # the chinese_mode:
         if self.db._is_chinese:
             if self._editor._chinese_mode == 0:
-                self._cmode_property.set_icon ( u'%s%s' % (self._icon_dir,\
-                        'sc-mode.svg' ) ) 
-                self._cmode_property.set_label ( _(u'Simplified Chinese Mode') )
-                self._cmode_property.set_tooltip ( _(u'Switch to Traditional Chinese mode') ) 
+                self._set_property(self._cmode_property, 'sc-mode.svg', 'Simplified Chinese Mode', 'Switch to Traditional Chinese mode')
             elif self._editor._chinese_mode == 1:
-                self._cmode_property.set_icon ( u'%s%s' % (self._icon_dir,\
-                        'tc-mode.svg' ) ) 
-                self._cmode_property.set_label ( _(u'Traditional Chinese Mode') )
-                self._cmode_property.set_tooltip ( _(u'Switch to Simplify Chinese first Big Charset Mode') ) 
+                self._set_property(self._cmode_property, 'tc-mode.svg', 'Traditional Chinese Mode', 'Switch to Simplify Chinese first Big Charset Mode')
             elif self._editor._chinese_mode == 2:
-                self._cmode_property.set_icon ( u'%s%s' % (self._icon_dir,\
-                        'scb-mode.svg' ) ) 
-                self._cmode_property.set_label ( _(u'Simplified Chinese First Big Charset Mode') )
-                self._cmode_property.set_tooltip ( _(u'Switch to Traditional Chinese first Big Charset Mode') ) 
+                self._set_property(self._cmode_property, 'scb-mode.svg', 'Simplified Chinese First Big Charset Mode', 'Switch to Traditional Chinese first Big Charset Mode')
             elif self._editor._chinese_mode == 3:
-                self._cmode_property.set_icon ( u'%s%s' % (self._icon_dir,\
-                        'tcb-mode.svg' ) ) 
-                self._cmode_property.set_label ( _(u'Traditional Chinese Big First Charset Mode') )
-                self._cmode_property.set_tooltip ( _(u'Switch to Big Charset Mode') ) 
+                self._set_property(self._cmode_property, 'tcb-mode.svg', 'Traditional Chinese First Big Charset Mode', 'Switch to Big Charset Mode')
             elif self._editor._chinese_mode == 4:
-                self._cmode_property.set_icon ( u'%s%s' % (self._icon_dir,\
-                        'cb-mode.svg' ) ) 
-                self._cmode_property.set_label ( _(u'Big Chinese Mode') )
-                self._cmode_property.set_tooltip ( _(u'Switch to Simplify Chinese Mode') ) 
+                self._set_property(self._cmode_property, 'cb-mode.svg', 'Big Chinese Mode', 'Switch to Simplified Chinese Mode')
 
         # use buildin method to update properties :)
         map (self.update_property, self.properties)
+
+    def _set_property (self, property, icon, label, tooltip):
+        property.set_icon ( u'%s%s' % (self._icon_dir, icon ) ) 
+        property.set_label ( _( unicode(label) ) )
+        property.set_tooltip ( _( unicode(tooltip) ) )
 
     def _change_mode (self):
         '''Shift input mode, TAB -> EN -> TAB
