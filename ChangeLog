@@ -1,3 +1,207 @@
+commit f118dba1b194a6adb6c4854da74d2fa297f077e7
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Wed Oct 3 17:11:46 2012 +1000
+
+    Updated PO files.
+
+commit 3675a495799cfa68da825350e449c45f5ceeac68
+Merge: f124c26 2cd1650
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Wed Oct 3 17:01:32 2012 +1000
+
+    Merge remote-tracking branch 'mozbugbox/page-up-down-config' into rel20121001
+
+commit 2cd1650663086e7a00f92a9eb7661c738351c39c
+Author: mozbugbox <mozbugbox@yahoo.com.au>
+Date:   Fri Sep 28 00:26:28 2012 +0800
+
+    Make page up/down keys configurable
+
+commit f124c2608e50796671ca518248dc68c716a7204d
+Author: mozbugbox <mozbugbox@yahoo.com.au>
+Date:   Thu Sep 27 22:45:30 2012 +0800
+
+    Fill input panel on demand. Huge GUI respond speedup
+    
+    Huge speedup on ibus-table GUI repsond time when using a large phrases
+    table.
+    
+    Currently, all the candidate phrases are created in the input panel
+    before shown to the users, while only 6 of the candidates actually show
+    up on the panel. For a phrase table with a lot of phrases, the candidate
+    list can contain more than 3000 entries, especially when only the 1st
+    key is entried.
+    
+    3000 candidates will cause 3000 input widgets being generated before the
+    first 6 candidates were show to the users. This can make the GUI update
+    lagging up to a few seconds depending on the speed of the CPU. This is
+    at least O(n).
+    
+    In this optimzed code, only 6 candidate widgets were generated at a
+    time. More candidate widgets will be generate on next-page/previous-
+    page action. Now we are O(1) for the GUI part of panel update.
+
+commit 14d46a0f8cd9d565db3548166873548a0cff9f80
+Author: mozbugbox <mozbugbox@yahoo.com.au>
+Date:   Thu Sep 27 22:41:25 2012 +0800
+
+    Remove unneeded sort in select_words(), speedup
+    
+    Since sql query statement already sorted (ORDER BY) the result, remove
+    the unneeded sort operation.
+    
+    Sorting with a python compare function is terribly slow for large list.
+
+commit 2a9a21fc7da056dfd599145198f9d36b33171bd8
+Merge: 4c358f7 9d8a722
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Tue Sep 18 11:04:29 2012 +1000
+
+    Merge remote-tracking branch 'mike-fabian/acevery-master-fix-ipa-x-sampa-rhbz856903' into rel20121001
+
+commit 4c358f755ddacf2117b91123490bad2fd85380cc
+Merge: e90dc05 c219fd9
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Thu Sep 13 23:34:09 2012 +1000
+
+    Merge remote-tracking branch 'mike-fabian/acevery-master-improve-chinese-category-check-rhbz856320' into rel20121001
+
+commit 9d8a7228fca7615b8a3b7f74f7bf8cfe7861fe8b
+Author: Mike FABIAN <mfabian@redhat.com>
+Date:   Thu Sep 13 15:32:10 2012 +0200
+
+    Fix ipa-x-sampa table and phrases containing spaces in emoji-table
+    
+    Currently there is a regular expression which filters out several
+    lines defining valid phrases. The emoji-table for example has phrases
+    containing spaces which are currently filtered out and the ipa-x-sampa
+    table has trailing comments which are filtered out as well.
+    
+    In phrase_parser, the phrases are parsed like:
+    
+    xingma, phrase, freq = unicode (l, "utf-8").strip ().split ('\t')[:3]
+    
+    Therefore, it seems reasonable to change the regular expression checking
+    for a table line containing a phrase definition to accept every
+    line which has 3 columns seperated by tabs followed optionally
+    by more columns also separated by tabs (the optional columns are ignored,
+    i.e. they are just comments in the table source).
+    
+    See: https://bugzilla.redhat.com/show_bug.cgi?id=856903
+
+commit c219fd9aed3c24dc6405ef88991ef178caf29f91
+Author: Mike FABIAN <mfabian@redhat.com>
+Date:   Thu Sep 13 12:43:55 2012 +0200
+
+    Improve check whether a phrase is simplified or traditional Chinese
+    
+    The improvement is to ignore all non-Han characters when
+    doing the check.
+    
+    This is to avoid classifying a simplified Chinese string as
+    traditional just because it happens to include some non-Chinese
+    characters, for example box drawing characters, which cannot be
+    converted to gb2312 but happen to be convertible to big5hkscs.
+    
+    This fixes the problem in the emoji-table input method that most
+    phrases cannot be input at all.
+    
+    See: https://bugzilla.redhat.com/show_bug.cgi?id=856320
+
+commit e90dc055de4e5ecda91ae03144be9731c8376989
+Merge: ce79966 84c287f
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Thu Sep 6 08:28:32 2012 +1000
+
+    Merge remote-tracking branch 'acevery/master' into rel20121001
+    
+    Conflicts:
+    	engine/table.py
+
+commit 84c287f1a7e261c32e7b4a18d7f488ae3d78da75
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Wed Sep 5 20:46:09 2012 +0800
+
+    exclude control characters from input range
+
+commit edd01646dca3599f1e9a838b9ab9813e1477bd3d
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Wed Sep 5 01:35:56 2012 +0800
+
+    remove repeat unichr; remove blank lines in table.py
+
+commit 50692ab9599c3845bc9f29cb0516ee78b6b0eda0
+Author: Yuwei Yu <acevery@gmail.com>
+Date:   Wed Sep 5 01:22:55 2012 +0800
+
+    fix non-ASCII input key bug
+
+commit ce7996600810421020c6904749213b73a7eb2dff
+Merge: d4c5fad 3ba23ba
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Tue Sep 4 22:35:46 2012 +1000
+
+    Merge commit '3ba23ba4667818c096639acb3920b50994263ef4' into rel20120901
+    
+    Conflicts:
+    	tables/additional/latex.txt
+
+commit d4c5fad5ad5bd80ad34d8e96bd1d1d48dc21973d
+Author: Caius 'kaio' Chance <me@kaio.net>
+Date:   Tue Sep 4 21:58:01 2012 +1000
+
+    Updated version number and ChangeLog.
+    Rebuilt PO files.
+
+commit 3ba23ba4667818c096639acb3920b50994263ef4
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sat Aug 11 15:00:27 2012 +0800
+
+    further remove 'additional' stuff
+
+commit 2b9fb58e532ea9ea51800e7e177fb9c30d0ccb8f
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sat Aug 11 14:38:08 2012 +0800
+
+    remove compose.db, latex.db; fix #1026
+
+commit 1bc85cd6e72eb0e30cd413ad0f4dde65dd8fc73f
+Merge: 7a28618 e015065
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sat Aug 11 13:16:04 2012 +0800
+
+    Merge branch 'master' of github.com:maxiaojun/ibus-table
+
+commit 7a28618143bf702ea52858df2d0a54b185e9c400
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sat Aug 11 13:11:02 2012 +0800
+
+    respect language_filter property; a better way to fix #1188
+
+commit e0150650b3fbbaf3d4b97a48d95620caa2342786
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sat Aug 11 13:11:02 2012 +0800
+
+    respect language_filter project; a better way to fix #1188
+
+commit 932abeea7511ae733d029f466260d3710a09b5e1
+Author: Mathieu Bridon <bochecha@fedoraproject.org>
+Date:   Sat Aug 11 12:45:58 2012 +0800
+
+    trivial change
+
+commit cb0abbd63040dd37f78628d595905faabd55de7f
+Author: Mathieu Bridon <bochecha@fedoraproject.org>
+Date:   Sat Aug 11 12:45:17 2012 +0800
+
+    add language_filter property
+
+commit 6f90e9c27491f169138abde9c85350838d28104e
+Author: Xiaojun Ma <damage3025@gmail.com>
+Date:   Sat Aug 11 11:42:28 2012 +0800
+
+    a better way to fix #1474
+
 commit d752b0274768e6d593c32cefebecdc24e197dbf0
 Merge: eaa6927 2c8d938
 Author: Caius 'kaio' Chance <me@kaio.net>
