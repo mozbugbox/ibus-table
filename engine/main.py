@@ -34,9 +34,11 @@ import tabsqlitedb
 
 try:
     db_dir = os.path.join (os.getenv('IBUS_TABLE_LOCATION'),'tables')
+    udb_dir = os.path.join (os.getenv('HOME'), '.ibus/tables/tables')
     icon_dir = os.path.join (os.getenv('IBUS_TABLE_LOCATION'),'icons')
 except:
     db_dir = "/usr/share/ibus-table/tables"
+    udb_dir = "~/.ibus/tables/tables"
     icon_dir = "/usr/share/ibus-table/icons"
 
 
@@ -159,16 +161,22 @@ def main():
         #    Elements
         dbs = os.listdir(db_dir)
         dbs = filter (lambda x: x.endswith('.db'), dbs)
-        #if not dbs:
-        #    return
-
-        egs = Element('engines')
+        udbs = os.listdir(udb_dir)
+        udbs = filter (lambda x: x.endswith('.db'), udbs)
+        
+        _tmp_dbs = []
         for _db in dbs:
-            _sq_db = tabsqlitedb.tabsqlitedb (os.path.join (db_dir, _db))
+            _tmp_dbs.append(os.path.join (db_dir, _db))
+        for _db in udbs:
+            _tmp_dbs.append(os.path.join (udb_dir, _db))
+            
+        egs = Element('engines')
+        for _tdb in _tmp_dbs:
+            _sq_db = tabsqlitedb.tabsqlitedb (_db)
             _engine = SubElement (egs,'engine')
             
             _name = SubElement (_engine, 'name')
-            _name.text = _db.replace ('.db','')
+            _name.text = os.path.basename(_db).replace ('.db','')
             
             _longname = SubElement (_engine, 'longname')
             _longname.text = ''
