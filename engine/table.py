@@ -93,7 +93,7 @@ class editor(object):
         __orientation = self._config.get_value (
                 self._config_section,
                 "LookupTableOrientation",
-                1)
+                self.db.get_orientation())
         # self._lookup_table: lookup table
         self._lookup_table = ibus.LookupTable (__page_size)
         self._lookup_table.set_orientation (__orientation)

@@ -106,7 +106,8 @@ class tabsqlitedb:
                       'rules':'',
                       #'rules':'ce2:p11+p12+p21+p22;ce3:p11+p21+p22+p31;ca4:p11+p21+p31+p41'}
                       'least_commit_length':'0',
-                      'start_chars':''
+                      'start_chars':'',
+                      'orientation':'1'
                       # we use this entry for those IME, which don't
                       # have rules to build up phrase, but still need
                       # auto commit to preedit
@@ -275,6 +276,12 @@ class tabsqlitedb:
             return int( self.get_ime_property ('page_size') )
         except:
             return 6
+        
+    def get_orientation (self):
+        try:
+            return int( self.get_ime_property ('orientation') )
+        except:
+            return 1
 
     def create_tables (self, database):
         '''Create tables that contain all phrase'''
