@@ -132,7 +132,7 @@ class editor(object):
     def set_select_keys(self, astring):
         """astring: select keys setting. e.g. 1,2,3,4,5,6,7,8,9"""
         self._select_keys = [x.strip() for x in astring.split(",")]
-        labels = [ibus.Text(x) for x in self._select_keys]
+        labels = [ibus.Text("{}.".format(x)) for x in self._select_keys]
         self._lookup_table.set_labels(labels)
 
     def get_select_keys(self):
