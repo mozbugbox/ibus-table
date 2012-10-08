@@ -117,6 +117,28 @@ class editor(object):
                 "ChineseMode",
                 self.get_chinese_mode())
 
+        # self._select_keys: a list of chars for select keys
+        self.init_select_keys()
+
+    def init_select_keys(self):
+        # __select_keys: lookup table select keys/labels
+        __select_keys = self._config.get_value (
+                self._config_section,
+                "LookupTableSelectKeys",
+                self.db.get_select_keys())
+        if __select_keys:
+            self.set_select_keys(__select_keys)
+
+    def set_select_keys(self, astring):
+        """astring: select keys setting. e.g. 1,2,3,4,5,6,7,8,9"""
+        self._select_keys = [x.strip() for x in astring.split(",")]
+        labels = [ibus.Text(x) for x in self._select_keys]
+        self._lookup_table.set_labels(labels)
+
+    def get_select_keys(self):
+        """@return: a list of chars as select keys: ["1", "2", ...]"""
+        return self._select_keys
+
     def get_chinese_mode (self):
         '''Use db value or LC_CTYPE in your box to determine the _chinese_mode'''
         # use db value, if applicable
@@ -730,9 +752,13 @@ class editor(object):
             return True
         return res
 
-    def number (self, index):
-        '''Select the candidates in Lookup Table
-        index should start from 0'''
+    def select_key(self, char):
+        '''Select the candidates in Lookup Table'''
+        try:
+            index = self._select_keys.index(char)
+        except ValueError:
+            return False
+
         self._lookup_table.set_cursor_pos_in_current_page ( index )
         if index != self._lookup_table.get_cursor_pos_in_current_page ():
             # the index given is out of range we do not commit string
@@ -740,8 +766,13 @@ class editor(object):
         self.commit_to_preedit ()
         return True
 
-    def alt_number (self,index):
-        '''Remove the candidates in Lookup Table from user_db index should start from 0'''
+    def alt_select_key(self, char):
+        '''Remove the candidates in Lookup Table from user_db index.'''
+        try:
+            index = self._select_keys.index(char)
+        except ValueError:
+            return False
+
         cps = self._lookup_table.get_current_page_start()
         pos = cps + index
         if  len (self._candidates[0]) > pos:
@@ -1468,13 +1499,17 @@ class tabengine (ibus.EngineBase):
             self._update_ui ()
             return res
 
-        elif key.code >= keysyms._1 and key.code <= keysyms._9 and self._editor._candidates[0] and key.mask & modifier.CONTROL_MASK:
-            res = self._editor.number (key.code - keysyms._1)
+        elif ( keychar in self._editor.get_select_keys() and
+                self._editor._candidates[0] and
+                key.mask & modifier.CONTROL_MASK ):
+            res = self._editor.select_key (keychar)
             self._update_ui ()
             return res
 
-        elif key.code >= keysyms._1 and key.code <= keysyms._9 and self._editor._candidates[0] and key.mask & modifier.ALT_MASK:
-            res = self._editor.alt_number (key.code - keysyms._1)
+        elif ( keychar in self._editor.get_select_keys() and
+                self._editor._candidates[0] and
+                key.mask & modifier.ALT_MASK ):
+            res = self._editor.alt_select_key (keychar)
             self._update_ui ()
             return res
 
@@ -1557,9 +1592,9 @@ class tabengine (ibus.EngineBase):
             self._update_lookup_table ()
             return res
 
-        elif key.code >= keysyms._1 and key.code <= keysyms._9 and self._editor._candidates[0]:
+        elif keychar in self._editor.get_select_keys() and self._editor._candidates[0]:
             input_keys = self._editor.get_all_input_strings ()
-            res = self._editor.number (key.code - keysyms._1)
+            res = self._editor.select_key (keychar)
             if res:
                 o_py = self._editor._py_mode
                 commit_string = self._editor.get_preedit_strings ()
@@ -1655,6 +1690,8 @@ class tabengine (ibus.EngineBase):
                 self._editor._lookup_table.set_orientation (value)
             elif name == u'LookupTablePageSize':
                 self._editor._lookup_table.set_page_size (value)
+            elif name == u'LookupTableSelectKeys':
+                self._editor.set_select_keys (value)
             elif name == u'OneChar':
                 self._editor._onechar = value
             elif name == u'TabDefFullWidthLetter':
