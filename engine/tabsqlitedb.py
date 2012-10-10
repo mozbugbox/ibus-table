@@ -272,7 +272,11 @@ class tabsqlitedb:
 
     def get_page_size (self):
         try:
-            return int( self.get_ime_property ('page_size') )
+            __page_size = int( self.get_ime_property ('page_size') )
+            if __page_size:
+                return __page_size
+            else:
+                return len(__select_keys.split(','))
         except:
             return 6
 
