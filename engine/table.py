@@ -1514,20 +1514,27 @@ class tabengine (ibus.EngineBase):
             return res
 
         elif key.code == keysyms.space:
-            o_py = self._editor._py_mode
-            sp_res = self._editor.space ()
-            #return (KeyProcessResult,whethercommit,commitstring)
-            if sp_res[0]:
-                self.commit_string (sp_res[1])
-                #self.add_string_len(sp_res[1])
-                self.db.check_phrase (sp_res[1], sp_res[2])
+            # if space is one of "page_down_keys" change to next page 
+            #  on lookup page
+            if keysyms.space in self._page_down_keys:
+                res = self._editor.page_down()
+                self._update_lookup_table ()
+                return res
             else:
-                if sp_res[1] == u' ':
-                    self.commit_string (cond_letter_translate (u" "))
-            if o_py != self._editor._py_mode:
-                self._refresh_properties ()
-                self._update_ui ()
-            return True
+                o_py = self._editor._py_mode
+                sp_res = self._editor.space ()
+                #return (KeyProcessResult,whethercommit,commitstring)
+                if sp_res[0]:
+                    self.commit_string (sp_res[1])
+                    #self.add_string_len(sp_res[1])
+                    self.db.check_phrase (sp_res[1], sp_res[2])
+                else:
+                    if sp_res[1] == u' ':
+                        self.commit_string (cond_letter_translate (u" "))
+                if o_py != self._editor._py_mode:
+                    self._refresh_properties ()
+                    self._update_ui ()
+                return True
         # now we ignore all else hotkeys
         elif key.mask & modifier.CONTROL_MASK+modifier.ALT_MASK:
             return False
