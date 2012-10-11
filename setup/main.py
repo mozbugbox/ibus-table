@@ -129,6 +129,27 @@ class PreferencesDialog:
             img = self.__builder.get_object("image_about")
             img.set_from_file(img_fname)
 
+        # setup table info
+        engines = self.__bus.list_engines()
+        engine = None
+        for e in engines:
+            if e.get_name() == self.__table_name:
+                engine = e
+                break
+        if engine:
+            longname = engine.get_longname()
+            if not longname:
+                longname = engine.get_name()
+            w = self.__builder.get_object("TableNameVersion")
+            w.set_markup(_("<b>%s</b>") %
+                    (longname))
+            icon_path = engine.get_icon()
+            if icon_path and os.path.exists(icon_path):
+                from gi.repository import GdkPixbuf
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_path,
+                        -1, 32)
+                w = self.__builder.get_object("TableNameImage")
+                w.set_from_pixbuf(pixbuf)
 
     def _init_combobox(self, name):
         """Set combobox from the __config engine"""
