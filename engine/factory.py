@@ -88,7 +88,8 @@ class EngineFactory (ibus.EngineFactoryBase):
                     db = os.path.join (db_dir,name+'.db')
                     udb = name+'-user.db'
                     if not os.path.exists(db):
-                        db = os.path.join(os.getenv('HOME') + '/.ibus/byo-tables', name + '.db')                    
+                        byo_db_dir = os.path.join(os.getenv('HOME'), '.ibus/byo-tables')
+                        db = os.path.join(byo_db_dir, name + '.db')                    
                     _sq_db = tabsqlitedb.tabsqlitedb( name = db,user_db = udb )
                     _sq_db.db.commit()
                     self.dbdict[name] = _sq_db
