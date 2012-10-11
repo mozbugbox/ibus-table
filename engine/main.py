@@ -32,13 +32,16 @@ import factory
 import tabsqlitedb
 
 
-try:
-    db_dir = os.path.join (os.getenv('IBUS_TABLE_LOCATION'),'tables')
-    icon_dir = os.path.join (os.getenv('IBUS_TABLE_LOCATION'),'icons')
-except:
-    db_dir = "/usr/share/ibus-table/tables"
-    icon_dir = "/usr/share/ibus-table/icons"
+ibus_dir = os.getenv('IBUS_TABLE_LOCATION')
+ibus_lib_dir = os.getenv('IBUS_TABLE_LIB_LOCATION')
 
+if not ibus_dir or not os.path.exists(ibus_dir):
+    ibus_dir = "/usr/share/ibus-table/"
+    ibus_lib_dir = "/usr/lib/ibus-table"
+
+db_dir = os.path.join (ibus_dir, 'tables')
+icon_dir = os.path.join (ibus_dir, 'icons')
+setup_cmd = os.path.join(ibus_lib_dir, "ibus-setup-table")
 
 opt = optparse.OptionParser()
 
@@ -103,15 +106,17 @@ class IMApp:
                 if not os.access( icon, os.F_OK):
                     icon = ''
             layout = self.__factory.db.get_ime_property ("layout")
-            
-            self.__component.add_engine(name,
+            setup_arg = "{} {}".format(setup_cmd, name)
+            engine = ibus.EngineDesc(name,
                                         longname,
                                         description,
                                         language,
                                         license,
                                         author,
                                         icon,
-                                        layout)
+                                        layout,
+                                        setup=setup_arg)
+            self.__component.add_engines([engine])
             self.__bus.register_component(self.__component)
 
 
@@ -169,6 +174,7 @@ def main():
             
             _name = SubElement (_engine, 'name')
             _name.text = _db.replace ('.db','')
+            setup_arg = "{} {}".format(setup_cmd, _name.text)
             
             _longname = SubElement (_engine, 'longname')
             _longname.text = ''
@@ -207,6 +213,9 @@ def main():
 
             _desc = SubElement (_engine, 'description')
             _desc.text = _sq_db.get_ime_property ('description')
+
+            _desc = SubElement (_engine, 'setup')
+            _desc.text = setup_arg
 
         # now format the xmlout pretty
         indent (egs)
