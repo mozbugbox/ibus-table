@@ -140,7 +140,8 @@ def print_result(table_sql, result):
     for row in result:
         row = list(row)
         for i in range(3, len(row) - 4):
-            row[i] = "{}|{: <2d}".format(tab_dict_rev.get(row[i]), row[i])
+            if row[i]:
+                row[i] = "{}|{: <2}".format(tab_dict_rev.get(row[i]), row[i])
         row_str = [unicode(x).strip() if x is not None else " " for x in row]
         row_str[-1], row_str[-3] = row_str[-3], row_str[-1]
         if len(row_str[-1]) == 1:
