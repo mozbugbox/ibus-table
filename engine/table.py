@@ -34,6 +34,9 @@ from ibus import ascii
 #import tabsqlitedb
 import tabdict
 import re
+import time
+import gobject
+
 patt_edit = re.compile (r'(.*)###(.*)###(.*)')
 patt_uncommit = re.compile (r'(.*)@@@(.*)')
 
@@ -42,6 +45,9 @@ _  = lambda a : dgettext ("ibus-table", a)
 N_ = lambda a : a
 
 import dbus
+
+SAVE_USER_COUNT_MAX = 16
+SAVE_USER_TIMEOUT = 30 # in seconds
 
 class KeyEvent:
     def __init__(self, keyval, is_press, state):
@@ -1006,7 +1012,15 @@ class tabengine (ibus.EngineBase):
         #    self._sm = None
         #self._sm_on = False
         self._on = False
+        self._save_user_count = 0
+        self._save_user_start = time.time()
+
+        self._save_user_count_max = SAVE_USER_COUNT_MAX
+        self._save_user_timeout = SAVE_USER_TIMEOUT
         self.reset ()
+
+        self.sync_timeout_id = gobject.timeout_add_seconds(1,
+                self._sync_user_db)
 
     def reset (self):
         self._editor.clear ()
@@ -1018,6 +1032,9 @@ class tabengine (ibus.EngineBase):
         self._update_ui ()
 
     def do_destroy(self):
+        if self.sync_timeout_id > 0:
+            gobject.source_remove(self.sync_timeout_id)
+            self.sync_timeout_id = 0
         self.reset ()
         self.focus_out ()
         #self.db.sync_usrdb ()
@@ -1226,6 +1243,26 @@ class tabengine (ibus.EngineBase):
     #            self._sm.Accumulate(len(astring))
     #        except:
     #            pass
+
+    def _check_phrase (self, phrase, tabkey):
+        """Check the given phrase and update save user db info"""
+        self.db.check_phrase(phrase, tabkey)
+
+        if self._save_user_count <= 0:
+            self._save_user_start = time.time()
+        self._save_user_count += 1
+
+    def _sync_user_db(self):
+        """Save user db to disk"""
+        if self._save_user_count >= 0:
+            now = time.time()
+            time_delta = now - self._save_user_start
+            if (self._save_user_count > self._save_user_count_max or 
+                    time_delta >= self._save_user_timeout):
+                self.db.sync_usrdb()
+                self._save_user_count = 0
+                self._save_user_start = now
+        return True
 
     def commit_string (self,string):
         self._editor.clear ()
@@ -1527,7 +1564,7 @@ class tabengine (ibus.EngineBase):
                 if sp_res[0]:
                     self.commit_string (sp_res[1])
                     #self.add_string_len(sp_res[1])
-                    self.db.check_phrase (sp_res[1], sp_res[2])
+                    self._check_phrase (sp_res[1], sp_res[2])
                 else:
                     if sp_res[1] == u' ':
                         self.commit_string (cond_letter_translate (u" "))
@@ -1554,7 +1591,7 @@ class tabengine (ibus.EngineBase):
                 if sp_res[0]:
                     self.commit_string (sp_res[1])
                     #self.add_string_len(sp_res[1])
-                    self.db.check_phrase (sp_res[1],sp_res[2])
+                    self._check_phrase (sp_res[1],sp_res[2])
 
             res = self._editor.add_input ( keychar )
             if not res:
@@ -1567,7 +1604,7 @@ class tabengine (ibus.EngineBase):
                 if sp_res[0]:
                     self.commit_string (sp_res[1] + key_char)
                     #self.add_string_len(sp_res[1])
-                    self.db.check_phrase (sp_res[1],sp_res[2])
+                    self._check_phrase (sp_res[1],sp_res[2])
                     return True
                 else:
                     self.commit_string ( key_char )
@@ -1582,7 +1619,7 @@ class tabengine (ibus.EngineBase):
                     if sp_res[0]:
                         self.commit_string (sp_res[1])
                         #self.add_string_len(sp_res[1])
-                        self.db.check_phrase (sp_res[1], sp_res[2])
+                        self._check_phrase (sp_res[1], sp_res[2])
                         return True
             self._update_ui ()
             return True
@@ -1611,7 +1648,7 @@ class tabengine (ibus.EngineBase):
                     self._refresh_properties ()
                     self._update_ui ()
                 # modify freq info
-                self.db.check_phrase (commit_string, input_keys)
+                self._check_phrase (commit_string, input_keys)
             return True
 
         elif key.code <= 127:
