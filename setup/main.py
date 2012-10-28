@@ -88,12 +88,23 @@ class PreferencesDialog:
             mdialog.run()
         return ret
 
+    def _build_combobox_renderer(self, name):
+        """setup cell renderer for combobox"""
+        __combobox = self.__builder.get_object("combobox%s" % name)
+        __cell = Gtk.CellRendererText()
+        __combobox.pack_start(__cell, True)
+        __combobox.add_attribute(__cell, 'text', 0)
+
     def load_builder(self):
         """Load builder and __dialog attribute"""
         self.__builder = Gtk.Builder()
         self.__builder.set_translation_domain("ibus-table")
         self.__builder.add_from_file("ibus-table-preferences.ui")
         self.__dialog = self.__builder.get_object("dialog")
+
+        for name in OPTION_DEFAULTS.keys():
+            if name not in SCALE_WIDGETS:
+                self._build_combobox_renderer(name)
 
     def do_init(self):
         self.__config = self.__bus.get_config()
@@ -154,10 +165,6 @@ class PreferencesDialog:
     def _init_combobox(self, name):
         """Set combobox from the __config engine"""
         __combobox = self.__builder.get_object("combobox%s" % name)
-        __cell = Gtk.CellRendererText()
-        __combobox.pack_start(__cell, True)
-        __combobox.add_attribute(__cell, 'text', 0)
-
         val = 0
         if name in self.__values:
             init_val = self.__values[name]
