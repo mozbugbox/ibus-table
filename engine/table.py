@@ -1037,7 +1037,9 @@ class tabengine (ibus.EngineBase):
             self.sync_timeout_id = 0
         self.reset ()
         self.focus_out ()
-        #self.db.sync_usrdb ()
+        if self._save_user_count > 0:
+            self.db.sync_usrdb()
+            self._save_user_count = 0
         super(tabengine,self).do_destroy()
 
     def _init_properties (self):
