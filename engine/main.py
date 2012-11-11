@@ -34,6 +34,14 @@ import tabsqlitedb
 
 ibus_dir = os.getenv('IBUS_TABLE_LOCATION')
 ibus_lib_dir = os.getenv('IBUS_TABLE_LIB_LOCATION')
+try:
+    db_dir = os.path.join (os.getenv('IBUS_TABLE_LOCATION'),'tables')
+    byo_db_dir = os.path.join (os.getenv('HOME'), '.ibus/byo-tables')
+    icon_dir = os.path.join (os.getenv('IBUS_TABLE_LOCATION'),'icons')
+except:
+    db_dir = "/usr/share/ibus-table/tables"
+    byo_db_dir = "~/.ibus/byo-tables"
+    icon_dir = "/usr/share/ibus-table/icons"
 
 if not ibus_dir or not os.path.exists(ibus_dir):
     ibus_dir = "/usr/share/ibus-table/"
@@ -164,12 +172,18 @@ def main():
         #    Elements
         dbs = os.listdir(db_dir)
         dbs = filter (lambda x: x.endswith('.db'), dbs)
-        #if not dbs:
-        #    return
-
-        egs = Element('engines')
+        byo_dbs = os.listdir(byo_db_dir)
+        byo_dbs = filter (lambda x: x.endswith('.db'), byo_dbs)
+       
+        _all_dbs = []
         for _db in dbs:
-            _sq_db = tabsqlitedb.tabsqlitedb (os.path.join (db_dir, _db))
+            _all_dbs.append(os.path.join (db_dir, _db))
+        for _db in byo_dbs:
+            _all_dbs.append(os.path.join (byo_db_dir, _db))
+            
+        egs = Element('engines')
+        for _db in _all_dbs:
+            _sq_db = tabsqlitedb.tabsqlitedb (_db)
             _engine = SubElement (egs,'engine')
             
             _name = SubElement (_engine, 'name')
