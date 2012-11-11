@@ -1,0 +1,192 @@
+#!/usr/bin/python
+# vim:fileencoding=utf-8:sw=4:et
+
+# query-ibus-table
+#
+# Copyright (c) 2012 mozbugbox <mozbugbox@yahoo.com.au>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3.0 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+from __future__ import print_function, unicode_literals, absolute_import
+import sys
+import os
+import io
+import logging as log
+import sqlite3
+
+TABLE_DIR = "/usr/share/ibus-table/tables/"
+
+tab_dict = {
+    'a':1, 'b':2, 'c':3, 'd':4, 'e':5,
+    'f':6, 'g':7, 'h':8, 'i':9, 'j':10,
+    'k':11, 'l':12, 'm':13, 'n':14, 'o':15,
+    'p':16, 'q':17, 'r':18, 's':19, 't':20,
+    'u':21, 'v':22, 'w':23, 'x':24, 'y':25,
+    'z':26, "'":27, ';':28, '`':29, '~':30,
+    '!':31, '@':32, '#':33, '$':34, '%':35,
+    '^':36, '&':37, '*':38, '(':39, ')':40,
+    '-':41, '_':42, '=':43, '+':44, '[':45,
+    ']':46, '{':47, '}':48, '|':49, '/':50,
+    ':':51, '"':52,  '<':53, '>':54, ',':55,
+    '.':56, '?':57, '\\':58, 'A':59, 'B':60,
+    'C':61, 'D':62, 'E':63, 'F':64, 'G':65,
+    'H':66, 'I':67, 'J':68, 'K':69, 'L':70,
+    'M':71, 'N':72, 'O':73, 'P':74, 'Q':75,
+    'R':76, 'S':77, 'T':78, 'U':79, 'V':80,
+    'W':81, 'X':82, 'Y':83, 'Z':84, '0':85,
+    '1':86, '2':87, '3':88, '4':89, '5':90,
+    '6':91, '7':92, '8':93, '9':94,
+    # for translit
+    'ä':95,
+    'ö':96,
+    'ü':97
+    }
+
+def is_keys(keys):
+    ret = True
+    for i in keys:
+        if i not in tab_dict:
+            ret = False
+            break
+    return ret
+
+def parse_keys(keys):
+    """Give a string of chars, return a list of integer from tab_dict"""
+    ikeys = [tab_dict.get(x, -1) for x in keys]
+    return ikeys
+
+def list_tables(cursor):
+    """List sql tables in a given sqlite database"""
+    tables = cursor.execute("SELECT * FROM sqlite_master WHERE type='table';")
+    for row in tables:
+        log.debug("Table: {}".format(" ".join(row[1:3])))
+        log.debug(row[4])
+
+def get_table_sql(cursor, name):
+    """Given a table name, return the creation sql statement of the table."""
+    tables = cursor.execute("SELECT * FROM sqlite_master WHERE type='table' AND tbl_name = ? ;", [name])
+    sql = None
+    for row in tables:
+        sql = row[4]
+    return sql
+
+def get_table_path(name):
+    """Given a filename, return the full path to the ibus table sqlite file."""
+    table_path = None
+    if name.startswith("/"):
+        if os.path.exists(name):
+            table_path = name
+    else:
+        tablename = None
+        for fname in os.listdir(TABLE_DIR):
+            if fname.startswith(name):
+                tablename = fname
+                break
+        if not tablename or (
+                os.path.splitext(tablename)[0] != os.path.splitext(name)[0]):
+            print("Known tables:")
+            for fname in os.listdir(TABLE_DIR):
+                print("  {}".format(fname))
+            if not tablename:
+                print("No table: {}".format(name))
+                sys.exit(2)
+        table_path = os.path.join(TABLE_DIR, tablename)
+    return table_path
+
+def query_keys(cursor, keys):
+    if is_keys(keys):
+        cond = ["m{} = ?".format(x) for x in range(len(keys))]
+        log.debug("Condition: {}".format(cond))
+        _condition = "AND ".join(cond)
+        ikeys = parse_keys(keys)
+    else:
+        cond = ["phrase = ?".format(x) for x in range(len(keys))]
+        _condition = "AND ".join(cond)
+        ikeys = [keys]
+
+    sqlstr = '''SELECT * FROM (SELECT * FROM main.phrases WHERE %(condition)s)
+        ORDER BY phrase ASC, freq DESC;''' % {'condition':_condition}
+    log.debug("sqlstr: {}".format(sqlstr))
+
+    result = cursor.execute(sqlstr, ikeys)
+    return result
+
+def print_result(table_sql, result):
+    """@result: sqlite execute result.
+    @table_sql: table creation sql statement
+    """
+    pidx = table_sql.find("(") + 1
+    pidx2 = table_sql.find(")", pidx)
+    headers = [x.split()[0] for x in table_sql[pidx:pidx2].split(",")][1:]
+    headers[-1], headers[-3] = headers[-3], headers[-1]
+    format_str = "{}{}{}".format("{:5s}"*2, "{:5s}"*(len(headers)-6), "{:10s}"*4)
+    headers = format_str.format(*headers)
+    print(headers)
+    print("="*len(headers.rstrip()))
+
+    tab_dict_rev = {v: k for k,v in tab_dict.items()}
+    for row in result:
+        row = list(row)
+        for i in range(3, len(row) - 4):
+            if row[i]:
+                row[i] = "{}|{: <2}".format(tab_dict_rev.get(row[i]), row[i])
+        row_str = [unicode(x).strip() if x is not None else " " for x in row]
+        row_str[-1], row_str[-3] = row_str[-3], row_str[-1]
+        if len(row_str[-1]) == 1:
+            row_str[-1] += "[U+{:X}]".format(ord(row_str[-1]))
+        line = format_str.format(*row_str[1:])
+        print(line)
+
+def parse_args():
+    import argparse
+    parser = argparse.ArgumentParser(description="Query ibus table database")
+    parser.add_argument("--debug", action="store_true", help="DEBUG")
+    parser.add_argument("-t", "--table-name", required=True,
+            help="table database name")
+    parser.add_argument("keys", metavar="Input-Keys", nargs=1, 
+            help="a string of input keys, e.g. hjik")
+    args = parser.parse_args()
+    return args
+
+NATIVE=sys.getfilesystemencoding()
+def main():
+    args = parse_args()
+    log_level = log.INFO
+    if args.debug:
+        log_level = log.DEBUG
+    log.basicConfig(format="%(levelname)s>> %(message)s", level=log_level)
+
+    table_prefix = args.table_name
+    keys = args.keys[0].decode(NATIVE)
+
+    table_path = get_table_path(table_prefix)
+    if not table_path:
+        print('Table "{}" does not exists'.format(table_prefix))
+        sys.exit(1)
+    print("Using table: {}".format(table_path))
+    log.debug("table path: {}".format(table_path))
+
+    db = sqlite3.connect(table_path)
+    cursor = db.cursor()
+    #list_tables(cursor)
+
+    table_sql = get_table_sql(cursor, "phrases")
+    result = query_keys(cursor, keys)
+
+    print_result(table_sql, result)
+
+if __name__ == '__main__':
+    main()
+
