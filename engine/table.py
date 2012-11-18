@@ -868,6 +868,23 @@ class editor(object):
         self._py_mode = not (self._py_mode)
         return True
 
+    def l_alt(self):
+        """Left Alt key, cycle cursor to next candidate in the page."""
+        total = len(self._candidates[0])
+
+        if total > 0:
+            lookup = self._lookup_table
+            page_size = lookup.get_page_size()
+            pos = lookup.get_cursor_pos()
+            page = int(pos/page_size)
+            pos += 1
+            if pos >= (page+1)*page_size or pos >= total:
+                pos = page*page_size
+            res = lookup.set_cursor_pos(pos)
+            return True
+        else:
+            return False
+
     def space (self):
         '''Process space Key Event
         return (KeyProcessResult,whethercommit,commitstring)'''
@@ -1424,6 +1441,12 @@ class tabengine (ibus.EngineBase):
         # process commit to preedit    
         if self._match_hotkey (key, keysyms.Shift_R, modifier.SHIFT_MASK + modifier.RELEASE_MASK) or self._match_hotkey (key, keysyms.Shift_L, modifier.SHIFT_MASK + modifier.RELEASE_MASK):
             res = self._editor.l_shift ()
+            self._update_ui ()
+            return res
+
+        # Left ALT key to cycle candidates in the current page.
+        if self._match_hotkey (key, keysyms.Alt_L, modifier.ALT_MASK + modifier.RELEASE_MASK):
+            res = self._editor.l_alt ()
             self._update_ui ()
             return res
 
