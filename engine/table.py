@@ -1481,22 +1481,22 @@ class tabengine (ibus.EngineBase):
 
         if self._editor.is_empty ():
             # we have not input anything
-            if key.code >= 32 and key.code <= 127 and ( keychar not in self._valid_input_chars ) \
-                    and (not key.mask & modifier.ALT_MASK + modifier.CONTROL_MASK):
-                if key.code == keysyms.space:
-                    #self.commit_string (cond_letter_translate (keychar))
-                    # little hack to make ibus to input space in gvim :)
-                    if self._full_width_letter [self._mode]:
-                        self.commit_string (cond_letter_translate (keychar))
-                        return True
-                    else: 
-                        return False
+            if key.code >= 32 and key.code <= 127 \
+                    and ( keychar not in self._valid_input_chars ) \
+                    and (not key.mask &
+                            modifier.ALT_MASK + modifier.CONTROL_MASK):
+                # Input untranslated ascii char directly
                 if ascii.ispunct (key.code):
-                    self.commit_string (cond_punct_translate (keychar))
+                    trans_char = cond_punct_translate (keychar)
+                else:
+                    trans_char = cond_letter_translate (keychar)
+
+                if trans_char == keychar:
+                    return False
+                else:
+                    self.commit_string(trans_char)
                     return True
-                if ascii.isdigit (key.code):
-                    self.commit_string (cond_letter_translate (keychar))
-                    return True
+
             elif (key.code < 32 or key.code > 127) and ( keychar not in self._valid_input_chars ) \
                     and(not self._editor._py_mode):
                 return False
