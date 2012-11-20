@@ -1404,22 +1404,24 @@ class tabengine (ibus.EngineBase):
         if key.mask & modifier.CONTROL_MASK+modifier.ALT_MASK:
             return False
 
-        keychar = unichr (key.code)
-        if ascii.ispunct (key.code): # if key code is a punctation
-            if self._full_width_punct[self._mode]:
-                self.commit_string (self._convert_to_full_width (keychar))
-                return True
-            else:
-                self.commit_string (keychar)
-                return True
+        cond_letter_translate = lambda (c): \
+            self._convert_to_full_width (c) if self._full_width_letter [
+                    self._mode] else c
+        cond_punct_translate = lambda (c): \
+            self._convert_to_full_width (c) if self._full_width_punct [
+                    self._mode] else c
 
-        # then, the key code is a letter or digit
-        if self._full_width_letter[self._mode]:
-            # in full width letter mode
-            self.commit_string (self._convert_to_full_width (keychar))
-            return True
+        keychar = unichr (key.code)
+        if ascii.ispunct (key.code):
+            trans_char = cond_punct_translate (keychar)
         else:
+            trans_char = cond_letter_translate (keychar)
+
+        if trans_char == keychar:
             return False
+        else:
+            self.commit_string(trans_char)
+            return True
 
         # should not reach there
         return False
