@@ -26,11 +26,8 @@ __all__ = (
 )
 
 import os
-import ibus
-#from ibus import Property
-from ibus import keysyms
-from ibus import modifier
-from ibus import ascii
+from gi.repository import IBus
+from curses import ascii
 #import tabsqlitedb
 import tabdict
 import re
@@ -48,9 +45,9 @@ class KeyEvent:
         self.code = keyval
         self.mask = state
         if not is_press:
-            self.mask |= modifier.RELEASE_MASK
+            self.mask |= IBus.ModifierType.RELEASE_MASK
     def __str__(self):
-        return "%s 0x%08x" % (keysyms.keycode_to_name(self.code), self.mask)
+        return "%s 0x%08x" % (IBus.keyval_name(self.code), self.mask)
 
 
 class editor(object):
@@ -90,7 +87,7 @@ class editor(object):
                 "LookupTableOrientation",
                 self.db.get_orientation())
         # self._lookup_table: lookup table
-        self._lookup_table = ibus.LookupTable ()
+        self._lookup_table = IBus.LookupTable ()
         self._lookup_table.set_orientation (__orientation)
         # self._py_mode: whether in pinyin mode
         self._py_mode = False
@@ -132,7 +129,7 @@ class editor(object):
     def set_select_keys(self, astring):
         """astring: select keys setting. e.g. 1,2,3,4,5,6,7,8,9"""
         self._select_keys = [x.strip() for x in astring.split(",")]
-        labels = [ibus.Text("{}.".format(x)) for x in self._select_keys]
+        labels = [IBus.Text("{}.".format(x)) for x in self._select_keys]
         self._lookup_table.set_labels(labels)
 
     def get_select_keys(self):
@@ -491,21 +488,21 @@ class editor(object):
         _phrase = candi[_p_index]
         # further color implementation needed :)
         # here -2 is the pos of num, -1 is the pos of . 0 is the pos of string
-        #attrs = ibus.AttrList ([ibus.AttributeForeground (0x8e2626, -2, 1)])
-        attrs = ibus.AttrList ()
+        #attrs = IBus.AttrList ([IBus.AttributeForeground (0x8e2626, -2, 1)])
+        attrs = IBus.AttrList ()
         # this is the part of tabkey
-        attrs.append( ibus.AttributeForeground ( 0x1973a2, 0, \
+        attrs.append( IBus.AttributeForeground ( 0x1973a2, 0, \
             len(_phrase) + len(_tbks)))
         if candi[-2] < 0:
             # this is a user defined phrase:
-            attrs.append ( ibus.AttributeForeground (0x7700c3, 0, len(_phrase)) )
+            attrs.append ( IBus.AttributeForeground (0x7700c3, 0, len(_phrase)) )
         elif candi[-1] > 0:
             # this is a sys phrase used by user:
-            attrs.append ( ibus.AttributeForeground (0x000000, 0, len(_phrase)) )
+            attrs.append ( IBus.AttributeForeground (0x000000, 0, len(_phrase)) )
         else:
             # this is a system phrase haven't been used:
-            attrs.append ( ibus.AttributeForeground (0x000000, 0, len(_phrase)) )
-        self._lookup_table.append_candidate ( ibus.Text(_phrase + _tbks, attrs) )
+            attrs.append ( IBus.AttributeForeground (0x000000, 0, len(_phrase)) )
+        self._lookup_table.append_candidate ( IBus.Text(_phrase + _tbks, attrs) )
         self._lookup_table.show_cursor (False)
 
     def filter_candidates (self, candidates):
@@ -904,7 +901,7 @@ class editor(object):
 ########################
 ### Engine Class #####
 ####################
-class tabengine (ibus.EngineBase):
+class tabengine (IBus.Engine):
     '''The IM Engine for Tables'''
 
     # colors
@@ -913,7 +910,8 @@ class tabengine (ibus.EngineBase):
 #    _new_phrase_color         = 0xffffff
 
     def __init__ (self, bus, obj_path, db ):
-        super(tabengine,self).__init__ (bus,obj_path)
+        super(tabengine,self).__init__ (connection=bus.get_connection(),
+                                        object_path=obj_path)
         self._bus = bus
         # this is the backend sql db we need for our IME
         # we receive this db from IMEngineFactory
@@ -948,20 +946,20 @@ class tabengine (ibus.EngineBase):
         del self._chars
 
         # check whether we can use '=' and '-' for page_down/up
-        self._page_down_keys = [keysyms.Page_Down, keysyms.KP_Page_Down]
-        self._page_up_keys = [keysyms.Page_Up, keysyms.KP_Page_Up]
+        self._page_down_keys = [IBus.KEY_Page_Down, IBus.KEY_KP_Page_Down]
+        self._page_up_keys = [IBus.KEY_Page_Up, IBus.KEY_KP_Page_Up]
         if '=' not in self._valid_input_chars \
                 and '-' not in self._valid_input_chars:
-            self._page_down_keys.append (keysyms.equal)
-            self._page_up_keys.append (keysyms.minus)
+            self._page_down_keys.append (IBus.KEY_equal)
+            self._page_up_keys.append (IBus.KEY_minus)
 
         pageup_prop = self.db.get_ime_property('page_up_keys')
         pagedown_prop = self.db.get_ime_property('page_down_keys')
         if pageup_prop is not None:
-            self._page_up_keys = [keysyms.name_to_keycode(x) for x in
+            self._page_up_keys = [IBus.keyval_from_name(x) for x in
                     pageup_prop.split(",")]
         if pagedown_prop is not None:
-            self._page_down_keys = [keysyms.name_to_keycode(x) for x in
+            self._page_down_keys = [IBus.keyval_from_name(x) for x in
                     pagedown_prop.split(",")]
 
         self._pt = self.db.get_phrase_table_index ()
@@ -1041,15 +1039,15 @@ class tabengine (ibus.EngineBase):
         super(tabengine,self).do_destroy()
 
     def _init_properties (self):
-        self.properties= ibus.PropList ()
-        self._status_property = ibus.Property(u'status')
+        self.properties= IBus.PropList ()
+        self._status_property = IBus.Property(u'status')
         if self.db._is_chinese:
-            self._cmode_property = ibus.Property(u'cmode')
-        self._letter_property = ibus.Property(u'letter')
-        self._punct_property = ibus.Property(u'punct')
-        self._py_property = ibus.Property(u'py_mode')
-        self._onechar_property = ibus.Property(u'onechar')
-        self._auto_commit_property = ibus.Property(u'acommit')
+            self._cmode_property = IBus.Property(u'cmode')
+        self._letter_property = IBus.Property(u'letter')
+        self._punct_property = IBus.Property(u'punct')
+        self._py_property = IBus.Property(u'py_mode')
+        self._onechar_property = IBus.Property(u'onechar')
+        self._auto_commit_property = IBus.Property(u'acommit')
         for prop in (self._status_property,
             self._letter_property,
             self._punct_property,
@@ -1128,7 +1126,7 @@ class tabengine (ibus.EngineBase):
         self.reset ()
         self._update_ui ()
 
-    def property_activate (self, property,prop_state = ibus.PROP_STATE_UNCHECKED):
+    def property_activate (self, property,prop_state = IBus.PropState.UNCHECKED):
         '''Shift property'''
         if property == u"status":
             self._change_mode ()
@@ -1179,9 +1177,9 @@ class tabengine (ibus.EngineBase):
         '''Update Preedit String in UI'''
         _str = self._editor.get_preedit_strings ()
         if _str == u'':
-            super(tabengine, self).update_preedit_text(ibus.Text(u'',None), 0, False)
+            super(tabengine, self).update_preedit_text(IBus.Text(u'',None), 0, False)
         else:
-            attrs = ibus.AttrList()
+            attrs = IBus.AttrList()
             res = patt_edit.match (_str)
             if res:
                 _str = u''
@@ -1190,36 +1188,36 @@ class tabengine (ibus.EngineBase):
                     _str=u''.join (ures.groups())
                     lc = len (ures.group(1) )
                     lu = len (ures.group(2) )
-                    attrs.append (ibus.AttributeForeground(0x1b3f03,0,lc) )
-                    attrs.append (ibus.AttributeForeground(0x0895a2,lc,lu) )
+                    attrs.append (IBus.AttributeForeground(0x1b3f03,0,lc) )
+                    attrs.append (IBus.AttributeForeground(0x0895a2,lc,lu) )
                     lg1 = len (_str)
                 else:
                     _str += res.group (1)
                     lg1 = len ( res.group(1) )
-                    attrs.append (ibus.AttributeForeground(0x1b3f03,0,lg1) )
+                    attrs.append (IBus.AttributeForeground(0x1b3f03,0,lg1) )
                 _str += res.group(2)
                 _str += res.group(3)
                 lg2 = len ( res.group(2) )
                 lg3 = len ( res.group(3) )
-                attrs.append( ibus.AttributeForeground(0x0e0ea0,lg1,lg2) )
-                attrs.append( ibus.AttributeForeground(0x1b3f03,lg1+lg2,lg3) )
+                attrs.append( IBus.AttributeForeground(0x0e0ea0,lg1,lg2) )
+                attrs.append( IBus.AttributeForeground(0x1b3f03,lg1+lg2,lg3) )
             else:
-                attrs.append( ibus.AttributeForeground(0x1b3f03,0,len(_str)) )
+                attrs.append( IBus.AttributeForeground(0x1b3f03,0,len(_str)) )
             # because ibus now can only insert preedit into txt, so...
-            attrs = ibus.AttrList()
-            attrs.append(ibus.AttributeUnderline(ibus.ATTR_UNDERLINE_SINGLE, 0, len(_str)))
+            attrs = IBus.AttrList()
+            attrs.append(IBus.AttributeUnderline(IBus.ATTR_UNDERLINE_SINGLE, 0, len(_str)))
 
 
-            super(tabengine, self).update_preedit_text(ibus.Text(_str, attrs), self._editor.get_caret(), True)
+            super(tabengine, self).update_preedit_text(IBus.Text(_str, attrs), self._editor.get_caret(), True)
 
     def _update_aux (self):
         '''Update Aux String in UI'''
         _ic = self._editor.get_aux_strings ()
         if _ic:
-            attrs = ibus.AttrList([ ibus.AttributeForeground(0x9515b5,0, len(_ic)) ])
+            attrs = IBus.AttrList([ IBus.AttributeForeground(0x9515b5,0, len(_ic)) ])
             #attrs = [ scim.Attribute(0,len(_ic),scim.ATTR_FOREGROUND,0x5540c1)]
 
-            super(tabengine, self).update_auxiliary_text(ibus.Text(_ic, attrs), True)
+            super(tabengine, self).update_auxiliary_text(IBus.Text(_ic, attrs), True)
         else:
             self.hide_auxiliary_text()
             #self.update_aux_string (u'', None, False)
@@ -1247,7 +1245,7 @@ class tabengine (ibus.EngineBase):
     def commit_string (self,string):
         self._editor.clear ()
         self._update_ui ()
-        super(tabengine,self).commit_text ( ibus.Text(string) )
+        super(tabengine,self).commit_text ( IBus.Text(string) )
         self._prev_char = string[-1]
 
     def _convert_to_full_width (self, c):
@@ -1298,14 +1296,14 @@ class tabengine (ibus.EngineBase):
                 if self._mode:
                     return u"\u300f"
             
-        return ibus.unichar_half_to_full (c)
+        return IBus.unichar_half_to_full (c)
 
     def _match_hotkey (self, key, code, mask):
 
         if key.code == code and key.mask == mask:
-            if self._prev_key and key.code == self._prev_key.code and key.mask & modifier.RELEASE_MASK:
+            if self._prev_key and key.code == self._prev_key.code and key.mask & IBus.ModifierType.RELEASE_MASK:
                 return True
-            if not key.mask & modifier.RELEASE_MASK:
+            if not key.mask & IBus.ModifierType.RELEASE_MASK:
                 return True
 
         return False
@@ -1315,9 +1313,9 @@ class tabengine (ibus.EngineBase):
         Key Events include Key Press and Key Release,
         modifier means Key Pressed
         '''
-        key = KeyEvent(keyval, state & modifier.RELEASE_MASK == 0, state)
+        key = KeyEvent(keyval, state & IBus.ModifierType.RELEASE_MASK == 0, state)
         # ignore NumLock mask
-        key.mask &= ~modifier.MOD2_MASK
+        key.mask &= ~IBus.ModifierType.MOD2_MASK
 
         result = self._process_key_event (key)
         self._prev_key = key
@@ -1326,26 +1324,26 @@ class tabengine (ibus.EngineBase):
     def _process_key_event (self, key):
         '''Internal method to process key event'''
         # Match mode switch hotkey
-        if not self._editor._t_chars and ( self._match_hotkey (key, keysyms.Shift_L, modifier.SHIFT_MASK + modifier.RELEASE_MASK)):
+        if not self._editor._t_chars and ( self._match_hotkey (key, IBus.KEY_Shift_L, IBus.ModifierType.SHIFT_MASK + IBus.ModifierType.RELEASE_MASK)):
             self._change_mode ()
             return True
 
         # Match full half letter mode switch hotkey
-        if self._match_hotkey (key, keysyms.space, modifier.SHIFT_MASK):
+        if self._match_hotkey (key, IBus.KEY_space, IBus.ModifierType.SHIFT_MASK):
             self.property_activate ("letter")
             return True
 
         # Match full half punct mode switch hotkey
-        if self._match_hotkey (key, keysyms.period, modifier.CONTROL_MASK):
+        if self._match_hotkey (key, IBus.KEY_period, IBus.ModifierType.CONTROL_MASK):
             self.property_activate ("punct")
             return True
 
         # we ignore all hotkeys
-#        if key.mask & modifier.ALT_MASK:
+#        if key.mask & IBus.ModifierType.MOD1_MASK:
 #            return False
 
         # Ignore key release event
-#        if key.mask & modifier.RELEASE_MASK:
+#        if key.mask & IBus.ModifierType.RELEASE_MASK:
 #            return True
 
         if self._mode:
@@ -1356,13 +1354,13 @@ class tabengine (ibus.EngineBase):
     def _english_mode_process_key_event (self, key):
         '''English Mode Process Key Event'''
         # Ignore key release event
-        if key.mask & modifier.RELEASE_MASK:
+        if key.mask & IBus.ModifierType.RELEASE_MASK:
             return True
 
         if key.code >= 128:
             return False
         # we ignore all hotkeys here    
-        if key.mask & modifier.CONTROL_MASK+modifier.ALT_MASK:
+        if key.mask & IBus.ModifierType.CONTROL_MASK+IBus.ModifierType.MOD1_MASK:
             return False
 
         keychar = unichr (key.code)
@@ -1394,13 +1392,13 @@ class tabengine (ibus.EngineBase):
 
         # We have to process the pinyin mode change key event here,
         # because we ignore all Release event below.
-        if self._match_hotkey (key, keysyms.Shift_R, modifier.SHIFT_MASK + modifier.RELEASE_MASK) and self._ime_py:
+        if self._match_hotkey (key, IBus.KEY_Shift_R, IBus.ModifierType.SHIFT_MASK + IBus.ModifierType.RELEASE_MASK) and self._ime_py:
             res = self._editor.r_shift ()
             self._refresh_properties ()
             self._update_ui ()
             return res
         # process commit to preedit    
-        if self._match_hotkey (key, keysyms.Shift_R, modifier.SHIFT_MASK + modifier.RELEASE_MASK) or self._match_hotkey (key, keysyms.Shift_L, modifier.SHIFT_MASK + modifier.RELEASE_MASK):
+        if self._match_hotkey (key, IBus.KEY_Shift_R, IBus.ModifierType.SHIFT_MASK + IBus.ModifierType.RELEASE_MASK) or self._match_hotkey (key, IBus.KEY_Shift_L, IBus.ModifierType.SHIFT_MASK + IBus.ModifierType.RELEASE_MASK):
             res = self._editor.l_shift ()
             self._update_ui ()
             return res
@@ -1412,21 +1410,21 @@ class tabengine (ibus.EngineBase):
             return res
 
         # Match single char mode switch hotkey
-        if self._match_hotkey (key, keysyms.comma, modifier.CONTROL_MASK):
+        if self._match_hotkey (key, IBus.KEY_comma, IBus.ModifierType.CONTROL_MASK):
             self.property_activate ( u"onechar" )
             return True
         # Match direct commit mode switch hotkey
-        if self._match_hotkey (key, keysyms.slash, modifier.CONTROL_MASK):
+        if self._match_hotkey (key, IBus.KEY_slash, IBus.ModifierType.CONTROL_MASK):
             self.property_activate ( u"acommit" )
             return True
 
         # Match Chinese mode shift
-        if self._match_hotkey (key, keysyms.semicolon, modifier.CONTROL_MASK):
+        if self._match_hotkey (key, IBus.KEY_semicolon, IBus.ModifierType.CONTROL_MASK):
             self.property_activate ( u"cmode" )
             return True
 
         # Match speedmeter shift
-        #if self._match_hotkey (key, keysyms.apostrophe, modifier.CONTROL_MASK):
+        #if self._match_hotkey (key, IBus.KEY_apostrophe, IBus.ModifierType.CONTROL_MASK):
         #    self._sm_on = not self._sm_on
         #    if self._sm_on:
         #        self._sm.Show ()
@@ -1434,7 +1432,7 @@ class tabengine (ibus.EngineBase):
         #        self._sm.Hide ()
         #    return True
         # Ignore key release event now :)
-        if key.mask & modifier.RELEASE_MASK:
+        if key.mask & IBus.ModifierType.RELEASE_MASK:
             return True
 
         #
@@ -1443,8 +1441,8 @@ class tabengine (ibus.EngineBase):
         if self._editor.is_empty ():
             # we have not input anything
             if key.code >= 32 and key.code <= 127 and ( keychar not in self._valid_input_chars ) \
-                    and (not key.mask & modifier.ALT_MASK + modifier.CONTROL_MASK):
-                if key.code == keysyms.space:
+                    and (not key.mask & IBus.ModifierType.MOD1_MASK + IBus.ModifierType.CONTROL_MASK):
+                if key.code == IBus.KEY_space:
                     #self.commit_string (cond_letter_translate (keychar))
                     # little hack to make ibus to input space in gvim :)
                     if self._full_width_letter [self._mode]:
@@ -1462,84 +1460,84 @@ class tabengine (ibus.EngineBase):
                     and(not self._editor._py_mode):
                 return False
 
-        if key.code == keysyms.Escape:
+        if key.code == IBus.KEY_Escape:
             self.reset ()
             self._update_ui ()
             return True
 
-        elif key.code in (keysyms.Return, keysyms.KP_Enter):
+        elif key.code in (IBus.KEY_Return, IBus.KEY_KP_Enter):
             commit_string = self._editor.get_all_input_strings ()
             self.commit_string (commit_string)
             return True
 
-        elif key.code in (keysyms.Down, keysyms.KP_Down) :
+        elif key.code in (IBus.KEY_Down, IBus.KEY_KP_Down) :
             res = self._editor.arrow_down ()
             self._update_ui ()
             return res
 
-        elif key.code in (keysyms.Up, keysyms.KP_Up):
+        elif key.code in (IBus.KEY_Up, IBus.KEY_KP_Up):
             res = self._editor.arrow_up ()
             self._update_ui ()
             return res
 
-        elif key.code in (keysyms.Left, keysyms.KP_Left) and key.mask & modifier.CONTROL_MASK:
+        elif key.code in (IBus.KEY_Left, IBus.KEY_KP_Left) and key.mask & IBus.ModifierType.CONTROL_MASK:
             res = self._editor.control_arrow_left ()
             self._update_ui ()
             return res
 
-        elif key.code in (keysyms.Right, keysyms.KP_Right) and key.mask & modifier.CONTROL_MASK:
+        elif key.code in (IBus.KEY_Right, IBus.KEY_KP_Right) and key.mask & IBus.ModifierType.CONTROL_MASK:
             res = self._editor.control_arrow_right ()
             self._update_ui ()
             return res
 
-        elif key.code in (keysyms.Left, keysyms.KP_Left):
+        elif key.code in (IBus.KEY_Left, IBus.KEY_KP_Left):
             res = self._editor.arrow_left ()
             self._update_ui ()
             return res
 
-        elif key.code in (keysyms.Right, keysyms.KP_Right):
+        elif key.code in (IBus.KEY_Right, IBus.KEY_KP_Right):
             res = self._editor.arrow_right ()
             self._update_ui ()
             return res
 
-        elif key.code == keysyms.BackSpace and key.mask & modifier.CONTROL_MASK:
+        elif key.code == IBus.KEY_BackSpace and key.mask & IBus.ModifierType.CONTROL_MASK:
             res = self._editor.control_backspace ()
             self._update_ui ()
             return res
 
-        elif key.code == keysyms.BackSpace:
+        elif key.code == IBus.KEY_BackSpace:
             res = self._editor.backspace ()
             self._update_ui ()
             return res
 
-        elif key.code == keysyms.Delete  and key.mask & modifier.CONTROL_MASK:
+        elif key.code == IBus.KEY_Delete  and key.mask & IBus.ModifierType.CONTROL_MASK:
             res = self._editor.control_delete ()
             self._update_ui ()
             return res
 
-        elif key.code == keysyms.Delete:
+        elif key.code == IBus.KEY_Delete:
             res = self._editor.delete ()
             self._update_ui ()
             return res
 
         elif ( keychar in self._editor.get_select_keys() and
                 self._editor._candidates[0] and
-                key.mask & modifier.CONTROL_MASK ):
+                key.mask & IBus.ModifierType.CONTROL_MASK ):
             res = self._editor.select_key (keychar)
             self._update_ui ()
             return res
 
         elif ( keychar in self._editor.get_select_keys() and
                 self._editor._candidates[0] and
-                key.mask & modifier.ALT_MASK ):
+                key.mask & IBus.ModifierType.MOD1_MASK ):
             res = self._editor.alt_select_key (keychar)
             self._update_ui ()
             return res
 
-        elif key.code == keysyms.space:
+        elif key.code == IBus.KEY_space:
             # if space is one of "page_down_keys" change to next page 
             #  on lookup page
-            if keysyms.space in self._page_down_keys:
+            if IBus.KEY_space in self._page_down_keys:
                 res = self._editor.page_down()
                 self._update_lookup_table ()
                 return res
@@ -1559,10 +1557,10 @@ class tabengine (ibus.EngineBase):
                     self._update_ui ()
                 return True
         # now we ignore all else hotkeys
-        elif key.mask & modifier.CONTROL_MASK+modifier.ALT_MASK:
+        elif key.mask & IBus.ModifierType.CONTROL_MASK+IBus.ModifierType.MOD1_MASK:
             return False
 
-        elif key.mask & modifier.ALT_MASK:
+        elif key.mask & IBus.ModifierType.MOD1_MASK:
             return False
 
         elif keychar in self._valid_input_chars or \
