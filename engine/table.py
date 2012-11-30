@@ -84,18 +84,13 @@ class editor(object):
         self._cursor = [0,0]
         # self._candidates: hold candidates selected from database [[now],[pre]]
         self._candidates = [[],[]]
-        # __page_size: lookup table page size
-        __page_size = self._config.get_value (
-                self._config_section,
-                "LookupTablePageSize",
-                self.db.get_page_size())
         # __orientation: lookup table orientation
         __orientation = self._config.get_value (
                 self._config_section,
                 "LookupTableOrientation",
                 self.db.get_orientation())
         # self._lookup_table: lookup table
-        self._lookup_table = ibus.LookupTable (__page_size)
+        self._lookup_table = ibus.LookupTable ()
         self._lookup_table.set_orientation (__orientation)
         # self._py_mode: whether in pinyin mode
         self._py_mode = False
@@ -119,6 +114,11 @@ class editor(object):
 
         # self._select_keys: a list of chars for select keys
         self.init_select_keys()
+
+        # __page_size: lookup table page size
+        # this is computed from the select_keys, so should be done after it
+        __page_size = self.db.get_page_size()
+        self._lookup_table.set_page_size(__page_size)
 
     def init_select_keys(self):
         # __select_keys: lookup table select keys/labels
@@ -1718,8 +1718,6 @@ class tabengine (ibus.EngineBase):
                 self._full_width_punct[0] = value
             elif name == u'LookupTableOrientation':
                 self._editor._lookup_table.set_orientation (value)
-            elif name == u'LookupTablePageSize':
-                self._editor._lookup_table.set_page_size (value)
             elif name == u'LookupTableSelectKeys':
                 self._editor.set_select_keys (value)
             elif name == u'OneChar':

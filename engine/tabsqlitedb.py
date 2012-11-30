@@ -90,7 +90,6 @@ class tabsqlitedb:
             #          'commit_keys':'space',
             #          'forward_keys':'Return',
                       'select_keys':'1,2,3,4,5,6,7,8,9,0',
-                      'page_size':'6',
                       'page_up_keys':'Page_Up,minus',
                       'page_down_keys':'Page_Down,equal',
                       'status_prompt':'',
@@ -272,14 +271,7 @@ class tabsqlitedb:
             return -1
 
     def get_page_size (self):
-        try:
-            __page_size = int( self.get_ime_property ('page_size') )
-            if __page_size:
-                return __page_size
-            else:
-                return len(__select_keys.split(','))
-        except:
-            return 6
+        return len(self.get_select_keys().split(','))
 
     def get_select_keys (self):
         ret = None
