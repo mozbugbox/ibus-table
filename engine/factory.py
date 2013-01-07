@@ -62,7 +62,7 @@ class EngineFactory (IBus.Factory):
                                             object_path=IBus.PATH_FACTORY)
         self.engine_id=0
     
-    def create_engine(self, engine_name):
+    def do_create_engine(self, engine_name):
         # because we need db to be past to Engine
         # the type (engine_name) == dbus.String
         name = engine_name.encode ('utf8')
@@ -104,6 +104,6 @@ class EngineFactory (IBus.Factory):
         for _db in self.dbdict:
             self.dbdict[_db].sync_usrdb ()
         ##print "Have synced user db\n"
-        super(EngineFactory,self).do_destroy()
+        super(EngineFactory,self).destroy()
 
 
