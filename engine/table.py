@@ -229,7 +229,7 @@ class editor(object):
                 self._config_section,
                 "ChineseMode"))
         if self._chinese_mode == None:
-            self.chinese_mode = self.get_chinese_mode()
+            self._chinese_mode = self.get_chinese_mode()
 
     def init_select_keys(self):
         # __select_keys: lookup table select keys/labels
