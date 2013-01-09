@@ -259,7 +259,9 @@ class editor(object):
             return __db_chinese_mode
         # otherwise
         try:
-            if os.environ.has_key('LC_CTYPE'):
+            if os.environ.has_key('LC_ALL'):
+                __lc = os.environ['LC_ALL'].split('.')[0].lower()
+            elif os.environ.has_key('LC_CTYPE'):
                 __lc = os.environ['LC_CTYPE'].split('.')[0].lower()
             else:
                 __lc = os.environ['LANG'].split('.')[0].lower()
