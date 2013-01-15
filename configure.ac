@@ -20,14 +20,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-# if not 1, append datestamp to the version number.
 m4_define([package_name], [ibus-table])
-m4_define([ibus_released], [0])
+# if not 1, append datestamp to the version number.
+m4_define([ibus_released], [1])
 m4_define([ibus_major_version], [1])
-m4_define([ibus_minor_version], [4])
-m4_define([ibus_micro_version], [99])
+m4_define([ibus_minor_version], [5])
+m4_define([ibus_micro_version], [0])
 m4_define(ibus_maybe_datestamp,
-    m4_esyscmd([if test x]ibus_released[ != 1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
+    m4_esyscmd([if test ]ibus_released[ != 1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
 
 m4_define([ibus_version],
     ibus_major_version.ibus_minor_version.ibus_micro_version[]ibus_maybe_datestamp)
