@@ -58,7 +58,7 @@ variants_table_orig = {
     # 1 = 1 << 0       simplified Chinese
     # 2 = 1 << 1       traditional Chinese
     # 3 = (1 | 1 << 1) used both in simplified *and* traditional Chinese
-    # 4 = 2 << 3       mixture of simplified and traditional Chinese
+    # 4 = 1 << 2       mixture of simplified and traditional Chinese
     #
     # overrides can be added manually here. For example the following
     # line marks the 〇 character as used in both
@@ -185,7 +185,7 @@ variants_table = {
     # 1 = 1 << 0       simplified Chinese
     # 2 = 1 << 1       traditional Chinese
     # 3 = (1 | 1 << 1) used both in simplified *and* traditional Chinese
-    # 4 = 2 << 3       mixture of simplified and traditional Chinese
+    # 4 = 1 << 2       mixture of simplified and traditional Chinese
 ''')
 
     for phrase in variants_table_orig:
@@ -208,7 +208,7 @@ def detect_chinese_category(phrase):
     1 = 1 << 0       simplified Chinese
     2 = 1 << 1       traditional Chinese
     3 = (1 | 1 << 1) used both in simplified *and* traditional Chinese
-    4 = 2 << 3       mixture of simplified and traditional Chinese
+    4 = 1 << 2       mixture of simplified and traditional Chinese
     \'\'\'
     # make sure that we got a unicode string
     if type(phrase) != type(u''):
@@ -253,7 +253,7 @@ test_data = {
     # 1 = 1 << 0       simplified Chinese
     # 2 = 1 << 1       traditional Chinese
     # 3 = (1 | 1 << 1) used both in simplified *and* traditional Chinese
-    # 4 = 2 << 3       mixture of simplified and traditional Chinese
+    # 4 = 1 << 2       mixture of simplified and traditional Chinese
     u'乌': 1,
     u'烏': 2,
     u'晞': 3,
