@@ -233,8 +233,10 @@ class editor(object):
                 self._config_section,
                 "AutoSelect"))
         if self._auto_select == None:
-            self._auto_select = self.db.get_ime_property('auto_select').lower() == u'true'
-        
+            if self.db.get_ime_property('auto_select') != None:
+                self._auto_select = self.db.get_ime_property('auto_select').lower() == u'true'
+            else:
+                self._auto_select = False
 
     def init_select_keys(self):
         # __select_keys: lookup table select keys/labels
@@ -1162,8 +1164,11 @@ class tabengine (IBus.Engine):
                 self._config_section,
                 "AutoSelect"))
         if self._auto_select == None:
-            self._auto_select = self.db.get_ime_property('auto_select').lower() == u'true'
-        
+            if self.db.get_ime_property('auto_select') != None:
+                self._auto_select = self.db.get_ime_property('auto_select').lower() == u'true'
+            else:
+                self._auto_select = False            
+            
         # the commit phrases length
         self._len_list = [0]
         # connect to SpeedMeter
