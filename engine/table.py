@@ -1751,7 +1751,7 @@ class tabengine (IBus.Engine):
             #  on lookup page
             if IBus.KEY_space in self._page_down_keys:
                 res = self._editor.page_down()
-                self._update_lookup_table ()
+                self._update_ui ()
                 return res
             else:
                 o_py = self._editor._py_mode
@@ -1826,13 +1826,13 @@ class tabengine (IBus.Engine):
         elif key.code in self._page_down_keys \
                 and self._editor._candidates[0]:
             res = self._editor.page_down()
-            self._update_lookup_table ()
+            self._update_ui ()
             return res
 
         elif key.code in self._page_up_keys \
                 and self._editor._candidates[0]:
             res = self._editor.page_up ()
-            self._update_lookup_table ()
+            self._update_ui ()
             return res
 
         elif keychar in self._editor.get_select_keys() and self._editor._candidates[0]:
@@ -1909,13 +1909,13 @@ class tabengine (IBus.Engine):
 
     def do_page_up (self):
         if self._editor.page_up ():
-            self._update_lookup_table ()
+            self._update_ui ()
             return True
         return False
 
     def do_page_down (self):
         if self._editor.page_down ():
-            self._update_lookup_table ()
+            self._update_ui ()
             return True
         return False
 
