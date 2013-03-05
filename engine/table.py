@@ -731,10 +731,10 @@ class editor(object):
                         ## chars
                         if not self._chars[1]:
                             # we don't have invalid input chars
-                            # here we need to check the last input
-                            # is a punctuation or not, if is a punct,
-                            # then we use old maner to summit the former valid
-                            # candidate
+                            # here we need to check whether the last input char
+                            # is a punctuation character or not,
+                            # if is a punctuation char, then we use old manner
+                            # to submit the former valid candidate
                             if ascii.ispunct (self._chars[0][-1].encode('ascii')) \
                                     or len (self._chars[0][:-1]) \
                                     in self.db.pkeylens \
