@@ -108,7 +108,8 @@ class tabsqlitedb:
                       #'rules':'ce2:p11+p12+p21+p22;ce3:p11+p21+p22+p31;ca4:p11+p21+p31+p41'}
                       'least_commit_length':'0',
                       'start_chars':'',
-                      'orientation':'1'
+                      'orientation':'1',
+                      'always_show_lookup':'true'
                       # we use this entry for those IME, which don't
                       # have rules to build up phrase, but still need
                       # auto commit to preedit

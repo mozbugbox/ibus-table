@@ -193,6 +193,14 @@ class editor(object):
                 "LookupTableOrientation"))
         if __orientation == None:
                 __orientation = self.db.get_orientation()
+        self._always_show_lookup = variant_to_value(self._config.get_value(
+                self._config_section,
+                "AlwaysShowLookup"))
+        if self._always_show_lookup == None:
+            if self.db.get_ime_property('always_show_lookup') != None:
+                self._always_show_lookup = self.db.get_ime_property('always_show_lookup').lower() == u'true'
+            else:
+                self._always_show_lookup = False
         # __page_size: lookup table page size
         # this is computed from the select_keys, so should be done after it
         __page_size = self.db.get_page_size()
@@ -296,6 +304,12 @@ class editor(object):
                 self._config_section,
                 "ChineseMode",
                 GLib.Variant.new_int32(self._chinese_mode))
+
+    def set_candidates_list_visible(self, visible):
+        if "set_candidates_list_visible" in dir(self._lookup_table):
+            self._lookup_table.set_candidates_list_visible(visible)
+        else:
+            print "Method set_candidates_list_visible not implemented in iBus. Please upgrade.\n"
 
     def clear (self):
         '''Remove data holded'''
@@ -1161,6 +1175,24 @@ class tabengine (IBus.Engine):
         if self._auto_commit == None:
             self._auto_commit = self.db.get_ime_property('auto_commit').lower() == u'true'
         
+        self._auto_select = variant_to_value(self._config.get_value(
+                self._config_section,
+                "AutoSelect"))
+        if self._auto_select == None:
+            if self.db.get_ime_property('auto_select') != None:
+                self._auto_select = self.db.get_ime_property('auto_select').lower() == u'true'
+            else:
+                self._auto_select = False
+        
+        self._always_show_lookup = variant_to_value(self._config.get_value(
+                self._config_section,
+                "AlwaysShowLookup"))
+        if self._always_show_lookup == None:
+            if self.db.get_ime_property('always_show_lookup') != None:
+                self._candidates = self.db.get_ime_property('always_show_lookup').lower() == u'true'
+            else:
+                self._candidates = False
+        
         # the commit phrases length
         self._len_list = [0]
         # connect to SpeedMeter
@@ -1244,6 +1276,13 @@ class tabengine (IBus.Engine):
                                                    sensitive=True,
                                                    visible=True)
         self.properties.append(self._auto_commit_property)
+        self._always_show_lookup_property = IBus.Property(key=u'always_show_lookup',
+                                                   label=None,
+                                                   icon=None,
+                                                   tooltip=None,
+                                                   sensitive=True,
+                                                   visible=True)
+        self.properties.append(self._always_show_lookup_property)
         self.register_properties (self.properties)
         self._refresh_properties ()
 
@@ -1288,6 +1327,14 @@ class tabengine (IBus.Engine):
         else:
             self._set_property(self._auto_commit_property, 'ncommit.svg', _('Normal Commit Mode'), _('Switch to direct commit mode'))
         self.update_property(self._auto_commit_property)
+        if self._always_show_lookup:
+            self._editor.set_candidates_list_visible(True)
+            self._set_property(self._always_show_lookup_property, 'always_show_lookup_y.svg', _('Hide candidates'), _('Do not display the candidates list.'))
+        else:
+            self._editor.set_candidates_list_visible(False)
+            self._set_property(self._always_show_lookup_property, 'always_show_lookup_n.svg', _('Display candidates'), _('Select your candidate among a list of possible key combinations.'))
+        self.update_property(self._always_show_lookup_property)
+        self._editor._always_show_lookup = self._always_show_lookup
 
         # the chinese_mode:
         if self.db._is_chinese:
@@ -1353,6 +1400,11 @@ class tabengine (IBus.Engine):
                 self._config.set_value(self._config_section,
                         "EnDefFullWidthPunct",
                         GLib.Variant.new_boolean(self._full_width_punct [self._mode]))
+        elif property == u'always_show_lookup':
+            self._always_show_lookup = not self._always_show_lookup
+            self._config.set_value( self._config_section,
+                    "AlwaysShowLookup",
+                    GLib.Variant.new_boolean(self._always_show_lookup))
         elif property == u'cmode':
             self._editor.change_chinese_mode()
             self.reset()
@@ -1968,6 +2020,9 @@ class tabengine (IBus.Engine):
         elif name == u'tabdeffullwidthpunct':
             self._full_width_punct[1] = value
             self._refresh_properties()
+            return
+        elif name == u'AlwaysShowLookup':
+            self._editor._always_show_lookup = value
             return
 
     # for further implementation :)
