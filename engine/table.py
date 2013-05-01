@@ -1232,65 +1232,43 @@ class tabengine (IBus.Engine):
 
     def _init_properties (self):
         self.properties= IBus.PropList ()
-        self._status_property = IBus.Property(key=u'status',
-                                              label=None,
-                                              icon=None,
-                                              tooltip=None,
-                                              sensitive=True,
-                                              visible=True)
+        
+        self._status_property = self._new_property(u'status')
         self.properties.append(self._status_property)
+        
         if self.db._is_chinese:
-            self._cmode_property = IBus.Property(key=u'cmode',
-                                                 label=None,
-                                                 icon=None,
-                                                 tooltip=None,
-                                                 sensitive=True,
-                                                 visible=True)
+            self._cmode_property = self._new_property(u'cmode')
             self.properties.append(self._cmode_property)
-        self._letter_property = IBus.Property(key=u'letter',
-                                              label=None,
-                                              icon=None,
-                                              tooltip=None,
-                                              sensitive=True,
-                                              visible=True)
+            
+        self._letter_property = self._new_property(u'letter')
         self.properties.append(self._letter_property)
-        self._punct_property = IBus.Property(key=u'punct',
-                                              label=None,
-                                              icon=None,
-                                              tooltip=None,
-                                             sensitive=True,
-                                             visible=True)
+        
+        self._punct_property = self._new_property(u'punct')
         self.properties.append(self._punct_property)
-        self._py_property = IBus.Property(key=u'py_mode',
-                                          label=None,
-                                          icon=None,
-                                          tooltip=None,
-                                          sensitive=True,
-                                          visible=True)
+        
+        self._py_property = self._new_property('py_mode')
         self.properties.append(self._py_property)
-        self._onechar_property = IBus.Property(key=u'onechar',
-                                               label=None,
-                                               icon=None,
-                                               tooltip=None,
-                                               sensitive=True,
-                                               visible=True)
+        
+        self._onechar_property = self._new_property(u'onechar')
         self.properties.append(self._onechar_property)
-        self._auto_commit_property = IBus.Property(key=u'acommit',
-                                                   label=None,
-                                                   icon=None,
-                                                   tooltip=None,
-                                                   sensitive=True,
-                                                   visible=True)
+        
+        self._auto_commit_property = self._new_property(u'acommit')
         self.properties.append(self._auto_commit_property)
-        self._always_show_lookup_property = IBus.Property(key=u'always_show_lookup',
-                                                   label=None,
-                                                   icon=None,
-                                                   tooltip=None,
-                                                   sensitive=True,
-                                                   visible=True)
+        
+        self._always_show_lookup_property = self._new_property(u'always_show_loopup')
         self.properties.append(self._always_show_lookup_property)
+        
         self.register_properties (self.properties)
         self._refresh_properties ()
+                
+    def _new_property (self, key):
+        '''Creates new IBus.Property and returns'''
+        return IBus.Property(key=key,
+                             label=None,
+                             icon=None,
+                             tooltip=None,
+                             sensitive=True,
+                             visible=True)
 
     def _refresh_properties (self):
         '''Method used to update properties'''
