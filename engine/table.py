@@ -1513,23 +1513,29 @@ class tabengine (IBus.Engine):
     def _convert_to_full_width (self, c):
         '''convert half width character to full width'''
         
-        pinyin_mode_table = {u"<": u"\u300a",
-                             u">": u"\u300b",
-                             u"[": u"\u300c",
-                             u"]": u"\u300d",
-                             u"{": u"\u300e",
-                             u"}": u"\u300f"
-                             }
+        # This function picks up punctuations that are not comply to the 
+        # unicode convesion formula in unichar_half_to_full (c).
+        # For ".", "\"", "'"; there are even variations under specific
+        # cases. This function should be more abstracted by extracting
+        # that to another handling function later on.
+        special_punct_dict = {u"<": u"\u300a", 
+                               u">": u"\u300b",
+                               u"[": u"\u300c",
+                               u"]": u"\u300d",
+                               u"{": u"\u300e",
+                               u"}": u"\u300f",
+                               u"\\": u"\u3001",
+                               u"^": u"\u2026\u2026",
+                               u"_": u"\u2014\u2014",
+                               u"$": u"\uffe5"
+                               }
         
-        non_pinyin_mode_table = {u"\\": u"\u3001",
-                                 u"^": u"\u2026\u2026",
-                                 u"_": u"\u2014\u2014",
-                                 u"$": u"\uffe5",
-                                 }
-        
-        if self._mode and c in pinyin_mode_table.keys():
-            return pinyin_mode_table[c]
-        else:
+        if c in special_punct_dict.keys() + [".", "\"", "'"]:
+            if c in special_punct_dict.keys():
+                if c in ["\\", "^", "_", "$"]:
+                    return special_punct_dict[c]
+                elif self._mode:
+                    return special_punct_dict[c]
             if c == u".":
                 if self._prev_char and self._prev_char.isdigit () \
                     and self._prev_key and chr (self._prev_key.code) == self._prev_char:
@@ -1548,8 +1554,6 @@ class tabengine (IBus.Engine):
                     return u"\u2018"
                 else:
                     return u"\u2019"
-            elif c in non_pinyin_mode_table.keys():
-                return non_pinyin_mode_table[c]
             
         return unichar_half_to_full (c)
 
