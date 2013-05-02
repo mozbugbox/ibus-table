@@ -1530,30 +1530,32 @@ class tabengine (IBus.Engine):
                                u"$": u"\uffe5"
                                }
         
-        if c in special_punct_dict.keys() + [".", "\"", "'"]:
-            if c in special_punct_dict.keys():
-                if c in ["\\", "^", "_", "$"]:
-                    return special_punct_dict[c]
-                elif self._mode:
-                    return special_punct_dict[c]
-            if c == u".":
-                if self._prev_char and self._prev_char.isdigit () \
-                    and self._prev_key and chr (self._prev_key.code) == self._prev_char:
-                    return u"."
-                else:
-                    return u"\u3002"
-            elif c == u"\"":
-                self._double_quotation_state = not self._double_quotation_state
-                if self._double_quotation_state:
-                    return u"\u201c"
-                else:
-                    return u"\u201d"
-            elif c == u"'":
-                self._single_quotation_state = not self._single_quotation_state
-                if self._single_quotation_state:
-                    return u"\u2018"
-                else:
-                    return u"\u2019"
+        # special puncts w/o further conditions
+        if c in special_punct_dict.keys():
+            if c in ["\\", "^", "_", "$"]:
+                return special_punct_dict[c]
+            elif self._mode:
+                return special_punct_dict[c]
+        
+        # special puncts w/ further conditions
+        if c == u".":
+            if self._prev_char and self._prev_char.isdigit () \
+                and self._prev_key and chr (self._prev_key.code) == self._prev_char:
+                return u"."
+            else:
+                return u"\u3002"
+        elif c == u"\"":
+            self._double_quotation_state = not self._double_quotation_state
+            if self._double_quotation_state:
+                return u"\u201c"
+            else:
+                return u"\u201d"
+        elif c == u"'":
+            self._single_quotation_state = not self._single_quotation_state
+            if self._single_quotation_state:
+                return u"\u2018"
+            else:
+                return u"\u2019"
             
         return unichar_half_to_full (c)
 
