@@ -1513,19 +1513,22 @@ class tabengine (IBus.Engine):
     def _convert_to_full_width (self, c):
         '''convert half width character to full width'''
         
-        if self._mode:
-            if c == u"<":
-                return u"\u300a"
-            elif c == u">":
-                return u"\u300b"
-            elif c == u"[":
-                return u"\u300c"
-            elif c == u"]":
-                return u"\u300d"
-            elif c == u"{":
-                return u"\u300e"
-            elif c == u"}":
-                return u"\u300f"
+        pinyin_mode_table = {u"<": u"\u300a",
+                             u">": u"\u300b",
+                             u"[": u"\u300c",
+                             u"]": u"\u300d",
+                             u"{": u"\u300e",
+                             u"}": u"\u300f"
+                             }
+        
+        non_pinyin_mode_table = {u"\\": u"\u3001",
+                                 u"^": u"\u2026\u2026",
+                                 u"_": u"\u2014\u2014",
+                                 u"$": u"\uffe5",
+                                 }
+        
+        if self._mode and c in pinyin_mode_table.keys():
+            return pinyin_mode_table[c]
         else:
             if c == u".":
                 if self._prev_char and self._prev_char.isdigit () \
@@ -1533,14 +1536,6 @@ class tabengine (IBus.Engine):
                     return u"."
                 else:
                     return u"\u3002"
-            elif c == u"\\":
-                return u"\u3001"
-            elif c == u"^":
-                return u"\u2026\u2026"
-            elif c == u"_":
-                return u"\u2014\u2014"
-            elif c == u"$":
-                return u"\uffe5"
             elif c == u"\"":
                 self._double_quotation_state = not self._double_quotation_state
                 if self._double_quotation_state:
@@ -1553,6 +1548,8 @@ class tabengine (IBus.Engine):
                     return u"\u2018"
                 else:
                     return u"\u2019"
+            elif c in non_pinyin_mode_table.keys():
+                return non_pinyin_mode_table[c]
             
         return unichar_half_to_full (c)
 
