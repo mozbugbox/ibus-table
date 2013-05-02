@@ -1513,50 +1513,46 @@ class tabengine (IBus.Engine):
     def _convert_to_full_width (self, c):
         '''convert half width character to full width'''
         
-        if c == u".":
-            if self._prev_char and self._prev_char.isdigit () \
-                and self._prev_key and chr (self._prev_key.code) == self._prev_char:
-                return u"."
-            else:
-                return u"\u3002"
-        elif c == u"\\":
-            return u"\u3001"
-        elif c == u"^":
-            return u"\u2026\u2026"
-        elif c == u"_":
-            return u"\u2014\u2014"
-        elif c == u"$":
-            return u"\uffe5"
-        elif c == u"\"":
-            self._double_quotation_state = not self._double_quotation_state
-            if self._double_quotation_state:
-                return u"\u201c"
-            else:
-                return u"\u201d"
-        elif c == u"'":
-            self._single_quotation_state = not self._single_quotation_state
-            if self._single_quotation_state:
-                return u"\u2018"
-            else:
-                return u"\u2019"
-        elif c == u"<":
-            if self._mode:
+        if self._mode:
+            if c == u"<":
                 return u"\u300a"
-        elif c == u">":
-            if self._mode:
+            elif c == u">":
                 return u"\u300b"
-        elif c == u"[":
-            if self._mode:
+            elif c == u"[":
                 return u"\u300c"
-        elif c == u"]":
-            if self._mode:
+            elif c == u"]":
                 return u"\u300d"
-        elif c == u"{":
-            if self._mode:
+            elif c == u"{":
                 return u"\u300e"
-        elif c == u"}":
-            if self._mode:
+            elif c == u"}":
                 return u"\u300f"
+        else:
+            if c == u".":
+                if self._prev_char and self._prev_char.isdigit () \
+                    and self._prev_key and chr (self._prev_key.code) == self._prev_char:
+                    return u"."
+                else:
+                    return u"\u3002"
+            elif c == u"\\":
+                return u"\u3001"
+            elif c == u"^":
+                return u"\u2026\u2026"
+            elif c == u"_":
+                return u"\u2014\u2014"
+            elif c == u"$":
+                return u"\uffe5"
+            elif c == u"\"":
+                self._double_quotation_state = not self._double_quotation_state
+                if self._double_quotation_state:
+                    return u"\u201c"
+                else:
+                    return u"\u201d"
+            elif c == u"'":
+                self._single_quotation_state = not self._single_quotation_state
+                if self._single_quotation_state:
+                    return u"\u2018"
+                else:
+                    return u"\u2019"
             
         return unichar_half_to_full (c)
 
