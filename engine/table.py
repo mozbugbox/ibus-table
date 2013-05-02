@@ -1490,51 +1490,50 @@ class tabengine (IBus.Engine):
 
     def _convert_to_full_width (self, c):
         '''convert half width character to full width'''
-        if c in [u".", u"\\", u"^", u"_", u"$", u"\"", u"'", u">", u"<", u"[", u"]", u"{", u"}" ]:
-            if c == u".":
-                if self._prev_char and self._prev_char.isdigit () \
-                    and self._prev_key and chr (self._prev_key.code) == self._prev_char:
-                    return u"."
-                else:
-                    return u"\u3002"
-            elif c == u"\\":
-                return u"\u3001"
-            elif c == u"^":
-                return u"\u2026\u2026"
-            elif c == u"_":
-                return u"\u2014\u2014"
-            elif c == u"$":
-                return u"\uffe5"
-            elif c == u"\"":
-                self._double_quotation_state = not self._double_quotation_state
-                if self._double_quotation_state:
-                    return u"\u201c"
-                else:
-                    return u"\u201d"
-            elif c == u"'":
-                self._single_quotation_state = not self._single_quotation_state
-                if self._single_quotation_state:
-                    return u"\u2018"
-                else:
-                    return u"\u2019"
-            elif c == u"<":
-                if self._mode:
-                    return u"\u300a"
-            elif c == u">":
-                if self._mode:
-                    return u"\u300b"
-            elif c == u"[":
-                if self._mode:
-                    return u"\u300c"
-            elif c == u"]":
-                if self._mode:
-                    return u"\u300d"
-            elif c == u"{":
-                if self._mode:
-                    return u"\u300e"
-            elif c == u"}":
-                if self._mode:
-                    return u"\u300f"
+        
+        # This function picks up punctuations that are not comply to the 
+        # unicode convesion formula in unichar_half_to_full (c).
+        # For ".", "\"", "'"; there are even variations under specific
+        # cases. This function should be more abstracted by extracting
+        # that to another handling function later on.
+        special_punct_dict = {u"<": u"\u300a", 
+                               u">": u"\u300b",
+                               u"[": u"\u300c",
+                               u"]": u"\u300d",
+                               u"{": u"\u300e",
+                               u"}": u"\u300f",
+                               u"\\": u"\u3001",
+                               u"^": u"\u2026\u2026",
+                               u"_": u"\u2014\u2014",
+                               u"$": u"\uffe5"
+                               }
+        
+        # special puncts w/o further conditions
+        if c in special_punct_dict.keys():
+            if c in [u"\\", u"^", u"_", u"$"]:
+                return special_punct_dict[c]
+            elif self._mode:
+                return special_punct_dict[c]
+        
+        # special puncts w/ further conditions
+        if c == u".":
+            if self._prev_char and self._prev_char.isdigit () \
+                and self._prev_key and chr (self._prev_key.code) == self._prev_char:
+                return u"."
+            else:
+                return u"\u3002"
+        elif c == u"\"":
+            self._double_quotation_state = not self._double_quotation_state
+            if self._double_quotation_state:
+                return u"\u201c"
+            else:
+                return u"\u201d"
+        elif c == u"'":
+            self._single_quotation_state = not self._single_quotation_state
+            if self._single_quotation_state:
+                return u"\u2018"
+            else:
+                return u"\u2019"
             
         return unichar_half_to_full (c)
 
