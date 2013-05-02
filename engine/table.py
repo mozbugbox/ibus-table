@@ -1532,7 +1532,7 @@ class tabengine (IBus.Engine):
         
         # special puncts w/o further conditions
         if c in special_punct_dict.keys():
-            if c in ["\\", "^", "_", "$"]:
+            if c in [u"\\", u"^", u"_", u"$"]:
                 return special_punct_dict[c]
             elif self._mode:
                 return special_punct_dict[c]
