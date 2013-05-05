@@ -866,7 +866,7 @@ class editor(object):
             batch = self._candidates[0][looklen:endpos]
             map(self.ap_candidate, batch)
 
-    def arrow_down(self):
+    def cursor_down(self):
         '''Process Arrow Down Key Event
         Move Lookup Table cursor down'''
         self.fill_lookup_table()
@@ -877,7 +877,7 @@ class editor(object):
             return True
         return res
 
-    def arrow_up(self):
+    def cursor_down(self):
         '''Process Arrow Up Key Event
         Move Lookup Table cursor up'''
         res = self._lookup_table.cursor_up()
@@ -926,7 +926,7 @@ class editor(object):
         self.commit_to_preedit ()
         return True
 
-    def alt_select_key(self, char):
+    def remove_cand_from_userdb(self, char):
         '''Remove the candidates in Lookup Table from user_db index.'''
         try:
             index = self._select_keys.index(char)
@@ -962,8 +962,8 @@ class editor(object):
         '''Check whether lookup table is visible'''
         return self._lookup_table.is_cursor_visible ()
 
-    def backspace (self):
-        '''Process backspace Key Event'''
+    def remove_char (self):
+        '''Process remove_char Key Event'''
         self._zi = u''
         if self.get_input_chars():
             self.pop_input ()
@@ -974,8 +974,8 @@ class editor(object):
         else:
             return False
 
-    def control_backspace (self):
-        '''Process control+backspace Key Event'''
+    def remove_str (self):
+        '''Process control+remove_char Key Event'''
         self._zi = u''
         if self.get_input_chars():
             self.over_input ()
@@ -1016,7 +1016,7 @@ class editor(object):
         else:
             return False
 
-    def r_shift (self):
+    def toggle_tab_py_mode (self):
         '''Proess Right Shift Key Event as changed between PinYin Mode and Table Mode'''
         self._zi = u''
         if self._chars[0]:
@@ -1024,7 +1024,7 @@ class editor(object):
         self._py_mode = not (self._py_mode)
         return True
 
-    def l_alt(self):
+    def cycle_next_cand(self):
         """Left Alt key, cycle cursor to next candidate in the page."""
         total = len(self._candidates[0])
 
@@ -1373,7 +1373,7 @@ class tabengine (IBus.Engine):
         if property == u"status":
             self._change_mode ()
         elif property == u'py_mode' and self._ime_py:
-            self._editor.r_shift ()
+            self._editor.toggle_tab_py_mode ()
         elif property == u'onechar':
             self._editor._onechar = not self._editor._onechar
             self._config.set_value(self._config_section,
@@ -1655,7 +1655,7 @@ class tabengine (IBus.Engine):
         # We have to process the pinyin mode change key event here,
         # because we ignore all Release event below.
         if self._match_hotkey (key, IBus.KEY_Shift_R, IBus.ModifierType.SHIFT_MASK | IBus.ModifierType.RELEASE_MASK) and self._ime_py:
-            res = self._editor.r_shift ()
+            res = self._editor.toggle_tab_py_mode ()
             self._refresh_properties ()
             self._update_ui ()
             return res
@@ -1667,7 +1667,7 @@ class tabengine (IBus.Engine):
 
         # Left ALT key to cycle candidates in the current page.
         if self._match_hotkey (key, IBus.KEY_Alt_L, IBus.ModifierType.MOD1_MASK | IBus.ModifierType.RELEASE_MASK):
-            res = self._editor.l_alt ()
+            res = self._editor.cycle_next_cand ()
             self._update_ui ()
             return res
 
@@ -1741,12 +1741,12 @@ class tabengine (IBus.Engine):
             self.commit_string (self._editor.get_preedit_strings ())
 
         elif key.code in (IBus.KEY_Down, IBus.KEY_KP_Down) :
-            res = self._editor.arrow_down ()
+            res = self._editor.cursor_down ()
             self._update_ui ()
             return res
 
         elif key.code in (IBus.KEY_Up, IBus.KEY_KP_Up):
-            res = self._editor.arrow_up ()
+            res = self._editor.cursor_down ()
             self._update_ui ()
             return res
 
@@ -1771,12 +1771,12 @@ class tabengine (IBus.Engine):
             return res
 
         elif key.code == IBus.KEY_BackSpace and key.mask & IBus.ModifierType.CONTROL_MASK:
-            res = self._editor.control_backspace ()
+            res = self._editor.remove_str ()
             self._update_ui ()
             return res
 
         elif key.code == IBus.KEY_BackSpace:
-            res = self._editor.backspace ()
+            res = self._editor.remove_char ()
             self._update_ui ()
             return res
 
@@ -1800,7 +1800,7 @@ class tabengine (IBus.Engine):
         elif ( keychar in self._editor.get_select_keys() and
                 self._editor._candidates[0] and
                 key.mask & IBus.ModifierType.MOD1_MASK ):
-            res = self._editor.alt_select_key (keychar)
+            res = self._editor.remove_cand_from_userdb (keychar)
             self._update_ui ()
             return res
 
