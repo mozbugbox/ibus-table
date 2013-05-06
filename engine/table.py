@@ -848,7 +848,6 @@ class editor(object):
             # we have pinyin result
             tabcodes = self.db.find_zi_code(self._zi)
             aux_string = u' '.join(tabcodes)
-        #    self._zi = u''
         cstr = u''.join(self._strings)
         if self.db.user_can_define_phrase:
             if len (cstr ) > 1:
@@ -1042,7 +1041,6 @@ class editor(object):
             istr = self.get_all_input_strings ()
             self.commit_to_preedit ()
             pstr = self.get_preedit_strings ()
-            #print "istr: ",istr
             self.clear()
             return (True,pstr,istr)
         else:
@@ -1058,11 +1056,6 @@ class editor(object):
 ####################
 class tabengine (IBus.Engine):
     '''The IM Engine for Tables'''
-
-    # colors
-#    _phrase_color             = 0xffffff
-#    _user_phrase_color         = 0xffffff
-#    _new_phrase_color         = 0xffffff
 
     def __init__ (self, bus, obj_path, db ):
         super(tabengine,self).__init__ (connection=bus.get_connection(),
@@ -1465,13 +1458,6 @@ class tabengine (IBus.Engine):
         self._update_preedit ()
         self._update_aux ()
 
-    #def add_string_len(self, astring):
-    #    if self._sm_on:
-    #        try:
-    #            self._sm.Accumulate(len(astring))
-    #        except:
-    #            pass
-
     def commit_string (self,string):
         self._editor.clear ()
         self._update_ui ()
@@ -1566,14 +1552,6 @@ class tabengine (IBus.Engine):
         if self._match_hotkey (key, IBus.KEY_period, IBus.ModifierType.CONTROL_MASK):
             self.do_property_activate ("punct")
             return True
-
-        # we ignore all hotkeys
-#        if key.mask & IBus.ModifierType.MOD1_MASK:
-#            return False
-
-        # Ignore key release event
-#        if key.mask & IBus.ModifierType.RELEASE_MASK:
-#            return True
 
         if self._mode:
             return self._table_mode_process_key_event (key)
@@ -1908,13 +1886,6 @@ class tabengine (IBus.Engine):
             self.register_properties (self.properties)
             self._refresh_properties ()
             self._update_ui ()
-            #try:
-            #    if self._sm_on:
-            #        self._sm.Show ()
-            #    else:
-            #        self._sm.Hide ()
-            #except:
-            #    pass
 
     def do_focus_out (self):
         try:
@@ -1923,19 +1894,10 @@ class tabengine (IBus.Engine):
             pass
 
     def do_enable (self):
-        #try:
-        #    self._sm.Reset()
-        #except:
-        #    pass
         self._on = True
         self.do_focus_in()
 
     def do_disable (self):
-        self.reset()
-        #try:
-        #    self._sm.Hide()
-        #except:
-        #    pass
         self._on = False
 
 
