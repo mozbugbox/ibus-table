@@ -880,7 +880,7 @@ class editor(object):
             return True
         return res
 
-    def cursor_down(self):
+    def cursor_up(self):
         '''Process Arrow Up Key Event
         Move Lookup Table cursor up'''
         res = self._lookup_table.cursor_up()
@@ -1713,7 +1713,7 @@ class tabengine (IBus.Engine):
             return res
 
         elif key.code in (IBus.KEY_Up, IBus.KEY_KP_Up):
-            res = self._editor.cursor_down ()
+            res = self._editor.cursor_up ()
             self._update_ui ()
             return res
 
