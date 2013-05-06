@@ -1917,11 +1917,10 @@ class tabengine (IBus.Engine):
             #    pass
 
     def do_focus_out (self):
-        #try:
-        #    self._sm.Hide()
-        #except:
-        #    pass
-        pass
+        try:
+            self._editor.clear()
+        except:
+            pass
 
     def do_enable (self):
         #try:
