@@ -799,20 +799,24 @@ class editor(object):
 
     def commit_to_preedit (self):
         '''Add select phrase in lookup table to preedit string'''
-        if not self._py_mode:
-            _p_index = self.get_index('phrase')
+        if self._chars[0]:
+            if not self._py_mode:
+                _p_index = self.get_index('phrase')
+            else:
+                _p_index = 8
+            try:
+                if self._candidates[0]:
+                    self._strings.insert(self._cursor[0], self._candidates[0][ self.get_cursor_pos() ][_p_index])
+                    self._cursor [0] += 1
+                    if self._py_mode:
+                        self._zi = self._candidates[0][ self.get_cursor_pos() ][_p_index]
+                self.over_input ()
+                self.update_candidates ()
+            except:
+                pass
+            return True
         else:
-            _p_index = 8
-        try:
-            if self._candidates[0]:
-                self._strings.insert(self._cursor[0], self._candidates[0][ self.get_cursor_pos() ][_p_index])
-                self._cursor [0] += 1
-                if self._py_mode:
-                    self._zi = self._candidates[0][ self.get_cursor_pos() ][_p_index]
-            self.over_input ()
-            self.update_candidates ()
-        except:
-            pass
+            return False
 
     def auto_commit_to_preedit (self):
         '''Add select phrase in lookup table to preedit string'''
@@ -857,10 +861,9 @@ class editor(object):
         If the cursor in _lookup_table moved beyond current length,
         add more entries from _candidiate[0] to _lookup_table.'''
 
-        lookup = self._lookup_table
-        looklen = lookup.get_number_of_candidates()
-        psize = lookup.get_page_size()
-        if (lookup.get_cursor_pos() + psize >=  looklen and
+        looklen = self._lookup_table.get_number_of_candidates()
+        psize = self._lookup_table.get_page_size()
+        if (self._lookup_table.get_cursor_pos() + psize >= looklen and
                 looklen < len(self._candidates[0])):
             endpos = looklen + psize
             batch = self._candidates[0][looklen:endpos]
@@ -958,10 +961,6 @@ class editor(object):
         '''Get lookup table'''
         return self._lookup_table
 
-    def is_lt_visible (self):
-        '''Check whether lookup table is visible'''
-        return self._lookup_table.is_cursor_visible ()
-
     def remove_char (self):
         '''Process remove_char Key Event'''
         self._zi = u''
@@ -1008,14 +1007,6 @@ class editor(object):
         else:
             return False
 
-    def l_shift (self):
-        '''Process Left Shift Key Event as immediately commit to preedit strings'''
-        if self._chars[0]:
-            self.commit_to_preedit ()
-            return True
-        else:
-            return False
-
     def toggle_tab_py_mode (self):
         '''Proess Right Shift Key Event as changed between PinYin Mode and Table Mode'''
         self._zi = u''
@@ -1029,14 +1020,13 @@ class editor(object):
         total = len(self._candidates[0])
 
         if total > 0:
-            lookup = self._lookup_table
-            page_size = lookup.get_page_size()
-            pos = lookup.get_cursor_pos()
+            page_size = self._lookup_table.get_page_size()
+            pos = self._lookup_table.get_cursor_pos()
             page = int(pos/page_size)
             pos += 1
             if pos >= (page+1)*page_size or pos >= total:
                 pos = page*page_size
-            res = lookup.set_cursor_pos(pos)
+            res = self._lookup_table.set_cursor_pos(pos)
             return True
         else:
             return False
