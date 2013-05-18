@@ -804,20 +804,24 @@ class editor(object):
 
     def commit_to_preedit (self):
         '''Add select phrase in lookup table to preedit string'''
-        if not self._py_mode:
-            _p_index = self.get_index('phrase')
+        if self._chars[0]:
+            if not self._py_mode:
+                _p_index = self.get_index('phrase')
+            else:
+                _p_index = 8
+            try:
+                if self._candidates[0]:
+                    self._strings.insert(self._cursor[0], self._candidates[0][ self.get_cursor_pos() ][_p_index])
+                    self._cursor [0] += 1
+                    if self._py_mode:
+                        self._zi = self._candidates[0][ self.get_cursor_pos() ][_p_index]
+                self.over_input ()
+                self.update_candidates ()
+            except:
+                pass
+            return True
         else:
-            _p_index = 8
-        try:
-            if self._candidates[0]:
-                self._strings.insert(self._cursor[0], self._candidates[0][ self.get_cursor_pos() ][_p_index])
-                self._cursor [0] += 1
-                if self._py_mode:
-                    self._zi = self._candidates[0][ self.get_cursor_pos() ][_p_index]
-            self.over_input ()
-            self.update_candidates ()
-        except:
-            pass
+            return False
 
     def auto_commit_to_preedit (self):
         '''Add select phrase in lookup table to preedit string'''
@@ -849,7 +853,6 @@ class editor(object):
             # we have pinyin result
             tabcodes = self.db.find_zi_code(self._zi)
             aux_string = u' '.join(tabcodes)
-        #    self._zi = u''
         cstr = u''.join(self._strings)
         if self.db.user_can_define_phrase:
             if len (cstr ) > 1:
@@ -862,10 +865,9 @@ class editor(object):
         If the cursor in _lookup_table moved beyond current length,
         add more entries from _candidiate[0] to _lookup_table.'''
 
-        lookup = self._lookup_table
-        looklen = lookup.get_number_of_candidates()
-        psize = lookup.get_page_size()
-        if (lookup.get_cursor_pos() + psize >=  looklen and
+        looklen = self._lookup_table.get_number_of_candidates()
+        psize = self._lookup_table.get_page_size()
+        if (self._lookup_table.get_cursor_pos() + psize >= looklen and
                 looklen < len(self._candidates[0])):
             endpos = looklen + psize
             batch = self._candidates[0][looklen:endpos]
@@ -882,7 +884,7 @@ class editor(object):
             return True
         return res
 
-    def cursor_down(self):
+    def cursor_up(self):
         '''Process Arrow Up Key Event
         Move Lookup Table cursor up'''
         res = self._lookup_table.cursor_up()
@@ -963,10 +965,6 @@ class editor(object):
         '''Get lookup table'''
         return self._lookup_table
 
-    def is_lt_visible (self):
-        '''Check whether lookup table is visible'''
-        return self._lookup_table.is_cursor_visible ()
-
     def remove_char (self):
         '''Process remove_char Key Event'''
         self._zi = u''
@@ -1013,14 +1011,6 @@ class editor(object):
         else:
             return False
 
-    def l_shift (self):
-        '''Process Left Shift Key Event as immediately commit to preedit strings'''
-        if self._chars[0]:
-            self.commit_to_preedit ()
-            return True
-        else:
-            return False
-
     def toggle_tab_py_mode (self):
         '''Proess Right Shift Key Event as changed between PinYin Mode and Table Mode'''
         self._zi = u''
@@ -1034,14 +1024,13 @@ class editor(object):
         total = len(self._candidates[0])
 
         if total > 0:
-            lookup = self._lookup_table
-            page_size = lookup.get_page_size()
-            pos = lookup.get_cursor_pos()
+            page_size = self._lookup_table.get_page_size()
+            pos = self._lookup_table.get_cursor_pos()
             page = int(pos/page_size)
             pos += 1
             if pos >= (page+1)*page_size or pos >= total:
                 pos = page*page_size
-            res = lookup.set_cursor_pos(pos)
+            res = self._lookup_table.set_cursor_pos(pos)
             return True
         else:
             return False
@@ -1057,7 +1046,6 @@ class editor(object):
             istr = self.get_all_input_strings ()
             self.commit_to_preedit ()
             pstr = self.get_preedit_strings ()
-            #print "istr: ",istr
             self.clear()
             return (True,pstr,istr)
         else:
@@ -1073,11 +1061,6 @@ class editor(object):
 ####################
 class tabengine (IBus.Engine):
     '''The IM Engine for Tables'''
-
-    # colors
-#    _phrase_color             = 0xffffff
-#    _user_phrase_color         = 0xffffff
-#    _new_phrase_color         = 0xffffff
 
     def __init__ (self, bus, obj_path, db ):
         super(tabengine,self).__init__ (connection=bus.get_connection(),
@@ -1493,13 +1476,6 @@ class tabengine (IBus.Engine):
         self._update_preedit ()
         self._update_aux ()
 
-    #def add_string_len(self, astring):
-    #    if self._sm_on:
-    #        try:
-    #            self._sm.Accumulate(len(astring))
-    #        except:
-    #            pass
-
     def _check_phrase (self, phrase, tabkey):
         """Check the given phrase and update save user db info"""
         self.db.check_phrase(phrase, tabkey)
@@ -1614,14 +1590,6 @@ class tabengine (IBus.Engine):
         if self._match_hotkey (key, IBus.KEY_period, IBus.ModifierType.CONTROL_MASK):
             self.do_property_activate ("punct")
             return True
-
-        # we ignore all hotkeys
-#        if key.mask & IBus.ModifierType.MOD1_MASK:
-#            return False
-
-        # Ignore key release event
-#        if key.mask & IBus.ModifierType.RELEASE_MASK:
-#            return True
 
         if self._mode:
             return self._table_mode_process_key_event (key)
@@ -1764,7 +1732,7 @@ class tabengine (IBus.Engine):
             return res
 
         elif key.code in (IBus.KEY_Up, IBus.KEY_KP_Up):
-            res = self._editor.cursor_down ()
+            res = self._editor.cursor_up ()
             self._update_ui ()
             return res
 
@@ -1959,35 +1927,18 @@ class tabengine (IBus.Engine):
             self.register_properties (self.properties)
             self._refresh_properties ()
             self._update_ui ()
-            #try:
-            #    if self._sm_on:
-            #        self._sm.Show ()
-            #    else:
-            #        self._sm.Hide ()
-            #except:
-            #    pass
 
     def do_focus_out (self):
-        #try:
-        #    self._sm.Hide()
-        #except:
-        #    pass
-        pass
+        try:
+            self._editor.clear()
+        except:
+            pass
 
     def do_enable (self):
-        #try:
-        #    self._sm.Reset()
-        #except:
-        #    pass
         self._on = True
         self.do_focus_in()
 
     def do_disable (self):
-        self.reset()
-        #try:
-        #    self._sm.Hide()
-        #except:
-        #    pass
         self._on = False
 
 
