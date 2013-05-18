@@ -32,6 +32,7 @@ engine_table_PYTHON = \
 	tabcreatedb.py \
 	tabdict.py \
 	tabsqlitedb.py \
+	compatIBus15.py \
 	$(NULL)
 engine_table_DATA = \
 	$(NULL)

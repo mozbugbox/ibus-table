@@ -23,6 +23,7 @@ import os
 import sys
 import optparse
 from gi.repository import IBus
+import compatIBus15 # API compatible layer with pre 1.5 IBus
 from gi.repository import GLib
 import re
 patt = re.compile (r'<\?.*\?>\n')
