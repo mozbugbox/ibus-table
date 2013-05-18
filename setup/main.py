@@ -36,19 +36,19 @@ import version
 _ = lambda a : gettext.dgettext("ibus-table", a)
 
 OPTION_DEFAULTS = {
-    "Language": False,
-    "ChineseMode": 0,
-    "TabDefFullWidthLetter": False,
-    "TabDefFullWidthPunct": False,
-    "LookupTableOrientation": True,
-    "LookupTablePageSize": 6,
-    "OneChar": False,
-    "AutoCommit": False,
-    "SpaceKeyBehavior": False,
+    "language": False,
+    "chinesemode": 0,
+    "tabdeffullwidthletter": False,
+    "tabdeffullwidthpunct": False,
+    "lookuptableorientation": True,
+    "lookuptablepagesize": 6,
+    "onechar": False,
+    "autocommit": False,
+    "spacekeybehavior": False,
 }
 
 SCALE_WIDGETS = {
-    "LookupTablePageSize",
+    "lookuptablepagesize",
 }
 
 ibus_dir = os.getenv('IBUS_TABLE_LOCATION')
