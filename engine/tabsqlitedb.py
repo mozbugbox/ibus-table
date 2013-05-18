@@ -30,6 +30,7 @@ import tabdict
 import uuid
 import time
 import re
+import chinese_variants
 
 patt_r = re.compile(r'c([ea])(\d):(.*)')
 patt_p = re.compile(r'p(-{0,1}\d)(-{0,1}\d)')
@@ -91,7 +92,6 @@ class tabsqlitedb:
             #          'commit_keys':'space',
             #          'forward_keys':'Return',
                       'select_keys':'1,2,3,4,5,6,7,8,9,0',
-                      'page_size':'6',
                       'page_up_keys':'Page_Up,minus',
                       'page_down_keys':'Page_Down,equal',
                       'status_prompt':'',
@@ -100,6 +100,7 @@ class tabsqlitedb:
                       'user_can_define_phrase':'FALSE',
                       'pinyin_mode':'FALSE',
                       'dynamic_adjust':'FALSE',
+                      'auto_select':'false',
                       'auto_commit':'false',
                       #'no_check_chars':u'',
                       'description':'A IME under IBus Table',
@@ -108,7 +109,8 @@ class tabsqlitedb:
                       #'rules':'ce2:p11+p12+p21+p22;ce3:p11+p21+p22+p31;ca4:p11+p21+p31+p41'}
                       'least_commit_length':'0',
                       'start_chars':'',
-                      'orientation':'1'
+                      'orientation':'1',
+                      'always_show_lookup':'true'
                       # we use this entry for those IME, which don't
                       # have rules to build up phrase, but still need
                       # auto commit to preedit
@@ -283,14 +285,7 @@ class tabsqlitedb:
             return -1
 
     def get_page_size (self):
-        try:
-            __page_size = int( self.get_ime_property ('page_size') )
-            if __page_size:
-                return __page_size
-            else:
-                return len(__select_keys.split(','))
-        except:
-            return 6
+        return len(self.get_select_keys().split(','))
 
     def get_select_keys (self):
         ret = None
@@ -506,52 +501,7 @@ class tabsqlitedb:
             user_freq = 0
         # now we will set the category bits if this is chinese
         if self._is_chinese:
-            # this is the bitmask we will use,
-            # from low to high, 1st bit is simplify Chinese,
-            # 2nd bit is traditional Chinese,
-            # 3rd bit means out of gbk
-            category = 0
-            # make sure that we got a unicode string
-            if type(phrase) != type(u''):
-                phrase = phrase.decode('utf8')
-            tmp_phrase = ''.join(re.findall(u'['
-                                            + u'\u4E00-\u9FCB'
-                                            + u'\u3400-\u4DB5'
-                                            + u'\uF900-\uFaFF'
-                                            + u'\U00020000-\U0002A6D6'
-                                            + u'\U0002A700-\U0002B734'
-                                            + u'\U0002B740-\U0002B81D'
-                                            + u'\U0002F800-\U0002FA1D'
-                                            + u']+',
-                                            phrase))
-            # first whether in gb2312
-            try:
-                tmp_phrase.encode('gb2312')
-                category |= 1
-            except:
-                if '〇'.decode('utf8') in tmp_phrase:
-                    # we add '〇' into SC as well
-                    category |= 1
-            # second check big5-hkscs
-            try:
-                tmp_phrase.encode('big5hkscs')
-                category |= 1 << 1
-            except:
-                # then check whether in gbk,
-                if category & 1:
-                    # already know in SC
-                    pass
-                else:
-                    # need to check
-                    try:
-                        tmp_phrase.encode('gbk')
-                        category |= 1
-                    except:
-                        # not in gbk
-                        pass
-            # then set for 3rd bit, if not in SC and TC
-            if not ( category & (1 | 1 << 1) ):
-                category |= (1 << 2)
+            category = chinese_variants.detect_chinese_category(phrase)
         try:
             tbks = self.parse(tabkeys)
             if len(tbks) != len(tabkeys):

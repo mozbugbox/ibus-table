@@ -1,0 +1,4 @@
+table.xml.in
+ibus-engine-table
+ibus-table-createdb
+*.pyc
